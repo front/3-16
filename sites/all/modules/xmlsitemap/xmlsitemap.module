@@ -1,0 +1,888 @@
+<?php
+// $Id: xmlsitemap.module,v 1.20.2.45.2.93 2009/07/03 04:28:33 davereid Exp $
+
+/**
+ * @defgroup xmlsitemap XML sitemap: create sitemaps.org sitemaps.
+ */
+
+/**
+ * @file
+ * Main file for the xmlsitemap module.
+ *
+ * @ingroup xmlsitemap
+ */
+
+/**
+ * Drupal 7 backport to define REQUEST_TIME.
+ */
+if (!defined('REQUEST_TIME')) {
+  define('REQUEST_TIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time());
+}
+
+/**
+ * PHP 5.2 backport to define DATE_W3C.
+ */
+if (!defined('DATE_W3C')) {
+  define('DATE_W3C', 'Y-m-d\TH:i:s+00:00');
+}
+
+define('XMLSITEMAP_FREQUENCY_YEARLY', 31449600); // 60 * 60 * 24 * 7 * 52
+define('XMLSITEMAP_FREQUENCY_MONTHLY', 2419200); // 60 * 60 * 24 * 7 * 4
+define('XMLSITEMAP_FREQUENCY_WEEKLY', 604800); // 60 * 60 * 24 * 7
+define('XMLSITEMAP_FREQUENCY_DAILY', 86400); // 60 * 60 * 24
+define('XMLSITEMAP_FREQUENCY_HOURLY', 3600); // 60 * 60
+define('XMLSITEMAP_FREQUENCY_ALWAYS', 60);
+
+/**
+ * Implementation of hook_help().
+ */
+function xmlsitemap_help($path, $arg) {
+  $output = '';
+
+  switch ($path) {
+    case 'admin/help#xmlsitemap':
+      $sitemaps = xmlsitemap_get_sitemaps(TRUE);
+      $output .= format_plural(count($sitemaps), 'Your sitemap is located at: !sitemaps', 'Your sitemaps are located at: !sitemaps', array('!sitemaps' => theme('item_list', $sitemaps)));
+      break;
+    case 'admin/settings/xmlsitemap':
+      break;
+  }
+
+  // Use a static variable because this code may be called more than once.
+  static $checked = FALSE;
+  if (!$checked && strpos($path, 'xmlsitemap') !== FALSE) {
+    $checked = TRUE;
+    module_load_include('inc', 'xmlsitemap');
+    xmlsitemap_check_status();
+    if ($blurb = _xmlsitemap_get_blurb()) {
+      $output .= '<div class="form-item"><div class="description">' . $blurb . '</div></div>';
+    }
+  }
+
+  return $output;
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function xmlsitemap_perm() {
+  return array('administer xmlsitemap');
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function xmlsitemap_menu() {
+  $items['admin/settings/xmlsitemap'] = array(
+    'title' => 'XML sitemap',
+    'description' => 'Configure the XML sitemap.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('xmlsitemap_settings_form'),
+    'access arguments' => array('administer xmlsitemap'),
+    'file' => 'xmlsitemap.admin.inc',
+  );
+  $items['admin/settings/xmlsitemap/settings'] = array(
+    'title' => 'Settings',
+    'access arguments' => array('administer xmlsitemap'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'file' => 'xmlsitemap.admin.inc',
+    'weight' => -10,
+  );
+  $items['admin/settings/xmlsitemap/rebuild'] = array(
+    'title' => 'Rebuild',
+    'description' => 'Rebuild the site map.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('xmlsitemap_rebuild_confirm'),
+    'access arguments' => array('administer xmlsitemap'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'xmlsitemap.admin.inc',
+    'weight' => 10,
+  );
+  $items['sitemap.xml'] = array(
+    'page callback' => 'xmlsitemap_output_chunk',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'xmlsitemap.pages.inc',
+  );
+  $chunks = xmlsitemap_get_chunk_count();
+  if ($chunks > 1) {
+    for ($i = 1; $i <= $chunks; $i++) {
+      $items['sitemap-' . $i . '.xml'] = array(
+        'page callback' => 'xmlsitemap_output_chunk',
+        'page arguments' => array((string) $i),
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'file' => 'xmlsitemap.pages.inc',
+      );
+    }
+  }
+  $items['sitemap.xsl'] = array(
+    'page callback' => 'xmlsitemap_output_xsl',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'xmlsitemap.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_cron().
+ */
+function xmlsitemap_cron() {
+  if (!xmlsitemap_var('regenerate_needed')
+      || (REQUEST_TIME - xmlsitemap_var('generated_last')) < xmlsitemap_var('minimum_lifetime')) {
+    return;
+  }
+
+  module_load_include('inc', 'xmlsitemap');
+  xmlsitemap_regenerate();
+}
+
+/**
+ * Implementation of hook_xmlsitemap_links().
+ */
+function xmlsitemap_xmlsitemap_links() {
+  $links = array();
+
+  // Frontpage link.
+  $links[] = array(
+    'type' => 'frontpage',
+    'id' => 0,
+    'loc' => '',
+  );
+
+  return $links;
+}
+
+/**
+ * Implementation of hook_xmlsitemap_link_alter().
+ */
+function xmlsitemap_xmlsitemap_link_alter(&$link) {
+  // Alter the frontpage priority.
+  if ($link['type'] == 'frontpage' || $link['loc'] == '' || $link['loc'] == drupal_get_normal_path(variable_get('site_frontpage', 'node'))) {
+    $link['priority'] = xmlsitemap_var('frontpage_priority');
+    $link['changefreq'] = xmlsitemap_var('frontpage_changefreq');
+  }
+
+  // Alter some of the data so that we can compare against existing links.
+  if ($link['priority'] === 'default') {
+    $link['priority'] = NULL;
+  }
+  if ($link['priority_override'] === 'default') {
+    $link['priority_override'] = NULL;
+  }
+
+  // @todo Remove when booleans are no longer used.
+  if (!is_int($link['status'])) {
+    $links['status'] = (int) $link['status'];
+  }
+  if (!is_int($link['access'])) {
+    $links['access'] = (int) $link['access'];
+  }
+}
+
+/**
+ * Implementation of hook_xmlsitemap_links_clear().
+ */
+function xmlsitemap_xmlsitemap_links_clear() {
+  db_query("DELETE FROM {xmlsitemap} WHERE type = 'frontpage'");
+}
+
+/**
+ * Implementation of hook_robotstxt().
+ */
+function xmlsitemap_robotstxt() {
+  module_load_include('inc', 'xmlsitemap');
+  $sitemaps = xmlsitemap_get_sitemaps();
+  foreach ($sitemaps as $index => $sitemap) {
+    $sitemaps[$index] = 'Sitemap: ' . $sitemap;
+  }
+  return $sitemaps;
+}
+
+/**
+ * Get an array of the current site's sitemaps.
+ *
+ * @param $links
+ *   A boolean if TRUE, the array elements will be HTML links.
+ * @return
+ *   An array of sitemaps.
+ */
+function xmlsitemap_get_sitemaps($links = FALSE) {
+  static $sitemaps = array();
+
+  if (!$sitemaps) {
+    $url_options = xmlsitemap_get_url_options();
+    $languages = language_list();
+    $sitemap_languages = xmlsitemap_var('languages');
+    natsort($sitemap_languages);
+
+    foreach ($sitemap_languages as $language) {
+      $url_options['language'] = $languages[$language];
+      $sitemap = url('sitemap.xml', $url_options);
+      $sitemaps[$language] = $links ? l($sitemap, $sitemap) : $sitemap;
+    }
+  }
+
+  return $sitemaps;
+}
+
+/**
+ * Return a list of commonly used parameters for url() used by XML sitemap.
+ *
+ * @see url()
+ */
+function xmlsitemap_get_url_options($options = array()) {
+  return $options + array(
+    'absolute' => TRUE,
+    'base_url' => xmlsitemap_var('base_url'),
+  );
+}
+
+/**
+ * Get a list of priority options.
+ *
+ * @param $default
+ *   Include a 'default' option.
+ * @return
+ *   An array of options.
+ *
+ * @see _xmlsitemap_translation_strings()
+ */
+function xmlsitemap_get_priority_options($default = FALSE) {
+  $options = array();
+
+  if ($default !== FALSE) {
+    // @todo Fix this default option text.
+    $options['default'] = $default !== TRUE && $default !== 'default' ? t('Default (@value)', array('@value' => $default)) : t('Default');
+  }
+
+  foreach (range(0, 1, 0.1) as $option) {
+    $option = number_format($option, 1);
+    // Sorry, we pass a variable through t() since we have provided all the
+    // possible values in _xmlsitemap_translation_strings().
+    $options[$option] = t($option);
+  }
+
+  return $options;
+}
+
+/**
+ * @todo Document this function.
+ */
+function xmlsitemap_get_changefreq_options() {
+  return array(
+    XMLSITEMAP_FREQUENCY_ALWAYS => 'always',
+    XMLSITEMAP_FREQUENCY_HOURLY => 'hourly',
+    XMLSITEMAP_FREQUENCY_DAILY => 'daily',
+    XMLSITEMAP_FREQUENCY_WEEKLY => 'weekly',
+    XMLSITEMAP_FREQUENCY_MONTHLY => 'monthly',
+    XMLSITEMAP_FREQUENCY_YEARLY => 'yearly',
+  );
+}
+
+/**
+ * Determine the frequency of updates to a link.
+ *
+ * @param $interval
+ *   An interval value in seconds.
+ * @return
+ *   A string representing the update frequency according to the sitemaps.org
+ *   protocol.
+ */
+function xmlsitemap_get_changefreq($interval) {
+  if ($interval <= 0 || !is_numeric($interval)) {
+    return FALSE;
+  }
+
+  foreach (xmlsitemap_get_changefreq_options() as $value => $frequency) {
+    if ($interval <= $value) {
+      return $frequency;
+    }
+  }
+
+  return 'never';
+}
+
+/**
+ * Get the current number of sitemap chunks.
+ */
+function xmlsitemap_get_chunk_count($reset = FALSE) {
+  static $chunks;
+  if (!isset($chunks) || $reset) {
+    $count = max(xmlsitemap_get_link_count($reset), 1);
+    $chunks = ceil($count / xmlsitemap_get_chunk_size($reset));
+  }
+  return $chunks;
+}
+
+/**
+ * Get the current number of sitemap links.
+ */
+function xmlsitemap_get_link_count($reset = FALSE) {
+  static $count;
+  if (!isset($count) || $reset) {
+    $count = db_result(db_query("SELECT COUNT(id) FROM {xmlsitemap} WHERE access = 1 AND status = 1"));
+  }
+  return $count;
+}
+
+/**
+ * Get the sitemap chunk size.
+ *
+ * This function is useful with the chunk size is set to automatic as it will
+ * calculate the appropriate value. Use this function instead of @code
+ * xmlsitemap_var('chunk_size') @endcode when the actual value is needed.
+ *
+ * @param $reset
+ *   A boolean to reset the saved, static result. Defaults to FALSE.
+ * @return
+ *   An integer with the number of links in each sitemap page.
+ */
+function xmlsitemap_get_chunk_size($reset = FALSE) {
+  static $size;
+  if (!isset($size) || $reset) {
+    $size = xmlsitemap_var('chunk_size');
+    if ($size === 'auto') {
+      $count = max(xmlsitemap_get_link_count($reset), 1); // Prevent divide by zero.
+      $size = min(ceil($count / 10000) * 5000, 50000);
+    }
+  }
+  return $size;
+}
+
+/**
+ * Recalculate the changefreq of a sitemap link.
+ *
+ * @param $link
+ *   A sitemap link array.
+ */
+function xmlsitemap_recalculate_changefreq(&$link) {
+  $link['changefreq'] = round((($link['changefreq'] * $link['changecount']) + (REQUEST_TIME - $link['lastmod'])) / ($link['changecount'] + 1));
+  $link['changecount']++;
+  $link['lastmod'] = REQUEST_TIME;
+}
+
+/**
+ * Calculates the average interval between UNIX timestamps.
+ *
+ * @param $timestamps
+ *   An array of UNIX timestamp integers.
+ * @return
+ *   An integer of the average interval.
+ */
+function xmlsitemap_calculate_changefreq($timestamps) {
+  sort($timestamps);
+  $count = count($timestamps) - 1;
+  $diff = 0;
+
+  for ($i = 0; $i < $count; $i++) {
+    $diff += $timestamps[$i + 1] - $timestamps[$i];
+  }
+
+  return $count > 0 ? round($diff / $count) : 0;
+}
+
+/**
+ * Given an {xmlsitemap} field, return the correct %-placeholder.
+ *
+ * @param $field
+ *   The {xmlsitemap} schema field name.
+ * @return
+ *   The placeholder string to embed in a query for that type.
+ *
+ * @see db_type_placeholder()
+ */
+function _xmlsitemap_get_placeholder($field) {
+  static $schema;
+  if (!isset($schema)) {
+    $schema = drupal_get_schema('xmlsitemap');
+  }
+  return db_type_placeholder($schema['fields'][$field]['type']);
+}
+
+/**
+ * Check if there is a visible sitemap link given a certain set of conditions.
+ *
+ * Optionally will set the regenerate needed flag to TRUE if there is a match.
+ *
+ * @param $conditions
+ *   An array of values to match keyed by field.
+ * @return
+ *   TRUE if there is a visible link, or FALSE if there is not.
+ */
+function _xmlsitemap_check_visible_link(array $conditions = array(), $flag = FALSE) {
+  $conditions['access'] = 1;
+  $conditions['status'] = 1;
+  $result = (bool) xmlsitemap_load_link($conditions);
+
+  if ($result && $flag) {
+    variable_set('xmlsitemap_regenerate_needed', TRUE);
+  }
+
+  return $result;
+}
+
+/**
+ * Condition builder for queries.
+ */
+function _xmlsitemap_build_conditions(&$conditions, &$args = array()) {
+  $primary_key = isset($conditions['type']) && isset($conditions['id']);
+  foreach ($conditions as $field => $value) {
+    if ($value === NULL) {
+      $conditions[$field] = $field . ' IS NULL';
+    }
+    else {
+      $conditions[$field] = $field . ' = ' . _xmlsitemap_get_placeholder($field);
+      $args[] = $value;
+    }
+  }
+  return $args;
+}
+
+/**
+ * Load a specific sitemap link.
+ *
+ * @param $conditions
+ *   An array of values to match keyed by field.
+ * @return
+ *   An array representing the first sitemap link matching the conditions found.
+ */
+function xmlsitemap_load_link(array $conditions) {
+  $args = _xmlsitemap_build_conditions($conditions);
+  $link = db_fetch_array(db_query_range("SELECT * FROM {xmlsitemap} WHERE ". implode(' AND ', $conditions), $args, 0, 1));
+
+  // Allow other modules to respond after loading the link.
+  //module_invoke_all('xmlsitemap_load_link', $link, $conditions, $args);
+
+  return $link;
+}
+
+/**
+ * Saves or updates a sitemap link.
+ *
+ * @param $link
+ *   An array with a sitemap link.
+ */
+function xmlsitemap_save_link(array $link) {
+  $link += array(
+    'access' => 1,
+    'status' => 1,
+    'lastmod' => 0,
+    'priority' => NULL,
+    'priority_override' => NULL,
+    'changefreq' => 0,
+    'changecount' => 0,
+    //'language' => '',
+  );
+
+  // Allow other modules to alter the link before saving.
+  drupal_alter('xmlsitemap_link', $link);
+
+  // Warn if the priority is an invalid value.
+  if ($link['priority'] < 0 || $link['priority'] > 1) {
+    watchdog('xmlsitemap', "Invalid sitemap link priority %priority.<br />@link", array('%priority' => $link['priority'], '@link' => var_export($link, TRUE)), WATCHDOG_NOTICE);
+  }
+
+  $existing = xmlsitemap_load_link(array('type' => $link['type'], 'id' => $link['id']));
+  $link_changed = !$existing || array_diff_assoc($existing, $link);
+
+  if ($link_changed) {
+    // This is a new or changed entry, set that we need a sitemap rebuild.
+    variable_set('xmlsitemap_regenerate_needed', TRUE);
+
+    if ($existing) {
+      xmlsitemap_write_record('xmlsitemap', $link, array('type', 'id'));
+    }
+    else {
+      xmlsitemap_write_record('xmlsitemap', $link);
+    }
+  }
+
+  // Allow other modules to respond after saving the link.
+  //module_invoke_all('xmlsitemap_save_link', $link);
+
+  return $link;
+}
+
+/**
+ * Perform a mass update of sitemap data.
+ *
+ * If visible links are updated, this will automatically set the regenerate
+ * needed flag to TRUE.
+ *
+ * @param $updates
+ *   An array of values to update fields to, keyed by field name.
+ * @param $conditions
+ *   An array of values to match keyed by field.
+ * @return
+ *   The number of links that were updated.
+ */
+function xmlsitemap_update_links($updates = array(), $conditions = array()) {
+  // If we are going to modify a visible sitemap link, we will need to set
+  // the regenerate needed flag.
+  _xmlsitemap_check_visible_link($conditions, TRUE);
+
+  $args = array();
+  foreach ($updates as $field => $value) {
+    if ($value === NULL || ($field == 'priority' && $value === 'default')) {
+      // Default priority is NULL, but we use the string 'default' in the
+      // interface so the correct default value is selected.
+      $updates[$field] = $field . ' = NULL';
+    }
+    else {
+      $updates[$field] = $field . ' = ' . _xmlsitemap_get_placeholder($field);
+      $args[] = $value;
+    }
+  }
+
+  // Process updates.
+  _xmlsitemap_build_conditions($conditions, $args);
+  $sql = "UPDATE {xmlsitemap} SET " . implode(', ', $updates) . " WHERE " . implode(' AND ', $conditions);
+  db_query($sql, $args);
+
+  return db_affected_rows();
+}
+
+/**
+ * Delete one or more sitemap links.
+ *
+ * If a visible sitemap link was deleted, this will automatically set the
+ * regenerate needed flag.
+ *
+ * @param $conditions
+ *   An array of values to match keyed by field.
+ * @return
+ *   The number of links that were deleted.
+ */
+function xmlsitemap_delete_link(array $conditions) {
+  _xmlsitemap_check_visible_link($conditions, TRUE);
+
+  $args = _xmlsitemap_build_conditions($conditions);
+  db_query("DELETE FROM {xmlsitemap} WHERE " . implode(' AND ', $conditions), $args);
+
+  // Allow other modules to respond after deleting the link.
+  //module_invoke_all('xmlsitemap_delete_link', $conditions, $args);
+
+  return db_affected_rows();
+}
+
+/**
+ * Delete all cached sitemap XML files.
+ *
+ * @param $rmdir
+ *   A boolean that if TRUE the directory will be removed after emptying.
+ * @param $path
+ *   An optional directory path, defaults to the xmlsiteamp cache directory.
+ */
+function xmlsitemap_clear_cache($rmdir = FALSE, $path = NULL) {
+  if (!isset($path)) {
+    $path = file_create_path(xmlsitemap_var('path'));
+  }
+
+  file_scan_directory($path, '.*', array('.', '..', 'CVS', '.svn'), 'file_delete', TRUE);
+  if ($rmdir) {
+    rmdir($path);
+  }
+}
+
+/**
+ * Get the filename of a specific sitemap page chunk.
+ *
+ * @param $chunk
+ *   An integer representing the integer of the sitemap page chunk.
+ * @param $language
+ *   A language object, defaults to the default language.
+ * @return
+ *   A file path to the expected chunk file.
+ *
+ * @todo Move to xmlsitemap.inc
+ */
+function xmlsitemap_get_chunk_file($chunk = 0, $language, $compressed = FALSE) {
+  return file_create_path(xmlsitemap_var('path')) .'/xmlsitemap-' . $language->language . '-' . $chunk . ($compressed ? '.gz' : '.xml');
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ *
+ * Set the regeneration needed flag if languages are changed.
+ */
+function xmlsitemap_form_locale_languages_overview_form_alter(&$form, $form_state) {
+  //module_load_include('inc', 'xmlsitemap', 'xmlsitemap.admin');
+  //array_unshift($form['#submit'], 'xmlsitemap_form_submit_flag_regenerate');
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ *
+ * Add vertical tabs to the XML sitemap settings.
+ */
+function xmlsitemap_form_xmlsitemap_settings_form_alter(&$form, $form_state) {
+  if (module_exists('vertical_tabs')) {
+    _xmlsitemap_add_vertical_tabs($form);
+  }
+}
+
+/**
+ * Internal default variables for xmlsitemap_var().
+ */
+function xmlsitemap_variables() {
+  return array(
+    'xmlsitemap_rebuild_needed' => FALSE,
+    'xmlsitemap_regenerate_needed' => FALSE,
+    'xmlsitemap_chunk_size' => 'auto',
+    'xmlsitemap_frontpage_priority' => '1.0',
+    'xmlsitemap_frontpage_changefreq' => XMLSITEMAP_FREQUENCY_DAILY,
+    'xmlsitemap_priority_default' => '0.5',
+    'xmlsitemap_path' => 'xmlsitemap',
+    'xmlsitemap_batch_limit' => 100,
+    'xmlsitemap_minimum_lifetime' => 0,
+    'xmlsitemap_xsl' => TRUE,
+    'xmlsitemap_generated_last' => 0,
+    'xmlsitemap_base_url' => $GLOBALS['base_url'],
+    'xmlsitemap_languages' => array(language_default('language')),
+    'xmlsitemap_gz' => FALSE,
+    // Removed variables are set to NULL so they can still be deleted.
+    'xmlsitemap_regenerate_last' => NULL,
+    'xmlsitemap_custom_links' => NULL,
+  );
+}
+
+/**
+ * Internal implementation of variable_get().
+ */
+function xmlsitemap_var($name, $default = NULL) {
+  static $defaults = NULL;
+  if (!isset($defaults)) {
+    $defaults = xmlsitemap_variables();
+  }
+
+  $name = 'xmlsitemap_'. $name;
+
+  // @todo Remove when stable.
+  if (!isset($defaults[$name])) {
+    trigger_error(t('Default variable for %variable not found.', array('%variable' => $name)));
+  }
+
+  return variable_get($name, isset($default) || !isset($defaults[$name]) ? $default : $defaults[$name]);
+}
+
+/**
+ * Set the current user stored in $GLOBALS['user'].
+ *
+ * @todo Remove when http://drupal.org/node/287292 is fixed.
+ */
+function xmlsitemap_switch_user($new_user = NULL) {
+  global $user;
+  static $user_original;
+
+  if (!isset($new_user)) {
+    if (isset($user_original)) {
+      // Restore the original user.
+      $user = $user_original;
+      unset($user_original);
+      session_save_session(TRUE);
+    }
+  }
+  else {
+    // Backup the user the first time this is called.
+    if (!isset($user_original)) {
+      $user_original = $user;
+      session_save_session(FALSE);
+    }
+
+    if (is_numeric($new_user) && $user->uid != $new_user) {
+      if (!$new_user) {
+        $user = drupal_anonymous_user();
+      }
+      else {
+        $user = user_load(array('uid' => $new_user));
+      }
+    }
+    else {
+      $user = is_object($new_user) ? $new_user : (object) $new_user;
+    }
+  }
+
+  return $user;
+}
+
+/**
+ * Restore the user that was originally loaded.
+ *
+ * @return
+ *  Current user.
+ */
+function xmlsitemap_restore_user() {
+  return xmlsitemap_switch_user();
+}
+
+/**
+ * Special implementation of drupal_write_record() to allow NULL values.
+ *
+ * @todo Remove when http://drupal.org/node/227677 is fixed.
+ */
+function xmlsitemap_write_record($table, &$object, $update = array()) {
+  // Standardize $update to an array.
+  if (is_string($update)) {
+    $update = array($update);
+  }
+
+  $schema = drupal_get_schema($table);
+  if (empty($schema)) {
+    return FALSE;
+  }
+
+  // Convert to an object if needed.
+  if (is_array($object)) {
+    $object = (object) $object;
+    $array = TRUE;
+  }
+  else {
+    $array = FALSE;
+  }
+
+  $fields = $defs = $values = $serials = $placeholders = array();
+  $object_fields = get_object_vars($object);
+
+  // Go through our schema, build SQL, and when inserting, fill in defaults for
+  // fields that are not set.
+  foreach ($schema['fields'] as $field => $info) {
+    // Special case -- skip serial types if we are updating.
+    if ($info['type'] == 'serial') {
+      if (empty($update)) {
+        // Track serial fields so we can helpfully populate them after the query.
+        $serials[] = $field;
+      }
+      continue;
+    }
+
+    // For inserts, populate defaults from Schema if not already provided
+    if (!isset($object->$field) && !count($update) && isset($info['default']) && !array_key_exists($field, $object_fields)) {
+      $object->$field = $info['default'];
+    }
+
+    // Build arrays for the fields, placeholders, and values in our query.
+    if (isset($object->$field) || (array_key_exists($field, $object_fields) && empty($info['not null']))) {
+      $fields[] = $field;
+      if (isset($object->$field)) {
+        $placeholders[] = db_type_placeholder($info['type']);
+        $values[] = empty($info['serialize']) ? $object->$field : serialize($object->$field);
+      }
+      else {
+        $placeholders[] = '%s';
+        $values[] = 'NULL';
+      }
+    }
+  }
+
+  // Build the SQL.
+  $query = '';
+  if (!count($update)) {
+    $query = "INSERT INTO {". $table ."} (". implode(', ', $fields) .') VALUES ('. implode(', ', $placeholders) .')';
+    $return = SAVED_NEW;
+  }
+  else {
+    $query = '';
+    foreach ($fields as $id => $field) {
+      if ($query) {
+        $query .= ', ';
+      }
+      $query .= $field .' = '. $placeholders[$id];
+    }
+
+    foreach ($update as $key) {
+      $conditions[] = "$key = ". db_type_placeholder($schema['fields'][$key]['type']);
+      $values[] = $object->$key;
+    }
+
+    $query = "UPDATE {". $table ."} SET $query WHERE ". implode(' AND ', $conditions);
+    $return = SAVED_UPDATED;
+  }
+
+  // Execute the SQL.
+  if (db_query($query, $values)) {
+    if ($serials) {
+      // Get last insert ids and fill them in.
+      foreach ($serials as $field) {
+        $object->$field = db_last_insert_id($table, $field);
+      }
+    }
+  }
+  else {
+    $return = FALSE;
+  }
+
+  // If we began with an array, convert back so we don't surprise the caller.
+  if ($array) {
+    $object = (array) $object;
+  }
+
+  return $return;
+}
+
+// @todo Remove when http://drupal.org/project/500044 is fixed.
+function _xmlsitemap_add_vertical_tabs(&$form, $fieldsets = NULL) {
+  // The javascript to add to the page.
+  $settings = array();
+  // Iterate through the form, finding fieldsets.
+  foreach (element_children($form) as $delta => $key) {
+    // We need to make sure that the element we have is a fieldset
+    // and the user has access to this field.
+    if ((!isset($fieldsets) || in_array($key, $fieldsets)) &&
+      (isset($form[$key]['#type']) && $form[$key]['#type'] == 'fieldset') &&
+      (!isset($form[$key]['#access']) || $form[$key]['#access'] != FALSE)) {
+      // Add the JavaScript.
+      $settings[$key] = array(
+        'name' => $form[$key]['#title'],
+        'weight' => (isset($form[$key]['#weight']) ? $form[$key]['#weight'] : 0) + (0.01 * $delta),
+        'callback' => (isset($form[$key]['#summary_callback']) ? $form[$key]['#summary_callback'] : $key),
+        'args' => (isset($form[$key]['#summary_arguments']) ? $form[$key]['#summary_arguments'] : array()),
+      );
+      // Add a class to identify the fieldset.
+      if (isset($form[$key]['#attributes']['class'])) {
+        $form[$key]['#attributes']['class'] .= ' vertical-tabs-fieldset vertical-tabs-'. $key;
+      }
+      else {
+        $form[$key]['#attributes']['class'] = 'vertical-tabs-fieldset vertical-tabs-'. $key;
+      }
+    }
+  }
+
+  // The JavaScript and CSS specific for this form.
+  if (!empty($settings)) {
+    $js = $css = array();
+
+    // Add Garland specific theming.
+    if ($GLOBALS['theme'] == 'garland') {
+      $garland_stylesheets = variable_get('color_garland_stylesheets', array());
+      if (count($garland_stylesheets) == 0 || !module_exists('color')) {
+        $css[] = drupal_get_path('module', 'vertical_tabs') .'/garland/vertical_tabs.garland.css';
+      }
+      else {
+        foreach ($garland_stylesheets as $path) {
+          if (strstr($path, 'vertical_tabs.garland.css')) {
+            $css[] = $path;
+          }
+        }
+      }
+    }
+
+    // User sort orders by the "weight" key.
+    uasort($settings, '_user_sort');
+
+    $form['vertical_tabs'] = array(
+      '#vertical_tabs_settings' => $settings,
+      '#vertical_tabs_js' => $js,
+      '#vertical_tabs_css' => $css,
+      '#form_id' => $form['form_id']['#value'],
+      '#type' => 'markup',
+      '#value' => '',
+      '#theme' => 'vertical_tabs',
+      '#attributes' => array('class' => 'vertical-tabs clear-block'),
+    );
+
+    return TRUE;
+  }
+}

@@ -1,0 +1,338 @@
+[18-Jul-2009 16:10:03] PHP Parse error:  syntax error, unexpected '[', expecting T_STRING in /home/a16notqi/public_html/sites/all/themes/soulkids/template.php on line 127
+[18-Jul-2009 16:10:09] PHP Parse error:  syntax error, unexpected '[', expecting T_STRING in /home/a16notqi/public_html/sites/all/themes/soulkids/template.php on line 127
+[18-Jul-2009 16:10:20] PHP Parse error:  syntax error, unexpected '[', expecting T_STRING in /home/a16notqi/public_html/sites/all/themes/soulkids/template.php on line 127
+[18-Jul-2009 16:12:11] PHP Parse error:  syntax error, unexpected '[', expecting T_STRING in /home/a16notqi/public_html/sites/all/themes/soulkids/template.php on line 127
+[18-Jul-2009 16:12:13] PHP Parse error:  syntax error, unexpected '[', expecting T_STRING in /home/a16notqi/public_html/sites/all/themes/soulkids/template.php on line 127
+[18-Jul-2009 16:12:18] PHP Parse error:  syntax error, unexpected '[', expecting T_STRING in /home/a16notqi/public_html/sites/all/themes/soulkids/template.php on line 127
+[18-Jul-2009 16:12:57] PHP Parse error:  syntax error, unexpected '[', expecting T_STRING in /home/a16notqi/public_html/sites/all/themes/soulkids/template.php on line 127
+[18-Jul-2009 16:13:18] PHP Parse error:  syntax error, unexpected '[', expecting T_STRING in /home/a16notqi/public_html/sites/all/themes/soulkids/template.php on line 127
+[21-Jul-2009 22:04:50] PHP Fatal error:  Cannot redeclare admin_menu_enable() (previously declared in /home/a16notqi/public_html/sites/all/modules/admin_menu/admin_menu.module:235) in /home/a16notqi/public_html/sites/all/modules/admin_menu/admin_menu.install on line 45
+[21-Jul-2009 22:09:05] PHP Fatal error:  Cannot redeclare theme_date_time_ago() (previously declared in /home/a16notqi/public_html/sites/all/modules/date/date/date.theme:221) in /home/a16notqi/public_html/sites/all/modules/date/theme/theme.inc on line 399
+[22-Jul-2009 20:36:54] PHP Fatal error:  Call to undefined function  comment_classes() in /home/a16notqi/public_html/sites/all/themes/soulkids/comment.tpl.php on line 3
+[22-Jul-2009 20:37:06] PHP Fatal error:  Call to undefined function  comment_classes() in /home/a16notqi/public_html/sites/all/themes/soulkids/comment.tpl.php on line 3
+[22-Jul-2009 20:37:18] PHP Fatal error:  Call to undefined function  comment_classes() in /home/a16notqi/public_html/sites/all/themes/soulkids/comment.tpl.php on line 3
+[22-Jul-2009 20:37:20] PHP Fatal error:  Call to undefined function  comment_classes() in /home/a16notqi/public_html/sites/all/themes/soulkids/comment.tpl.php on line 3
+[22-Jul-2009 20:37:35] PHP Fatal error:  Call to undefined function  comment_classes() in /home/a16notqi/public_html/sites/all/themes/soulkids/comment.tpl.php on line 3
+[22-Jul-2009 20:37:40] PHP Fatal error:  Call to undefined function  comment_classes() in /home/a16notqi/public_html/sites/all/themes/soulkids/comment.tpl.php on line 3
+[24-Jul-2009 16:25:13] PHP Fatal error:  Call to undefined function  context_enabled_contexts() in /home/a16notqi/public_html/sites/all/modules/features/includes/features.context.inc on line 43
+[24-Jul-2009 16:25:30] PHP Fatal error:  Call to undefined function  context_enabled_contexts() in /home/a16notqi/public_html/sites/all/modules/features/includes/features.context.inc on line 43
+[24-Jul-2009 16:25:39] PHP Fatal error:  Call to undefined function  context_enabled_contexts() in /home/a16notqi/public_html/sites/all/modules/features/includes/features.context.inc on line 43
+[30-Jul-2009 19:55:11] PHP Fatal error:  Call to undefined function  taxonomy_get_vocabularies() in /home/a16notqi/public_html/sites/all/modules/menutrails/menutrails.module on line 250
+[30-Jul-2009 19:55:15] PHP Fatal error:  Call to undefined function  taxonomy_get_vocabularies() in /home/a16notqi/public_html/sites/all/modules/menutrails/menutrails.module on line 250
+[30-Jul-2009 19:55:19] PHP Fatal error:  Call to undefined function  taxonomy_get_vocabularies() in /home/a16notqi/public_html/sites/all/modules/menutrails/menutrails.module on line 250
+[30-Jul-2009 19:55:39] PHP Fatal error:  Call to undefined function  taxonomy_get_vocabularies() in /home/a16notqi/public_html/sites/all/modules/menutrails/menutrails.module on line 250
+[31-Jul-2009 11:58:19] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:20] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:30] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:32] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:34] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:36] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:37] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:40] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:40] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:41] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:42] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:42] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:45] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:46] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:47] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:47] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:48] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:48] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:52] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:52] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:55] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:55] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:56] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:57] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:58] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:58:58] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:00] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:06] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:14] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:14] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:15] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:17] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:18] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:19] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:20] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:20] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:20] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:22] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:23] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:24] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:24] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:25] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:25] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:26] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:28] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:28] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:29] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:30] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:31] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:32] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:40] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:48] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:51] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 11:59:55] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:16] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:18] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:18] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:22] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:23] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:27] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:27] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:31] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:34] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:34] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:40] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:40] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:41] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:42] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:44] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:47] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:00:47] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:41] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:41] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:42] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:42] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:44] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:44] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:48] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:48] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:48] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:54] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:54] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:54] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:58] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:59] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:01:59] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:02:03] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:02:03] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:02:04] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:02:07] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:02:07] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:02:12] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:02:12] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:02:41] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 12:02:41] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 13:51:43] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 13:51:44] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 16:01:51] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 16:01:52] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[31-Jul-2009 16:01:54] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:55:18] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:55:19] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:55:22] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:56:23] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:56:23] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:56:24] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:56:24] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:58:34] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:58:34] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:59:03] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:59:05] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:59:07] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:59:09] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:59:11] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:59:12] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:59:13] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:59:14] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 14:59:14] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 15:00:40] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 17:56:31] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 17:56:44] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[03-Aug-2009 17:56:55] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[04-Aug-2009 09:06:36] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[04-Aug-2009 09:06:36] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[12-Aug-2009 12:08:45] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[12-Aug-2009 12:08:45] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[12-Aug-2009 12:08:47] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[12-Aug-2009 12:08:47] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[22-Aug-2009 20:55:59] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[22-Aug-2009 20:55:59] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[22-Aug-2009 20:56:53] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[22-Aug-2009 20:56:53] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[22-Aug-2009 20:56:53] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[22-Aug-2009 20:56:57] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[22-Aug-2009 20:57:00] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[22-Aug-2009 20:57:10] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[22-Aug-2009 20:58:09] PHP Fatal error:  Call to undefined function  batch_get() in /home/a16notqi/public_html/sites/all/modules/patterns/patterns.module on line 1932
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:370213:\&quot;MySQL server has gone away\nquery: UPDATE cache_update SET data = &amp;#039;a:37:{s:10:\\&amp;quot;addanother\\&amp;quot;;a:10:{s:5:\\&amp;quot;title\\&amp;quot;;s:11:\\&amp;quot;Add Another\\&amp;quot;;s:10:\\&amp;quot;short_name\\&amp;quot;;s:10:\\&amp;quot;addanother\\&amp;quot;;s:10:\\&amp;quot;dc:creator\\&amp;quot;;s:11:\\&amp;quot;Robin Monks\\&amp;quot;;s:11:\\&amp;quot;api_version\\&amp;quot;;s:3:\\&amp;quot;6.x\\&amp;quot;;s:17:\\&amp;quot;recommended_major\\&amp;quot;;s:1:\\&amp;quot;1\\&amp;quot;;s:16:\\&amp;quot;supported_majors\\&amp;quot;;s:1:\\&amp;quot;1\\&amp;quot;;s:13:\\&amp;quot;default_major\\&amp;quot;;s:1:\\&amp;quot;1\\&amp;quot;;s:14:\\&amp;quot;proj in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:174:\&quot;MySQL server has gone away\nquery: SELECT dst FROM url_alias WHERE src = &amp;#039;admin/reports/updates&amp;#039; AND language IN(&amp;#039;nb&amp;#039;, &amp;#039;&amp;#039;) ORDER BY language DESC\&quot;;s:5:\&quot;%file\&quot;;s:44:\&quot;/home/a16notqi/public_html/includes/path.inc\&quot;;s:5:\&quot;%line\&quot;;i:69;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959395) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:572:\&quot;MySQL server has gone away\nquery: INSERT INTO watchdog\n    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)\n    VALUES\n    (0, &amp;#039;update&amp;#039;, &amp;#039;Attempted to fetch information about all available new releases and updates.&amp;#039;, &amp;#039;a:0:{}&amp;#039;, 5, &amp;#039;&amp;lt;a href=\\&amp;quot;/admin/reports/updates\\&amp;quot;&amp;gt;vis&amp;lt;/a&amp;gt;&amp;#039;, &amp;#039;http://soulkids.no/http://soulkids.no/comment/reply/26&amp;#039;, &amp;#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&amp;#039;, &amp;#039;68.198.33.123&amp;#039;, 1257959395)\&quot;;s:5:\&quot;%file\&quo in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:130:\&quot;MySQL server has gone away\nquery: UPDATE variable SET value = &amp;#039;i:1257959395;&amp;#039; WHERE name = &amp;#039;update_last_check&amp;#039;\&quot;;s:5:\&quot;%file\&quot;;s:49:\&quot;/home/a16notqi/public_html/includes/bootstrap.inc\&quot;;s:5:\&quot;%line\&quot;;i:519;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959395) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:85:\&quot;MySQL server has gone away\nquery: DELETE FROM cache WHERE cid = &amp;#039;variables&amp;#039;\&quot;;s:5:\&quot;%file\&quot;;s:45:\&quot;/home/a16notqi/public_html/includes/cache.inc\&quot;;s:5:\&quot;%line\&quot;;i:179;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959395) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:142:\&quot;MySQL server has gone away\nquery: SELECT data, created, expire, serialized FROM cache_update WHERE cid = &amp;#039;update_available_releases&amp;#039;\&quot;;s:5:\&quot;%file\&quot;;s:55:\&quot;/home/a16notqi/public_html/modules/update/update.module\&quot;;s:5:\&quot;%line\&quot;;i:569;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959395) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:182:\&quot;MySQL server has gone away\nquery: SELECT dst FROM url_alias WHERE src = &amp;#039;admin/reports/status/run-cron&amp;#039; AND language IN(&amp;#039;nb&amp;#039;, &amp;#039;&amp;#039;) ORDER BY language DESC\&quot;;s:5:\&quot;%file\&quot;;s:44:\&quot;/home/a16notqi/public_html/includes/path.inc\&quot;;s:5:\&quot;%line\&quot;;i:69;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959395) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:180:\&quot;MySQL server has gone away\nquery: SELECT dst FROM url_alias WHERE src = &amp;#039;admin/reports/updates/check&amp;#039; AND language IN(&amp;#039;nb&amp;#039;, &amp;#039;&amp;#039;) ORDER BY language DESC\&quot;;s:5:\&quot;%file\&quot;;s:44:\&quot;/home/a16notqi/public_html/includes/path.inc\&quot;;s:5:\&quot;%line\&quot;;i:69;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959395) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:606:\&quot;MySQL server has gone away\nquery: SELECT s.lid, t.translation, s.version FROM locales_source s LEFT JOIN locales_target t ON s.lid = t.lid AND t.language = &amp;#039;nb&amp;#039; WHERE s.source = &amp;#039;No information is available about potential new releases for currently installed modules and themes. To check for updates, you may need to &amp;lt;a href=\\&amp;quot;@run_cron\\&amp;quot;&amp;gt;run cron&amp;lt;/a&amp;gt; or you can &amp;lt;a href=\\&amp;quot;@check_manually\\&amp;quot;&amp;gt;check manually&amp;lt;/a&amp;gt;. Please note that checking for available updates can take a long time, so please be patient.&amp;#039; AND s.textgroup = &amp;#039;default&amp;#039;\&qu in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:578:\&quot;MySQL server has gone away\nquery: INSERT INTO locales_source (location, source, textgroup, version) VALUES (&amp;#039;/http://soulkids.no/comment/reply/26&amp;#039;, &amp;#039;No information is available about potential new releases for currently installed modules and themes. To check for updates, you may need to &amp;lt;a href=\\&amp;quot;@run_cron\\&amp;quot;&amp;gt;run cron&amp;lt;/a&amp;gt; or you can &amp;lt;a href=\\&amp;quot;@check_manually\\&amp;quot;&amp;gt;check manually&amp;lt;/a&amp;gt;. Please note that checking for available updates can take a long time, so please be patient.&amp;#039;, &amp;#039;default&amp;#039;, &amp;#039;6.13&amp;#039;)\&quot;;s:5:\&quot;%file in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:87:\&quot;MySQL server has gone away\nquery: DELETE FROM cache WHERE cid LIKE &amp;#039;locale:%&amp;#039;\&quot;;s:5:\&quot;%file\&quot;;s:45:\&quot;/home/a16notqi/public_html/includes/cache.inc\&quot;;s:5:\&quot;%line\&quot;;i:175;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959395) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:51:\&quot;MySQL server has gone away\nquery: show table status\&quot;;s:5:\&quot;%file\&quot;;s:81:\&quot;/home/a16notqi/public_html/sites/all/modules/backup_migrate/backup_migrate.module\&quot;;s:5:\&quot;%line\&quot;;i:669;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959395) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:7:\&quot;warning\&quot;;s:8:\&quot;%message\&quot;;s:39:\&quot;Invalid argument supplied for foreach()\&quot;;s:5:\&quot;%file\&quot;;s:81:\&quot;/home/a16notqi/public_html/sites/all/modules/backup_migrate/backup_migrate.module\&quot;;s:5:\&quot;%line\&quot;;i:578;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959395) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:575:\&quot;MySQL server has gone away\nquery: INSERT INTO watchdog\n    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)\n    VALUES\n    (0, &amp;#039;backup_migrate&amp;#039;, &amp;#039;Database backup saved to &amp;lt;em&amp;gt;sites/soulkids.no/files/backup_migrate/scheduled/Soulkids.no-2009-11-11T18-09-55.sql.gz&amp;lt;/em&amp;gt;. &amp;#039;, &amp;#039;a:0:{}&amp;#039;, 5, &amp;#039;&amp;#039;, &amp;#039;http://soulkids.no/http://soulkids.no/comment/reply/26&amp;#039;, &amp;#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&amp;#039;, &amp;#039;68.198.33.123&amp;#039;, 1257959395)\&quot;;s:5:\&quot;%file\&quot;;s:53 in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:148:\&quot;MySQL server has gone away\nquery: UPDATE variable SET value = &amp;#039;i:1257959395;&amp;#039; WHERE name = &amp;#039;backup_migrate_schedule_last_backup&amp;#039;\&quot;;s:5:\&quot;%file\&quot;;s:49:\&quot;/home/a16notqi/public_html/includes/bootstrap.inc\&quot;;s:5:\&quot;%line\&quot;;i:519;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959395) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:55] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:85:\&quot;MySQL server has gone away\nquery: DELETE FROM cache WHERE cid = &amp;#039;variables&amp;#039;\&quot;;s:5:\&quot;%file\&quot;;s:45:\&quot;/home/a16notqi/public_html/includes/cache.inc\&quot;;s:5:\&quot;%line\&quot;;i:179;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959395) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:56] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:149:\&quot;MySQL server has gone away\nquery: SELECT data, created, headers, expire, serialized FROM cache WHERE cid = &amp;#039;date_timezone_identifiers_list&amp;#039;\&quot;;s:5:\&quot;%file\&quot;;s:45:\&quot;/home/a16notqi/public_html/includes/cache.inc\&quot;;s:5:\&quot;%line\&quot;;i:26;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959396) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:56] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:32093:\&quot;MySQL server has gone away\nquery: UPDATE cache SET data = &amp;#039;a:450:{s:14:\\&amp;quot;Africa/Abidjan\\&amp;quot;;s:14:\\&amp;quot;Africa/Abidjan\\&amp;quot;;s:12:\\&amp;quot;Africa/Accra\\&amp;quot;;s:12:\\&amp;quot;Africa/Accra\\&amp;quot;;s:18:\\&amp;quot;Africa/Addis_Ababa\\&amp;quot;;s:18:\\&amp;quot;Africa/Addis_Ababa\\&amp;quot;;s:14:\\&amp;quot;Africa/Algiers\\&amp;quot;;s:14:\\&amp;quot;Africa/Algiers\\&amp;quot;;s:13:\\&amp;quot;Africa/Asmara\\&amp;quot;;s:13:\\&amp;quot;Africa/Asmara\\&amp;quot;;s:13:\\&amp;quot;Africa/Asmera\\&amp;quot;;s:13:\\&amp;quot;Africa/Asmera\\&amp;quot;;s:13:\\&amp;quot;Africa/Bamako\\&amp;quot;;s:13:\\&amp;quot;Africa/Bamako\\&amp;q in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:56] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:99:\&quot;MySQL server has gone away\nquery: SELECT fbuid FROM fbconnect_users WHERE timestamp &amp;lt; 1257872996\&quot;;s:5:\&quot;%file\&quot;;s:71:\&quot;/home/a16notqi/public_html/sites/all/modules/fbconnect/fbconnect.module\&quot;;s:5:\&quot;%line\&quot;;i:494;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959396) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:56] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:468:\&quot;MySQL server has gone away\nquery: INSERT INTO watchdog\n    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)\n    VALUES\n    (0, &amp;#039;cron&amp;#039;, &amp;#039;Cron run completed (via poormanscron).&amp;#039;, &amp;#039;a:0:{}&amp;#039;, 5, &amp;#039;&amp;#039;, &amp;#039;http://soulkids.no/http://soulkids.no/comment/reply/26&amp;#039;, &amp;#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&amp;#039;, &amp;#039;68.198.33.123&amp;#039;, 1257959396)\&quot;;s:5:\&quot;%file\&quot;;s:53:\&quot;/home/a16notqi/public_html/modules/dblog/dblog.module\&quot;;s:5:\&quot;%line\&quot;;i:144;}&#039;, 3, &#039;&#039; in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:56] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:133:\&quot;MySQL server has gone away\nquery: UPDATE variable SET value = &amp;#039;i:1257959396;&amp;#039; WHERE name = &amp;#039;poormanscron_lastrun&amp;#039;\&quot;;s:5:\&quot;%file\&quot;;s:49:\&quot;/home/a16notqi/public_html/includes/bootstrap.inc\&quot;;s:5:\&quot;%line\&quot;;i:519;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959396) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:56] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:85:\&quot;MySQL server has gone away\nquery: DELETE FROM cache WHERE cid = &amp;#039;variables&amp;#039;\&quot;;s:5:\&quot;%file\&quot;;s:45:\&quot;/home/a16notqi/public_html/includes/cache.inc\&quot;;s:5:\&quot;%line\&quot;;i:179;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959396) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:56] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:122:\&quot;MySQL server has gone away\nquery: UPDATE variable SET value = &amp;#039;i:1257959396;&amp;#039; WHERE name = &amp;#039;cron_last&amp;#039;\&quot;;s:5:\&quot;%file\&quot;;s:49:\&quot;/home/a16notqi/public_html/includes/bootstrap.inc\&quot;;s:5:\&quot;%line\&quot;;i:519;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959396) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[11-Nov-2009 18:09:56] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:85:\&quot;MySQL server has gone away\nquery: DELETE FROM cache WHERE cid = &amp;#039;variables&amp;#039;\&quot;;s:5:\&quot;%file\&quot;;s:45:\&quot;/home/a16notqi/public_html/includes/cache.inc\&quot;;s:5:\&quot;%line\&quot;;i:179;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/http://soulkids.no/comment/reply/26&#039;, &#039;http://soulkids.no/artikkel/hvordan-legge-inn-bilder-og-video-pa-soulkidsno&#039;, &#039;68.198.33.123&#039;, 1257959396) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[18-Dec-2009 07:19:23] PHP Warning:  Lost connection to MySQL server during query
+query: SELECT 1 FROM access WHERE type = &#039;host&#039; AND LOWER(&#039;95.168.183.94&#039;) LIKE LOWER(mask) AND status = 0 LIMIT 0, 1 in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:50:47] PHP Warning:  Lost connection to MySQL server during query
+query: SELECT data, created, headers, expire, serialized FROM cache WHERE cid = &#039;variables&#039; in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:50:47] PHP Warning:  Lost connection to MySQL server during query
+query: SELECT data, created, headers, expire, serialized FROM cache WHERE cid = &#039;variables&#039; in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:50:47] PHP Warning:  Lost connection to MySQL server during query
+query: SELECT data, created, headers, expire, serialized FROM cache WHERE cid = &#039;variables&#039; in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:50:47] PHP Warning:  Lost connection to MySQL server during query
+query: SELECT data, created, headers, expire, serialized FROM cache WHERE cid = &#039;variables&#039; in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:50:47] PHP Warning:  Lost connection to MySQL server during query
+query: SELECT data, created, headers, expire, serialized FROM cache WHERE cid = &#039;variables&#039; in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:50:47] PHP Warning:  Lost connection to MySQL server during query
+query: SELECT data, created, headers, expire, serialized FROM cache WHERE cid = &#039;variables&#039; in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:50:47] PHP Warning:  Lost connection to MySQL server during query
+query: SELECT data, created, headers, expire, serialized FROM cache WHERE cid = &#039;variables&#039; in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:50:47] PHP Warning:  Lost connection to MySQL server during query
+query: SELECT data, created, headers, expire, serialized FROM cache WHERE cid = &#039;variables&#039; in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:50:47] PHP Warning:  Lost connection to MySQL server during query
+query: SELECT data, created, headers, expire, serialized FROM cache WHERE cid = &#039;variables&#039; in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:50:47] PHP Warning:  Lost connection to MySQL server during query
+query: SELECT data, created, headers, expire, serialized FROM cache WHERE cid = &#039;variables&#039; in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:50:52] PHP Warning:  MySQL server has gone away
+query: SELECT * FROM variable in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:50:53] PHP Warning:  MySQL server has gone away
+query: UPDATE cache SET data = &#039;&#039;, created = 1263264653, expire = 0, headers = &#039;&#039;, serialized = 0 WHERE cid = &#039;variables&#039; in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:50:59] PHP Warning:  MySQL server has gone away
+query: SELECT name, filename, throttle FROM system WHERE type = &#039;module&#039; AND status = 1 AND bootstrap = 1 ORDER BY weight ASC, filename ASC in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:50:59] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/a16notqi/public_html/includes/database.mysqli.inc:128) in /home/a16notqi/public_html/includes/bootstrap.inc on line 630
+[12-Jan-2010 03:50:59] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/a16notqi/public_html/includes/database.mysqli.inc:128) in /home/a16notqi/public_html/includes/bootstrap.inc on line 631
+[12-Jan-2010 03:50:59] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/a16notqi/public_html/includes/database.mysqli.inc:128) in /home/a16notqi/public_html/includes/bootstrap.inc on line 632
+[12-Jan-2010 03:50:59] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/a16notqi/public_html/includes/database.mysqli.inc:128) in /home/a16notqi/public_html/includes/bootstrap.inc on line 633
+[12-Jan-2010 03:51:04] PHP Warning:  MySQL server has gone away
+query: SELECT COUNT(pid) FROM url_alias in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:51:26] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:434:\&quot;Lost connection to MySQL server during query\nquery: SELECT n.nid, n.type, n.language, n.uid, n.status, n.created, n.changed, n.comment, n.promote, n.moderate, n.sticky, n.tnid, n.translate, r.vid, r.uid AS revision_uid, r.title, r.body, r.teaser, r.log, r.timestamp AS revision_timestamp, r.format, u.name, u.picture, u.data FROM node n INNER JOIN users u ON u.uid = n.uid INNER JOIN node_revisions r ON r.vid = n.vid WHERE n.nid = 27\&quot;;s:5:\&quot;%file\&quot;;s:51:\&quot;/home/a16notqi/public_html/modules/node/node.module\&quot;;s:5:\&quot;%line\&quot;;i:749;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.no/comment/reply/26&#039;, &#039;http://www.jillianfoxxx.com/comments.p in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[12-Jan-2010 03:51:30] PHP Warning:  MySQL server has gone away
+query: UPDATE sessions SET uid = 0, cache = 0, hostname = &#039;213.5.71.12&#039;, session = &#039;messages|a:1:{s:5:\&quot;error\&quot;;a:1:{i:0;s:516:\&quot;user warning: Lost connection to MySQL server during query\nquery: SELECT n.nid, n.type, n.language, n.uid, n.status, n.created, n.changed, n.comment, n.promote, n.moderate, n.sticky, n.tnid, n.translate, r.vid, r.uid AS revision_uid, r.title, r.body, r.teaser, r.log, r.timestamp AS revision_timestamp, r.format, u.name, u.picture, u.data FROM node n INNER JOIN users u ON u.uid = n.uid INNER JOIN node_revisions r ON r.vid = n.vid WHERE n.nid = 27 in /home/a16notqi/public_html/modules/node/node.module on line 749.\&quot;;}}&#039;, timestamp = 1263264690 WHERE sid = &#039;80d2df6a83d90cd817f79a3c9ba6ffb1&#039; in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[15-Jan-2010 14:41:59] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:119:\&quot;MySQL server has gone away\nquery: SELECT p.perm FROM role r INNER JOIN permission p ON p.rid = r.rid WHERE r.rid IN (1)\&quot;;s:5:\&quot;%file\&quot;;s:51:\&quot;/home/a16notqi/public_html/modules/user/user.module\&quot;;s:5:\&quot;%line\&quot;;i:502;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.3-16.no/rss.xml&#039;, &#039;&#039;, &#039;85.165.34.204&#039;, 1263562905) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[15-Jan-2010 14:43:09] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:160:\&quot;MySQL server has gone away\nquery: SELECT dst FROM url_alias WHERE src = &amp;#039;rss.xml&amp;#039; AND language IN(&amp;#039;nb&amp;#039;, &amp;#039;&amp;#039;) ORDER BY language DESC\&quot;;s:5:\&quot;%file\&quot;;s:44:\&quot;/home/a16notqi/public_html/includes/path.inc\&quot;;s:5:\&quot;%line\&quot;;i:69;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.3-16.no/rss.xml&#039;, &#039;&#039;, &#039;85.165.34.204&#039;, 1263562932) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[15-Jan-2010 14:43:12] PHP Warning:  MySQL server has gone away
+query: INSERT INTO watchdog
+    (uid, type, message, variables, severity, link, location, referer, hostname, timestamp)
+    VALUES
+    (0, &#039;php&#039;, &#039;%message in %file on line %line.&#039;, &#039;a:4:{s:6:\&quot;%error\&quot;;s:12:\&quot;user warning\&quot;;s:8:\&quot;%message\&quot;;s:126:\&quot;MySQL server has gone away\nquery: SELECT data, created, headers, expire, serialized FROM cache WHERE cid = &amp;#039;context&amp;#039;\&quot;;s:5:\&quot;%file\&quot;;s:45:\&quot;/home/a16notqi/public_html/includes/cache.inc\&quot;;s:5:\&quot;%line\&quot;;i:26;}&#039;, 3, &#039;&#039;, &#039;http://soulkids.3-16.no/rss.xml&#039;, &#039;&#039;, &#039;85.165.34.204&#039;, 1263562990) in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128
+[15-Jan-2010 14:43:13] PHP Warning:  MySQL server has gone away
+query: UPDATE sessions SET uid = 0, cache = 0, hostname = &#039;85.165.34.204&#039;, session = &#039;messages|a:1:{s:5:\&quot;error\&quot;;a:3:{i:0;s:201:\&quot;user warning: MySQL server has gone away\nquery: SELECT p.perm FROM role r INNER JOIN permission p ON p.rid = r.rid WHERE r.rid IN (1) in /home/a16notqi/public_html/modules/user/user.module on line 502.\&quot;;i:1;s:234:\&quot;user warning: MySQL server has gone away\nquery: SELECT dst FROM url_alias WHERE src = &amp;#039;rss.xml&amp;#039; AND language IN(&amp;#039;nb&amp;#039;, &amp;#039;&amp;#039;) ORDER BY language DESC in /home/a16notqi/public_html/includes/path.inc on line 69.\&quot;;i:2;s:201:\&quot;user warning: MySQL server has gone away\nquery: SELECT data, created, headers, expire, serialized FROM cache WHERE cid = &amp;#039;context&amp;#039; in /home/a16notqi/public_html/includes/cache.inc on line 26.\&quot;;}}&#039;, timestamp = 1263562993 WHERE sid = &#039;db1ec54189d15954a8caefc9922b22c6&#039; in /home/a16notqi/public_html/includes/database.mysqli.inc on line 128

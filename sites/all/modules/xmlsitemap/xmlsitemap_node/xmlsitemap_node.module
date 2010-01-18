@@ -1,0 +1,341 @@
+<?php
+// $Id: xmlsitemap_node.module,v 1.19.2.20.2.60 2009/07/14 00:33:46 davereid Exp $
+
+/**
+ * Implementation of hook_cron().
+ *
+ * Process old nodes not found in the {xmlsitemap} table.
+ */
+function xmlsitemap_node_cron() {
+  // Start with the most recently changed nodes first.
+  $query = db_query_range("SELECT n.nid FROM {node} n LEFT JOIN {xmlsitemap} x ON x.type = 'node' AND n.nid = x.id WHERE (x.id IS NULL OR x.status IS NULL) ORDER BY n.changed DESC", 0, xmlsitemap_var('batch_limit'));
+  while ($nid = db_result($query)) {
+    $node = node_load($nid, NULL, TRUE);
+    $link = xmlsitemap_node_create_link($node);
+    xmlsitemap_save_link($link);
+  }
+}
+
+/**
+ * Implementation of hook_nodeapi().
+ */
+function xmlsitemap_node_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  switch ($op) {
+    case 'load':
+      if ($data = xmlsitemap_load_link(array('type' => 'node', 'id' => $node->nid))) {
+        return array('xmlsitemap' => $data);
+      }
+      break;
+    case 'insert':
+      $link = xmlsitemap_node_create_link($node);
+      xmlsitemap_save_link($link);
+      break;
+    case 'update':
+      $link = xmlsitemap_node_create_link($node);
+      if ($node->revision) {
+        // Update the change frequency.
+        xmlsitemap_recalculate_changefreq($link);
+      }
+      xmlsitemap_save_link($link);
+      break;
+    case 'delete':
+      xmlsitemap_delete_link(array('type' => 'node', 'id' => $node->nid));
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_comment().
+ */
+function xmlsitemap_node_comment($comment, $op) {
+  switch ($op) {
+    case 'delete':
+    case 'publish':
+    case 'unpublish':
+      $comment = (object) $comment;
+      if ($node = node_load($comment->nid, NULL, TRUE)) {
+        $link = xmlsitemap_node_create_link($node);
+        if ($op == 'publish') {
+          xmlsitemap_recalculate_changefreq($link);
+        }
+        xmlsitemap_save_link($link);
+      }
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_node_type().
+ */
+function xmlsitemap_node_node_type($op, $info) {
+  if ($op == 'delete') {
+    variable_del('xmlsitemap_node_status_' . $info->type);
+    variable_del('xmlsitemap_node_priority_' . $info->type);
+  }
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ *
+ * Show a list of content types and their status/priorities at
+ * admin/settings/xmlsitemap.
+ */
+function xmlsitemap_node_form_xmlsitemap_settings_form_alter(&$form, $form_state) {
+  $form['node'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Content types'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#weight' => 30,
+    '#access' => user_access('administer content types'),
+  );
+
+  $node_types = node_get_types('names');
+  foreach ($node_types as $node_type => $node_type_name) {
+    $node_types[$node_type] = array(
+      'name' => check_plain(drupal_ucfirst($node_type_name)), // Or use t()?
+      'link' => 'admin/content/node-type/' . str_replace('_', '-', $node_type),
+      'status' => variable_get('xmlsitemap_node_status_' . $node_type, 1),
+      'priority' => variable_get('xmlsitemap_node_priority_' . $node_type, 'default'),
+    );
+  }
+  xmlsitemap_settings_list(t('Content type'), $node_types, $form['node']);
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ *
+ * @see node_type_form()
+ */
+function xmlsitemap_node_form_node_type_form_alter(&$form, $form_state) {
+  $node_type = isset($form['#node_type']->type) ? $form['#node_type']->type : '';
+
+  $form['xmlsitemap'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('XML sitemap'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#access' => user_access('administer xmlsitemap'),
+  );
+  $form['xmlsitemap']['xmlsitemap_node_status'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Include in the sitemap'),
+    '#default_value' => variable_get('xmlsitemap_node_status_' . $node_type, 1),
+  );
+  $form['xmlsitemap']['xmlsitemap_node_priority'] = array(
+    '#type' => 'select',
+    '#title' => t('Default priority'),
+    '#options' => xmlsitemap_get_priority_options(TRUE),
+    '#default_value' => variable_get('xmlsitemap_node_priority_' . $node_type, 'default'),
+  );
+
+  // Add our submit handler before node_type_form_submit() so we can compare
+  // the old and new values.
+  array_unshift($form['#submit'], 'xmlsitemap_node_type_form_submit');
+}
+
+function xmlsitemap_node_type_form_submit($form, $form_state) {
+  $node_type = $form_state['values']['old_type'];
+  $new_status = $form_state['values']['xmlsitemap_node_status'];
+  $new_priority = $form_state['values']['xmlsitemap_node_priority'];
+  $new_type = $form_state['values']['type'];
+
+  $updates = array();
+  if ($new_status != variable_get('xmlsitemap_node_status_' . $node_type, 1)) {
+    $updates['status'] = $new_status;
+  }
+  if ($new_priority != variable_get('xmlsitemap_node_priority_' . $node_type, 'default')) {
+    $updates['priority'] = $new_priority;
+  }
+  if ($node_type != $new_type) {
+    $updates['node_type'] = $new_type;
+  }
+
+  if ($updates) {
+    xmlsitemap_update_links($updates, array('type' => 'node', 'node_type' => $node_type));
+  }
+}
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function xmlsitemap_node_form_alter(&$form, $form_state, $form_id) {
+  if (isset($form['type']) && isset($form['#node']) && $form['type']['#value'] .'_node_form' == $form_id) {
+    $node = drupal_clone($form['#node']);
+    if (!isset($node->nid)) {
+      // Handle new nodes that do not have a value for nid yet.
+      $node->nid = NULL;
+    }
+    $link = xmlsitemap_node_create_link($node);
+
+    $form['xmlsitemap'] = array(
+      '#type' => 'fieldset',
+      '#tree' => TRUE,
+      '#title' => t('XML sitemap'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#access' => user_access('administer xmlsitemap') || user_access('administer nodes'),
+      '#weight' => 30,
+    );
+    $form['xmlsitemap']['priority_override'] = array(
+      '#type' => 'select',
+      '#title' => t('Priority'),
+      '#options' => xmlsitemap_get_priority_options($link['priority']),
+      '#default_value' => $node->xmlsitemap['priority_override'],
+      '#description' => user_access('administer content types') ? t('The default priority for this content type can be changed <a href="@link-type">here</a>.', array('@link-type' => url('admin/content/node-type/' . $node->type, array('query' => drupal_get_destination())))) : '',
+    );
+    // The following values should not exist for new nodes.
+    if ($node->nid) {
+      $form['xmlsitemap']['lastmod'] = array(
+        '#type' => 'value',
+        '#value' => $node->xmlsitemap['lastmod'],
+      );
+      $form['xmlsitemap']['changefreq'] = array(
+        '#type' => 'value',
+        '#value' => $node->xmlsitemap['changefreq'],
+      );
+      $form['xmlsitemap']['changecount'] = array(
+        '#type' => 'value',
+        '#value' => $node->xmlsitemap['changecount'],
+      );
+    }
+
+    //if (isset($node->nid) && !node_access('view', $node, drupal_anonymous_user())) {
+    //  $form['xmlsitemap']['status_override']['#disabled'] = TRUE;
+    //  $form['xmlsitemap']['status_override']['#description'] = t('This content is not currently visible to anonymous users, so it cannot be included in the sitemap.');
+    //}
+
+    // Add the vertical tabs JavaScript, but set it to deferred.
+    if ($form['xmlsitemap']['#access'] && module_exists('vertical_tabs')) {
+      drupal_add_js(drupal_get_path('module', 'xmlsitemap_node') . '/xmlsitemap_node.vertical_tabs.node_form.js');
+    }
+  }
+}
+
+/**
+ * Implementation of hook_xmlsitemap_links().
+ */
+function xmlsitemap_node_xmlsitemap_links($offset = 0, $limit = 0) {
+  $links = array();
+
+  $sql = "SELECT n.nid FROM {node} n WHERE n.nid > %d ORDER BY n.nid";
+  $query = ($limit ? db_query_range($sql, $offset, 0, $limit) : db_query($sql, $offset));
+
+  while ($nid = db_result($query)) {
+    $node = node_load($nid, NULL, TRUE);
+    $links[] = xmlsitemap_node_create_link($node);
+  }
+
+  return $links;
+}
+
+/**
+ * Implementation of hook_xmlsitemap_links_batch_info().
+ */
+function xmlsitemap_node_xmlsitemap_links_batch_info() {
+  return array(
+    'max' => db_result(db_query("SELECT COUNT(n.nid) FROM {node} n")),
+  );
+}
+
+/**
+ * Implementation of hook_xmlsitemap_links_clear().
+ */
+function xmlsitemap_node_xmlsitemap_links_clear() {
+  db_query("DELETE FROM {xmlsitemap} WHERE type = 'node'");
+}
+
+/**
+ * Fetch all the timestamps for when a node was changed.
+ *
+ * @param $node
+ *   A node object.
+ * @return
+ *   An array of UNIX timestamp integers.
+ */
+function xmlsitemap_node_get_timestamps($node) {
+  static $timestamps = array();
+
+  if (!isset($timestamps[$node->nid])) {
+    $timestamps[$node->nid] = array();
+    $query = db_query("SELECT c.timestamp FROM {comments} c WHERE c.nid = %d AND c.status = %d UNION ALL SELECT nr.timestamp FROM {node_revisions} nr WHERE nr.nid = %d", $node->nid, COMMENT_PUBLISHED, $node->nid);
+    while ($timestamp = db_result($query)) {
+      $timestamps[$node->nid][] = (int) $timestamp;
+    }
+  }
+
+  return $timestamps[$node->nid];
+}
+
+/**
+ * Create a sitemap link from a node.
+ *
+ * The link will be saved as $node->xmlsitemap.
+ *
+ * @param $node
+ *   A node object.
+ */
+function xmlsitemap_node_create_link(&$node) {
+  if (!isset($node->xmlsitemap)) {
+    $node->xmlsitemap = array();
+  }
+
+  $node->xmlsitemap += array(
+    'type' => 'node',
+    'id' => $node->nid,
+    'loc' => 'node/'. $node->nid,
+    'priority_override' => NULL,
+    'lastmod' => isset($node->changed) ? $node->changed : REQUEST_TIME,
+    'changefreq' => $node->nid ? xmlsitemap_calculate_changefreq(xmlsitemap_node_get_timestamps($node)) : 0,
+    'changecount' => $node->nid ? count(xmlsitemap_node_get_timestamps($node)) - 1 : 0,
+    'node_type' => $node->type,
+  );
+
+  // Temporary check and fix for http://drupal.org/node/516928.
+  if ($node->xmlsitemap['changecount'] < 0) {
+    trigger_error("Changecount for node {$node->nid} was negative (timestamps: " . implode(', ', xmlsitemap_node_get_timestamps($node)) . ". Please report this to <a href=\"http://drupal.org/node/516928\">http://drupal.org/node/516928</a>.", E_USER_ERROR);
+    $node->xmlsitemap['changecount'] = 0;
+  }
+
+  // The following values must always be checked because they are volatile.
+  $node->xmlsitemap['access'] = node_access('view', $node, drupal_anonymous_user());
+  $node->xmlsitemap['status'] = variable_get('xmlsitemap_node_status_' . $node->type, 1);
+  $node->xmlsitemap['priority'] = variable_get('xmlsitemap_node_priority_' . $node->type, 'default');
+  $node->xmlsitemap['language'] = isset($node->language) ? $node->language : '';
+
+  return $node->xmlsitemap;
+}
+
+/**
+ * Internal default variables for xmlsitemap_node_var().
+ */
+function xmlsitemap_node_variables() {
+  $defaults = array();
+  $node_types = array_keys(node_get_types('names'));
+  foreach ($node_types as $node_type) {
+    $defaults['xmlsitemap_node_priority_' . $node_type] = 'default';
+    $defaults['xmlsitemap_node_status_' . $node_type] = 1;
+    // @todo Remove the variable.
+    $defaults['xmlsitemap_node_update_' . $node_type] = NULL;
+  }
+  return $defaults;
+}
+
+///**
+// * Internal implementation of variable_get().
+// */
+//function xmlsitemap_node_var($name, $default = NULL) {
+//  static $defaults;
+//  if (!isset($defaults)) {
+//    $defaults = xmlsitemap_node_variables();
+//  }
+//
+//  $name = 'xmlsitemap_node_'. $name;
+//
+//  // @todo Remove when stable.
+//  if (!isset($defaults[$name])) {
+//    trigger_error(t('Default variable for %variable not found.', array('%variable' => $name)));
+//  }
+//
+//  return variable_get($name, isset($default) || !isset($defaults[$name]) ? $default : $defaults[$name]);
+//}

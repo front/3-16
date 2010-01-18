@@ -1,0 +1,246 @@
+# Norwegian Bokmål translation of Drupal (6.10)
+# Copyright (c) 2009 by the Norwegian Bokmål translation team
+# Generated from files:
+#  php.module,v 1.8.2.1 2008/02/05 09:29:50 goba
+#  php.install,v 1.1 2007/04/24 10:54:34 dries
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Drupal (6.10)\n"
+"POT-Creation-Date: 2009-02-27 19:39-0600\n"
+"PO-Revision-Date: 2008-09-28 08:40-0500\n"
+"Language-Team: Norwegian Bokmål\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: modules/php/php.module:16
+msgid ""
+"The PHP filter adds the ability to include PHP code in posts. PHP is a "
+"general-purpose scripting language widely-used for web development; the "
+"content management system used by this website has been developed using PHP."
+msgstr ""
+"PHP-filteret åpner for å inkludere PHP-kode i innlegg. PHP er et generelt "
+"programmeringsspråk for nettsider. Publiseringssystemet som dette nettstedet "
+"bruker er skrevet i PHP."
+
+#: modules/php/php.module:17
+msgid ""
+"Through the PHP filter, users with the proper permission may include custom "
+"PHP code within a page of the site. While this is a powerful and flexible "
+"feature if used by a trusted user with PHP experience, it is a significant "
+"and dangerous security risk in the hands of a malicious user. Even a trusted "
+"user may accidentally compromise the site by entering malformed or incorrect "
+"PHP code. Only the most trusted users should be granted permission to use "
+"the PHP filter, and all PHP code added through the PHP filter should be "
+"carefully examined before use."
+msgstr ""
+"Med PHP-filteret kan brukere med de rette tilgangene legge ut sin egen PHP-"
+"kode på sidene. Dette er en kraftig og fleksibel egenskap som kan gis til "
+"brukere med gode PHP-kunnskaper, som administratorgruppa har tillit til. "
+"Samtidig er det en stor og farlig sikkerhetsrisiko hvis en bruker med onde "
+"hensikter får tilgang til egenskapen. Også brukere man har tillit til kan "
+"ved inkurie sette nettstedet ut av spill ved å legge ut feilskrevet PHP-"
+"kode. Kun de brukerne man stoler aller mest på bør få tilgang til å bruke "
+"PHP-filteret, og all PHP-kode som legges til gjennom filteret bør leses nøye "
+"gjennom før den blir lagt ut."
+
+#: modules/php/php.module:18,61
+msgid ""
+"<a href=\"@drupal\">Drupal.org</a> offers <a href=\"@php-snippets\">some "
+"example PHP snippets</a>, or you can create your own with some PHP "
+"experience and knowledge of the Drupal system."
+msgstr ""
+"<a href=\"@drupal\">Drupal.org</a> tilbyr <a href=\"@php-snippets\">noen PHP "
+"snutter som eksempel</a>, eller så kan du lage dine egne med noe PHP "
+"erfaring og kunnskap om Drupalsystemet."
+
+#: modules/php/php.module:19
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@php\">PHP "
+"module</a>."
+msgstr ""
+"For ytterligere opplysninger, les den engelske Drupalhåndbokas avsnitt om <a "
+"href=\"@contact\">PHPmodulen</a>."
+
+#: modules/php/php.module:32
+msgid "You may post PHP code. You should include &lt;?php ?&gt; tags."
+msgstr "Du kan legge inn PHP-kode."
+
+#: modules/php/php.module:34
+msgid "Using custom PHP code"
+msgstr "Bruk tilpasset PHP-kode"
+
+#: modules/php/php.module:35
+msgid ""
+"Custom PHP code may be embedded in some types of site content, including "
+"posts and blocks. While embedding PHP code inside a post or block is a "
+"powerful and flexible feature when used by a trusted user with PHP "
+"experience, it is a significant and dangerous security risk when used "
+"improperly. Even a small mistake when posting PHP code may accidentally "
+"compromise your site."
+msgstr ""
+"Egenutviklet PHP-kode kan legges inn i enkelte typer innhold, som poster og "
+"blokker. Dette kan være en kraftig og fleksibel egenskap når den benyttes av "
+"brukere med PHP-kunnskaper som har tillit, og samtidig en stor og farlig "
+"sikkerhetsrisiko ved feil bruk. En liten feil er nok til å sette hele "
+"nettstedet ut av spill."
+
+#: modules/php/php.module:36
+msgid ""
+"If you are unfamiliar with PHP, SQL, or Drupal, avoid using custom PHP code "
+"within posts. Experimenting with PHP may corrupt your database, render your "
+"site inoperable, or significantly compromise security."
+msgstr ""
+"Hvis du er ukjent med PHP, SQL eller Drupal, unngå bruk av tilpasset PHP-"
+"kode i innlegg. Eksperimentering med PHP kan ødelegge databasen din, sette "
+"nettstedet ut av drift eller skape signifikante sikkerhetshull."
+
+#: modules/php/php.module:37
+msgid "Notes:"
+msgstr "Notater:"
+
+#: modules/php/php.module:38
+msgid ""
+"Remember to double-check each line for syntax and logic errors "
+"<strong>before</strong> saving."
+msgstr ""
+"Husk å dobbeltklikke hver linje for syntaks- og logiske feil <strong>før</"
+"strong> lagring."
+
+#: modules/php/php.module:39
+msgid "Statements must be correctly terminated with semicolons."
+msgstr "Uttrykk må være korrekt avsluttet med semikolon."
+
+#: modules/php/php.module:40
+msgid ""
+"Global variables used within your PHP code retain their values after your "
+"script executes."
+msgstr ""
+"Globale variable brukt i din PHP-kode beholder sin verdi etter at skriptet "
+"ditt kjører."
+
+#: modules/php/php.module:41
+msgid ""
+"<code>register_globals</code> is <strong>turned off</strong>. If you need to "
+"use forms, understand and use the functions in <a href=\"@formapi\">the "
+"Drupal Form API</a>."
+msgstr ""
+"<code>register_globals</code> er<strong>slått av</strong>. Hvis du må bruke "
+"skjema, forstå og bruk funksjonene i <a href=\"@formapi\">Drupal sin skjema "
+"API</a>."
+
+#: modules/php/php.module:42
+msgid ""
+"Use a <code>print</code> or <code>return</code> statement in your code to "
+"output content."
+msgstr ""
+"Bruk et <code>print</code> eller <code>return</code> uttrykk in koden din "
+"for å skrive ut innhold."
+
+#: modules/php/php.module:43
+msgid ""
+"Develop and test your PHP code using a separate test script and sample "
+"database before deploying on a production site."
+msgstr ""
+"Utvikle og test PHP-koden din med et eget testskript på en testdatabase før "
+"den legges ut på en produksjonsdatabase."
+
+#: modules/php/php.module:44
+msgid ""
+"Consider including your custom PHP code within a site-specific module or "
+"<code>template.php</code> file rather than embedding it directly into a post "
+"or block."
+msgstr ""
+"Vurder å inkludere din tilpassede PKP-kode i en module for nettstedet eller "
+"i en <code>template.php</code>-fil heller enn å putte den direkte i en "
+"oppføring eller blokk."
+
+#: modules/php/php.module:45
+msgid ""
+"Be aware that the ability to embed PHP code within content is provided by "
+"the PHP Filter module. If this module is disabled or deleted, then blocks "
+"and posts with embedded PHP may display, rather than execute, the PHP code."
+msgstr ""
+"Vær klar over at evnen til å legge inn PHP-kode direkte i innholdet kommer "
+"fra PHP Filter-modulen. Hvis denne modulen er deaktivert eller slettet, kan "
+"blokker eller oppføringer med innlagt PHP-kode vise, istedenfor for å "
+"utføre, PHP-koden."
+
+#: modules/php/php.module:46
+msgid ""
+"A basic example: <em>Creating a \"Welcome\" block that greets visitors with "
+"a simple message.</em>"
+msgstr ""
+"Et enkelt eksempel: <em>Opprett en \"Velkommen\"-blokk som hilser besøkende "
+"velkommen med en kort beskjed.</em>"
+
+#: modules/php/php.module:47
+msgid ""
+"<p>Add a custom block to your site, named \"Welcome\". With its input format "
+"set to \"PHP code\" (or another format supporting PHP input), add the "
+"following in the Block body:</p>\n"
+"<pre>\n"
+"print t('Welcome visitor! Thank you for visiting.');\n"
+"</pre>"
+msgstr ""
+"<p>Legg til en tilpasset blokk til nettstedet ditt kalt <q>Velkommen</q>. "
+"Sett blokkas inndataformat til  <q>PHP-kode</q> (eller et annet format som "
+"støtter PHP-inndata), og legg til følgende i blokkas kropp:</p>\n"
+"<pre>\n"
+"print t('Velkommen, gjest! Takk for at du besøker oss.');\n"
+"</pre>"
+
+#: modules/php/php.module:51
+msgid ""
+"<p>To display the name of a registered user, use this instead:</p>\n"
+"<pre>\n"
+"global $user;\n"
+"if ($user->uid) {\n"
+"  print t('Welcome @name! Thank you for visiting.', array('@name' => $user-"
+">name));\n"
+"}\n"
+"else {\n"
+"  print t('Welcome visitor! Thank you for visiting.');\n"
+"}\n"
+"</pre>"
+msgstr ""
+"<p>For å vise navnet til en registrert bruker, bruk dette i stedet:</p>\r\n"
+"<pre>\r\n"
+"global $user;\r\n"
+"if ($user->uid) {\r\n"
+"  print t('Velkommen, @name! Takk for at du besøker oss.', array('@name' => "
+"$user->name));\r\n"
+"}\r\n"
+"else {\r\n"
+"  print t('Velkommen, gjest! Takk for at du besøker oss.');\r\n"
+"}\r\n"
+"</pre>"
+
+#: modules/php/php.module:75
+msgid "PHP evaluator"
+msgstr "PHP fortolker"
+
+#: modules/php/php.module:80
+msgid ""
+"Executes a piece of PHP code. The usage of this filter should be restricted "
+"to administrators only!"
+msgstr ""
+"Fortolker PHP-kode. Bruken av dette filteret bør forbeholdes administratorer!"
+
+#: modules/php/php.install:20
+msgid "A !php-code input format has been created."
+msgstr "En inndataformat for !php-code ble opprettet."
+
+#: modules/php/php.install:28
+msgid ""
+"The PHP module has been disabled. Please note that any existing content that "
+"was using the PHP filter will now be visible in plain text. This might pose "
+"a security risk by exposing sensitive information, if any, used in the PHP "
+"code."
+msgstr ""
+"PHP-modulen har blitt deaktivert. Eksisterende innhold som bruke PHP-"
+"filteret vil nå bli vist som ren tekst. Dette kan utgjøre en "
+"sikkerhetsrisiko siden eventuell sensitiv informasjon som ble brukt i PHP-"
+"koden nå vil være synlig."
