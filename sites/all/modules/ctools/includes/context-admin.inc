@@ -1,5 +1,5 @@
 <?php
-// $Id: context-admin.inc,v 1.6 2009/04/20 23:51:44 merlinofchaos Exp $
+// $Id: context-admin.inc,v 1.9.2.1 2009/10/06 18:08:23 merlinofchaos Exp $
 
 /**
  * @file includes/common-context.inc
@@ -31,6 +31,7 @@ function ctools_context_info($type = NULL) {
         'form id' => 'ctools_edit_argument_form',
         'key' => 'arguments', // the key that data will be stored on an object, eg $panel_page
         'sortable' => TRUE,
+        'settings' => 'argument_settings',
       ),
       'relationship' => array(
         'title' => t('Relationships'),
@@ -41,6 +42,7 @@ function ctools_context_info($type = NULL) {
         'form id' => 'ctools_edit_relationship_form',
         'key' => 'relationships',
         'sortable' => FALSE,
+        'settings' => 'relationship_settings',
       ),
       'context' => array(
         'title' => t('Contexts'),
@@ -51,6 +53,7 @@ function ctools_context_info($type = NULL) {
         'form id' => 'ctools_edit_context_form',
         'key' => 'contexts',
         'sortable' => FALSE,
+        'settings' => 'context_settings',
       ),
       'requiredcontext' => array(
         'title' => t('Required contexts'),
@@ -60,7 +63,7 @@ function ctools_context_info($type = NULL) {
         'context function' => 'ctools_get_context',
         'form id' => 'ctools_edit_requiredcontext_form',
         'key' => 'requiredcontexts',
-        'sortable' => TRUE,
+        'sortable' => FALSE,
       ),
     );
   }
@@ -70,6 +73,56 @@ function ctools_context_info($type = NULL) {
   }
 
   return $info[$type];
+}
+
+/**
+ * Get the cache for the context object.
+ *
+ * This can pass through to a module provided cache if it exists, or
+ * the default cache will be used.
+ */
+function ctools_context_cache_get($fragment, $key) {
+  // Separate the fragment into 'module' and 'argument'
+  if (strpos($fragment, '-') === FALSE) {
+    $module = $fragment;
+    $argument = NULL;
+  }
+  else {
+    list($module, $argument) = explode('-', $fragment, 2);
+  }
+
+  $function = $module . '_context_cache_get';
+  if (function_exists($function)) {
+    return $function($argument, $key);
+  }
+  else {
+    return ctools_object_cache_get("context_object:$module", $key);
+  }
+}
+
+/**
+ * Get the cache for the context object.
+ *
+ * This can pass through to a module provided cache if it exists, or
+ * the default cache will be used.
+ */
+function ctools_context_cache_set($fragment, $key, $object) {
+  // Separate the fragment into 'module' and 'argument'
+  if (strpos($fragment, '-') === FALSE) {
+    $module = $fragment;
+    $argument = NULL;
+  }
+  else {
+    list($module, $argument) = explode('-', $fragment, 2);
+  }
+
+  $function = $module . '_context_cache_set';
+  if (function_exists($function)) {
+    return $function($argument, $key, $object);
+  }
+  else {
+    return ctools_object_cache_set("context_object:$module", $key, $object);
+  }
 }
 
 /**
@@ -194,6 +247,8 @@ function ctools_context_admin_includes() {
   ctools_include('ajax');
   ctools_include('object-cache');
   ctools_modal_add_js();
+  ctools_modal_add_plugin_js(ctools_get_contexts());
+  ctools_modal_add_plugin_js(ctools_get_relationships());
 }
 
 /**
@@ -306,7 +361,7 @@ function ctools_context_ajax_item_add($module = NULL, $type = NULL, $object_name
   }
 
   // Load stored object from cache.
-  if (!($object = ctools_object_cache_get("context_object:$module", $object_name))) {
+  if (!($object = ctools_context_cache_get($module, $object_name))) {
     ctools_ajax_render_error(t('Invalid object name.'));
   }
 
@@ -324,7 +379,7 @@ function ctools_context_ajax_item_add($module = NULL, $type = NULL, $object_name
 
   // Give this item an id, which is really just the nth version
   // of this particular context.
-  $id = ctools_context_next_id($ref, $name) + 1;
+  $id = ctools_context_next_id($ref, $name);
 
   // Figure out the position for our new context.
   $position = empty($ref) ? 0 : max(array_keys($ref)) + 1;
@@ -336,6 +391,10 @@ function ctools_context_ajax_item_add($module = NULL, $type = NULL, $object_name
     'id' => $id,
     'name' => $name,
   );
+
+  if (isset($type_info['settings'])) {
+    $ref[$position][$type_info['settings']] = isset($info['defaults']) ? $info['defaults'] : array();
+  }
 
   $base_contexts = isset($object->base_contexts) ? $object->base_contexts : array();
   $contexts = ctools_context_load_contexts($object, TRUE, $base_contexts);
@@ -357,7 +416,7 @@ function ctools_context_ajax_item_add($module = NULL, $type = NULL, $object_name
 
   if (empty($output)) {
     // successful submit
-    ctools_object_cache_set("context_object:$module", $object_name, $object);
+    ctools_context_cache_set($module, $object_name, $object);
 
     $arg_form_state = array();
 
@@ -430,7 +489,7 @@ function ctools_context_ajax_item_edit($module = NULL, $type = NULL, $object_nam
   }
 
   // Load stored object from cache.
-  if (!($object = ctools_object_cache_get("context_object:$module", $object_name))) {
+  if (!($object = ctools_context_cache_get($module, $object_name))) {
     ctools_ajax_render_error(t('Invalid object name.'));
   }
 
@@ -475,7 +534,7 @@ function ctools_context_ajax_item_edit($module = NULL, $type = NULL, $object_nam
 
   if (empty($output)) {
     // successful submit
-    ctools_object_cache_set("context_object:$module", $object_name, $object);
+    ctools_context_cache_set($module, $object_name, $object);
 
     $output = array();
     $output[] = ctools_modal_command_dismiss();
@@ -868,7 +927,7 @@ function ctools_context_ajax_item_delete($module = NULL, $type = NULL, $object_n
   }
 
   // Load stored object from cache.
-  if (!($object = ctools_object_cache_get("context_object:$module", $object_name))) {
+  if (!($object = ctools_context_cache_get($module, $object_name))) {
     ctools_ajax_render_error(t('Invalid object name.'));
   }
 
@@ -884,7 +943,7 @@ function ctools_context_ajax_item_delete($module = NULL, $type = NULL, $object_n
   }
 
   unset($ref[$position]);
-  ctools_object_cache_set("context_object:$module", $object_name, $object);
+  ctools_context_cache_set($module, $object_name, $object);
 
   $output   = array();
   $output[] = ctools_ajax_command_replace('#' . $type . '-row-' . $position, '');

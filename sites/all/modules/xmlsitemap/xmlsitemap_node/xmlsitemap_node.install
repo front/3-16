@@ -1,102 +1,271 @@
 <?php
-// $Id: xmlsitemap_node.install,v 1.9.2.11.2.26 2009/06/29 02:21:33 davereid Exp $
+// $Id: xmlsitemap_node.install,v 1.9.2.65 2009/06/10 15:16:55 earnie Exp $
 
 /**
  * @file
- * Install and uninstall schema and functions for the xmlsitemap_node module.
+ * Installation file for XML sitemap node.
  */
+
+/*****************************************************************************
+ * Drupal hooks.
+ ****************************************************************************/
 
 /**
- * Implementation of hook_requirements().
+ * Implementation of hook_enable().
  */
-function xmlsitemap_node_requirements($phase) {
-  $requirements = array();
-  $t = get_t();
-
-  if (function_exists('user_access') && !user_access('access content', drupal_anonymous_user())) {
-    $requirements['xmlsitemap_node_anonymous_permission'] = array(
-      'title' => $t('XML sitemap node'),
-      'value' => $t('Anonymous access to content'),
-      'description' => $t('In order to list content links in the sitemap, the anonymous user must have the <a href="@perm-link">%permission</a> permission.', array('@perm-link' => url('admin/user/permissions', array('fragment' => 'module-node')), '%permission' => 'access content')),
-      'severity' => REQUIREMENT_ERROR,
-    );
-  }
-
-  return $requirements;
+function xmlsitemap_node_enable() {
+  xmlsitemap_flag_sitemap();
 }
 
 /**
- * Implementation of hook_schema_alter().
+ * Implementation of hook_disable().
  */
-function xmlsitemap_node_schema_alter(&$schema) {
-  $schema['xmlsitemap']['fields']['node_type'] = array(
-    'description' => 'The {node_type}.type of this node link.',
-    'type' => 'varchar',
-    'length' => 32,
-    'default' => NULL,
+function xmlsitemap_node_disable() {
+  xmlsitemap_flag_sitemap();
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function xmlsitemap_node_schema() {
+  $schema['xmlsitemap_node'] = array(
+    'description' => 'The base table for xmlsitemap_node.',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The node ID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'changed' => array(
+        'description' => 'The Unix timestamp of the last change.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'previously_changed' => array(
+        'description' => 'The Unix timestamp of the previous change.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'comment_ratio' => array(
+        'description' => 'The ratio between the node comments and the maximum number of comments added to a node.',
+        'type' => 'float',
+        'not null' => TRUE,
+        'default' => 0.0,
+      ),
+      'priority_override' => array(
+        'description' => 'The priority of the node in the sitemap.',
+        'type' => 'float',
+        'not null' => TRUE,
+        'default' => -2.0,
+      ),
+    ),
+    'primary key' => array('nid'),
   );
-  $schema['xmlsitemap']['indexes']['node_type'] = array('node_type');
+
+  return $schema;
 }
 
 /**
  * Implementation of hook_install().
  */
 function xmlsitemap_node_install() {
+  drupal_install_schema('xmlsitemap_node');
+  db_query("UPDATE {system} SET weight = 5 WHERE name = 'xmlsitemap_node'");
+}
+
+/**
+ * Implementation of hook_update_N().
+ *
+ */
+function xmlsitemap_node_update_6100() {
   $ret = array();
-  $field = array(
-    'description' => 'The {node_type}.type of this node link.',
-    'type' => 'varchar',
-    'length' => 32,
-    'default' => NULL,
-  );
-  db_add_field($ret, 'xmlsitemap', 'node_type', $field);
-  db_add_index($ret, 'xmlsitemap', 'node_type', array('node_type'));
+  if (db_table_exists('xmlsitemap_node')) {
+    if (db_column_exists('xmlsitemap_node', 'pid')) {
+      $result = array();
+      @db_drop_index($result, 'xmlsitemap_node', 'pid');
+      if ($result[0]['success']) {
+        $ret[] = $result[0];
+      }
+      db_drop_field($ret, 'xmlsitemap_node', 'pid');
+    }
+    if (db_column_exists('xmlsitemap_node', 'nid')) {
+      $result = array();
+      @db_drop_primary_key($result, 'xmlsitemap_node');
+      if ($result[0]['success']) {
+        $ret[] = $result[0];
+      }
+      db_change_field($ret, 'xmlsitemap_node', 'nid', 'nid',
+        array(
+          'description' => 'The node ID.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+        ),
+        array('primary key' => array('nid'))
+      );
+    }
+    else {
+      db_add_field($ret, 'xmlsitemap_node', 'nid',
+        array(
+          'description' => 'The node ID.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+        ),
+        array('primary key' => array('nid'))
+      );
+    }
+    if (db_column_exists('xmlsitemap_node', 'vid')) {
+      db_drop_field($ret, 'xmlsitemap_node', 'vid');
+    }
+    if (db_column_exists('xmlsitemap_node', 'last_changed')) {
+      db_change_field($ret, 'xmlsitemap_node', 'last_changed', 'changed',
+        array(
+          'description' => 'The Unix timestamp of the last change.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+        )
+      );
+    }
+    else {
+      if (db_column_exists('xmlsitemap_node', 'changed')) {
+        db_change_field($ret, 'xmlsitemap_node', 'changed', 'changed',
+          array(
+            'description' => 'The Unix timestamp of the last change.',
+            'type' => 'int',
+            'unsigned' => TRUE,
+            'not null' => TRUE,
+            'default' => 0,
+          )
+        );
+      }
+      else {
+        db_add_field($ret, 'xmlsitemap_node', 'changed',
+          array(
+            'description' => 'The Unix timestamp of the last change.',
+            'type' => 'int',
+            'unsigned' => TRUE,
+            'not null' => TRUE,
+            'default' => 0,
+          )
+        );
+      }
+    }
+    if (db_column_exists('xmlsitemap_node', 'last_comment')) {
+      db_drop_field($ret, 'xmlsitemap_node', 'last_comment');
+    }
+    if (db_column_exists('xmlsitemap_node', 'previous_comment')) {
+      db_drop_field($ret, 'xmlsitemap_node', 'previous_comment');
+    }
+    if (!db_column_exists('xmlsitemap_node', 'comment_ratio')) {
+      db_add_field($ret, 'xmlsitemap_node', 'comment_ratio',
+        array(
+          'description' => 'The ratio between the node comments and the maximum number of comments added to a node.',
+          'type' => 'float',
+          'not null' => TRUE,
+          'default' => 0.0,
+        )
+      );
+    }
+    else {
+      db_change_field($ret, 'xmlsitemap_node', 'comment_ratio', 'comment_ratio',
+        array(
+          'description' => 'The ratio between the node comments and the maximum number of comments added to a node.',
+          'type' => 'float',
+          'not null' => TRUE,
+          'default' => 0.0,
+        )
+      );
+    }
+    $ret[] = update_sql("UPDATE {xmlsitemap_node}
+      SET priority_override = -2.0
+      WHERE priority_override IS NULL"
+    );
+    db_change_field($ret, 'xmlsitemap_node', 'priority_override', 'priority_override',
+      array(
+        'description' => 'The priority of the node in the sitemap.',
+        'type' => 'float',
+        'not null' => TRUE,
+        'default' => -2.0,
+      )
+    );
+  }
+  else {
+    db_create_table($ret, 'xmlsitemap_node',
+      array(
+        'description' => 'The base table for xmlsitemap_node.',
+        'fields' => array(
+          'nid' => array(
+            'description' => 'The node ID.',
+            'type' => 'int',
+            'unsigned' => TRUE,
+            'not null' => TRUE,
+            'default' => 0,
+          ),
+          'changed' => array(
+            'description' => 'The Unix timestamp of the last change.',
+            'type' => 'int',
+            'unsigned' => TRUE,
+            'not null' => TRUE,
+            'default' => 0,
+          ),
+          'previously_changed' => array(
+            'description' => 'The Unix timestamp of the previous change.',
+            'type' => 'int',
+            'unsigned' => TRUE,
+            'not null' => TRUE,
+            'default' => 0,
+          ),
+          'comment_ratio' => array(
+            'description' => 'The ratio between the node comments and the maximum number of comments added to a node.',
+            'type' => 'float',
+            'not null' => TRUE,
+            'default' => 0.0,
+          ),
+          'priority_override' => array(
+            'description' => 'The priority of the node in the sitemap.',
+            'type' => 'float',
+            'not null' => TRUE,
+            'default' => -2.0,
+          ),
+        ),
+        'primary key' => array('nid'),
+      )
+    );
+  }
+  if (variable_get('xmlsitemap_node_comment_priority', 0.5) == 0.5) {
+    variable_set('xmlsitemap_node_comment_priority', 0.2);
+    $ret[] = array(
+      'success' => TRUE,
+      'query' => 'UPDATE MODULE SETTINGS',
+    );
+  }
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ *
+ */
+function xmlsitemap_node_update_6106() {
+  $ret[] = update_sql("UPDATE {system} SET weight = 5 WHERE name = 'xmlsitemap_node'");
+  return $ret;
 }
 
 /**
  * Implementation of hook_uninstall().
  */
 function xmlsitemap_node_uninstall() {
-  $ret = array();
-  db_drop_index($ret, 'xmlsitemap', 'node_type');
-  db_drop_field($ret, 'xmlsitemap', 'node_type');
-
-  // Remove variables.
-  drupal_load('module', 'xmlsitemap_node');
-  $variables = array_keys(xmlsitemap_node_variables());
-  foreach ($variables as $variable) {
-    variable_del($variable);
-  }
-}
-
-// @todo Remove these update functions before alpha.
-function xmlsitemap_node_update_1() {
-  $ret = array();
-  $field = array(
-    'description' => "The {node_type}.type of this link's node.",
-    'type' => 'varchar',
-    'length' => 32,
-  );
-  db_add_field($ret, 'xmlsitemap', 'node_type', $field);
-  db_add_index($ret, 'xmlsitemap', 'node_type', array('node_type'));
-  $ret[] = update_sql("UPDATE {xmlsitemap} SET node_type = (SELECT type FROM {node} WHERE nid = {xmlsitemap}.id) WHERE type = 'node'");
-  return $ret;
-}
-
-//function xmlsitemap_node_update_2() {
-//  $ret = array();
-//  if (db_column_exists('xmlsitemap', 'language')) {
-//    $ret[] = update_sql("UPDATE {xmlsitemap} SET language = (SELECT node.language FROM {node} WHERE node.nid = xmlsitemap.id AND node.language <> '') WHERE xmlsitemap.type = 'node'");
-//  }
-//  else {
-//    // Set the abort flag so this update runs again when the {xmlsitemap}.language field exists.
-//    $ret['#abort'] = TRUE;
-//  }
-//  return $ret;
-//}
-
-function xmlsitemap_menu_update_5() {
-  $ret = array();
-  $ret[] = update_sql("UPDATE {system} SET weight = 0 WHERE type = 'module' AND name = 'xmlsitemap_node'");
-  return $ret;
+  drupal_uninstall_schema('xmlsitemap_node');
+  db_query("DELETE FROM {variable} WHERE name LIKE 'xmlsitemap\_node\_%'");
 }

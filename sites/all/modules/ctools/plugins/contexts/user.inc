@@ -1,5 +1,5 @@
 <?php
-// $Id: user.inc,v 1.3 2009/04/20 23:51:44 merlinofchaos Exp $
+// $Id: user.inc,v 1.4.2.1 2009/10/01 22:00:08 merlinofchaos Exp $
 
 /**
  * @file
@@ -11,7 +11,7 @@
  * Implementation of specially named hook_ctools_contexts().
  */
 function ctools_user_ctools_contexts() {
-  $args['user'] = array(
+  return array(
     'title' => t("User"),
     'description' => t('A single user object.'),
     'context' => 'ctools_context_create_user',
@@ -26,7 +26,6 @@ function ctools_user_ctools_contexts() {
     ),
     'convert' => 'ctools_context_user_convert',
   );
-  return $args;
 }
 
 /**
@@ -53,7 +52,7 @@ function ctools_context_create_user($empty, $data = NULL, $conf = FALSE) {
   }
 }
 
-function ctools_context_user_settings_form($conf, $external = FALSE) {
+function ctools_context_user_settings_form($conf) {
   $form = array();
   return $form;
 }

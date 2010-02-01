@@ -7,9 +7,9 @@ dependencies[] = search
 version = "6.x-1.0"
 
 core = 6.x
-; Information added by drupal.org packaging script on 2009-01-06
-version = "6.x-1.x-dev"
+; Information added by drupal.org packaging script on 2009-05-30
+version = "6.x-1.5"
 core = "6.x"
 project = "search_config"
-datestamp = "1231244054"
+datestamp = "1243716664"
 

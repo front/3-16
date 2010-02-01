@@ -1,5 +1,5 @@
 <?php
-// $Id: window.tpl.php,v 1.1.2.6 2008/12/03 22:18:51 starnox Exp $
+// $Id: window.tpl.php,v 1.1.2.11 2009/07/19 14:30:51 starnox Exp $
 
 /**
  * @file
@@ -18,7 +18,7 @@
     <div id="insert"></div>
     <div id="edit"></div>
     <div id="messages">
-      <h2>Messages</h2>
+      <h2><?php print t('Messages'); ?></h2>
       <ul class="log"></ul>
       <div class="footer"><a href="#" class="button close">Close</a></div>
     </div>

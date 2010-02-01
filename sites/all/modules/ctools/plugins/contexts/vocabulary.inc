@@ -1,5 +1,5 @@
 <?php
-// $Id: vocabulary.inc,v 1.2 2009/05/05 23:31:11 merlinofchaos Exp $
+// $Id: vocabulary.inc,v 1.3.2.1 2009/10/01 22:00:08 merlinofchaos Exp $
 
 /**
  * @file
@@ -11,7 +11,7 @@
  * Implementation of specially named hook_ctools_contexts().
  */
 function ctools_vocabulary_ctools_contexts() {
-  $args['vocabulary'] = array(
+  return array(
     'title' => t("Taxonomy vocabulary"),
     'description' => t('A single taxonomy vocabulary object.'),
     'context' => 'ctools_context_create_vocabulary',
@@ -20,7 +20,6 @@ function ctools_vocabulary_ctools_contexts() {
     'keyword' => 'vocabulary',
     'context name' => 'vocabulary',
   );
-  return $args;
 }
 
 /**
@@ -47,11 +46,8 @@ function ctools_context_create_vocabulary($empty, $data = NULL, $conf = FALSE) {
   }
 }
 
-function ctools_context_vocabulary_settings_form($conf, $external = FALSE) {
+function ctools_context_vocabulary_settings_form($conf) {
   $options = array();
-  if ($external) {
-    $options[0] = t('External source');
-  }
 
   foreach (taxonomy_get_vocabularies() as $vid => $vocabulary) {
     $options[$vid] = $vocabulary->name;
@@ -66,9 +62,6 @@ function ctools_context_vocabulary_settings_form($conf, $external = FALSE) {
     '#suffix' => '</div>',
     '#description' => t('Select the vocabulary for this form.'),
   );
-  if ($external) {
-    $form['vid']['#description'] .= ' ' . t('Select external to require this from an external source (such as a containing panel page).');
-  }
 
   return $form;
 }

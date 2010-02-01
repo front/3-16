@@ -1,5 +1,5 @@
 <?php
-// $Id: object-cache.inc,v 1.7 2009/01/29 22:33:40 merlinofchaos Exp $
+// $Id: object-cache.inc,v 1.8.2.1 2009/10/15 18:32:23 merlinofchaos Exp $
 
 /**
  * @file
@@ -37,7 +37,7 @@ function ctools_object_cache_get($obj, $name, $skip_cache = FALSE) {
   if (!array_key_exists($key, $cache)) {
     $data = db_fetch_object(db_query("SELECT * FROM {ctools_object_cache} WHERE sid = '%s' AND obj = '%s' AND name = '%s'", session_id(), $obj, $name));
     if ($data) {
-      $cache[$key] = unserialize($data->data);
+      $cache[$key] = unserialize(db_decode_blob($data->data));
     }
   }
   return isset($cache[$key]) ? $cache[$key] : NULL;
@@ -90,6 +90,34 @@ function ctools_object_cache_clear($obj, $name) {
  */
 function ctools_object_cache_test($obj, $name) {
   return db_fetch_object(db_query("SELECT s.uid, c.updated FROM {ctools_object_cache} c INNER JOIN {sessions}  s ON c.sid = s.sid WHERE s.sid != '%s' AND c.obj = '%s' AND c.name = '%s' ORDER BY c.updated ASC", session_id(), $obj, $name));
+}
+
+/**
+ * Get the cache status of a group of objects.
+ *
+ * This is useful for displaying lock status when listing a number of objects
+ * an an administration UI.
+ *
+ * @param $obj
+ *   A 32 character or less string to define what kind of object is being
+ *   stored; primarily this is used to prevent collisions.
+ * @param $names
+ *   An array of names of objects
+ *
+ * @return
+ *   An array of objects containing the UID and updated date for each name found.
+ */
+function ctools_object_cache_test_objects($obj, $names) {
+  $placeholders = db_placeholders($names, 'varchar');
+  $args = array_merge(array($obj), $names);
+  $result = db_query("SELECT c.name, s.uid, c.updated FROM {ctools_object_cache} c INNER JOIN {sessions}  s ON c.sid = s.sid WHERE c.obj = '%s' AND c.name IN ($placeholders) ORDER BY c.updated ASC", $args);
+
+  $return = array();
+  while ($test = db_fetch_object($result)) {
+    $return[$test->name] = $test;
+  }
+
+  return $return;
 }
 
 /**

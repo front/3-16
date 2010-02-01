@@ -1,20 +1,26 @@
-# $Id: xmlsitemap.pot,v 1.2.2.3.2.6 2009/06/12 06:02:51 davereid Exp $
+# $Id: xmlsitemap.pot,v 1.2.2.9 2009/07/29 21:04:57 hass Exp $
 #
-# LANGUAGE translation of Drupal (general)
+# LANGUAGE translation of Drupal (root)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  xmlsitemap.inc,v 1.1.2.14 2009/06/11 20:51:55 davereid
-#  xmlsitemap.module,v 1.20.2.45.2.87 2009/06/12 00:45:09 davereid
-#  xmlsitemap.admin.inc,v 1.1.2.34 2009/06/10 22:39:42 davereid
-#  xmlsitemap.pages.inc,v 1.1.2.24 2009/06/12 04:42:24 davereid
-#  xmlsitemap.install,v 1.5.2.38.2.41 2009/06/05 22:03:51 davereid
-#  xmlsitemap.info,v 1.2.2.4.2.11 2009/05/31 16:41:50 davereid
+#  xmlsitemap.admin.inc,v 1.1.4.2 2009/06/22 15:06:06 earnie
+#  xmlsitemap.pages.inc,v 1.1.4.4 2009/07/02 14:20:24 earnie
+#  xmlsitemap.module,v 1.20.2.66 2009/06/23 11:54:41 earnie
+#  xmlsitemap.info,v 1.2.2.6 2009/06/22 15:06:06 earnie
+#  xmlsitemap_engines.info,v 1.2.2.3 2009/05/05 21:53:44 earnie
+#  xmlsitemap_node.module,v 1.19.2.128 2009/07/24 18:03:38 earnie
+#  xmlsitemap_node.info,v 1.2.2.4 2009/05/05 21:53:44 earnie
+#  xmlsitemap_taxonomy.module,v 1.1.2.19 2009/07/16 12:56:04 earnie
+#  xmlsitemap_taxonomy.info,v 1.1.2.2 2009/05/07 17:10:35 kiam
+#  xmlsitemap_user.module,v 1.12.2.106 2009/07/16 12:56:04 earnie
+#  xmlsitemap_user.info,v 1.2.2.4 2009/05/05 21:53:44 earnie
+#  xmlsitemap.install,v 1.5.2.50 2009/07/16 13:35:22 earnie
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2009-06-12 00:51-0500\n"
+"POT-Creation-Date: 2009-07-29 23:02+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -23,345 +29,289 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: xmlsitemap.inc:97
-msgid "View"
-msgstr ""
-
-#: xmlsitemap.inc:264
-msgid "Now clearing %module links."
-msgstr ""
-
-#: xmlsitemap.inc:297
-msgid "Now processing %module link @count."
-msgstr ""
-
-#: xmlsitemap.inc:321
-msgid "Now generating @language sitemap page @chunk."
-msgstr ""
-
-#: xmlsitemap.inc:335
-msgid "The sitemap was rebuilt."
-msgstr ""
-
-#: xmlsitemap.inc:338
-msgid "The sitemap was not successfully rebuilt."
-msgstr ""
-
-#: xmlsitemap.inc:400
-msgid "One or more problems were detected with your sitemap configuration. Please check the <a href=\"@status-report\">status report</a> for more information."
-msgstr ""
-
-#: xmlsitemap.inc:97;134;148 xmlsitemap.module:490
-msgid "xmlsitemap"
-msgstr ""
-
-#: xmlsitemap.inc:97
-msgid "Sitemap regenerated."
-msgstr ""
-
-#: xmlsitemap.inc:134
-msgid "Could not open file @file for writing."
-msgstr ""
-
-#: xmlsitemap.inc:148
-msgid "Unknown error occurred while writing to file @file."
-msgstr ""
-
-#: xmlsitemap.admin.inc:20 xmlsitemap.module:87
+#: xmlsitemap.admin.inc:25
 msgid "Settings"
 msgstr ""
 
-#: xmlsitemap.admin.inc:27
-msgid "Minimum sitemap lifetime"
-msgstr ""
-
-#: xmlsitemap.admin.inc:28
-msgid "No minimum"
+#: xmlsitemap.admin.inc:31
+msgid "Add all the links to the default language sitemap"
 msgstr ""
 
 #: xmlsitemap.admin.inc:33
-msgid "Include a stylesheet in the sitemaps."
+msgid "This option will be used only when the language negotiation uses a path prefix mechanism."
 msgstr ""
 
-#: xmlsitemap.admin.inc:35
-msgid "Using the stylesheet will make it easier for non-computers to view and sort."
+#: xmlsitemap.admin.inc:37
+msgid "Cron limit"
 msgstr ""
 
-#: xmlsitemap.admin.inc:39
-msgid "Generate additional compressed sitemaps using gzip."
+#: xmlsitemap.admin.inc:38
+msgid "The number of links that are updated in each pass of a <a href=\"@cron\">cron maintenance task</a>."
 msgstr ""
 
-#: xmlsitemap.admin.inc:46
-msgid "Number of links in each sitemap page"
+#: xmlsitemap.admin.inc:44
+msgid "Cache directory"
 msgstr ""
 
-#: xmlsitemap.admin.inc:47
-msgid "Automatic"
+#: xmlsitemap.admin.inc:48
+msgid "The directory where the cache files are created; change it only if you are having problems with the default setting."
 msgstr ""
 
-#: xmlsitemap.admin.inc:50
-msgid "If there are problems with rebuilding the sitemap, you may want to manually set this value. If you have more than 50,000 links, an index with multiple sitemap pages will be generated. There is a maximum of 1000 sitemap pages."
+#: xmlsitemap.admin.inc:52
+msgid "Use stylesheet"
 msgstr ""
 
 #: xmlsitemap.admin.inc:54
-msgid "Maximum number of sitemap links to process at once"
+msgid "Specify a xml stylesheet for the sitemap?"
 msgstr ""
 
-#: xmlsitemap.admin.inc:57
-msgid "If you have problems running cron or rebuilding the sitemap, you may want to lower this value."
-msgstr ""
-
-#: xmlsitemap.admin.inc:61
-msgid "Sitemap cache directory"
-msgstr ""
-
-#: xmlsitemap.admin.inc:65
-msgid "Subdirectory in the directory %dir where the sitemap data will be stored. This folder <strong>must not be shared</strong> with any other Drupal site or install using XML sitemap."
-msgstr ""
-
-#: xmlsitemap.admin.inc:70
-msgid "Base URL"
-msgstr ""
-
-#: xmlsitemap.admin.inc:72
-msgid "This is the base URL for links generated in the sitemap."
-msgstr ""
-
-#: xmlsitemap.admin.inc:77
-msgid "Generate sitemaps for the following languages"
-msgstr ""
-
-#: xmlsitemap.admin.inc:94
+#: xmlsitemap.admin.inc:58
 msgid "Front page"
 msgstr ""
 
-#: xmlsitemap.admin.inc:101
-msgid "Current front page"
+#: xmlsitemap.admin.inc:63
+msgid "Front page change frequency"
 msgstr ""
 
-#: xmlsitemap.admin.inc:103
-msgid "The front page path can be changed at <a href=\"@url-frontpage\">@url-frontpage</a>."
+#: xmlsitemap.admin.inc:64
+msgid "The change frequency associated with the front page."
 msgstr ""
 
-#: xmlsitemap.admin.inc:107 xmlsitemap.pages.inc:110
-msgid "Priority"
+#: xmlsitemap.admin.inc:76
+msgid "Front page priority"
 msgstr ""
 
-#: xmlsitemap.admin.inc:113 xmlsitemap.pages.inc:109
-msgid "Change frequency"
+#: xmlsitemap.admin.inc:77
+msgid "The absolute priority for the front page."
 msgstr ""
 
-#: xmlsitemap.admin.inc:152
-msgid "Included in sitemap?"
+#: xmlsitemap.admin.inc:110
+msgid "Operations"
 msgstr ""
 
-#: xmlsitemap.admin.inc:153
-msgid "Default priority"
+#: xmlsitemap.admin.inc:128
+msgid "Apply"
 msgstr ""
 
-#: xmlsitemap.admin.inc:160
-msgid "Included"
+#: xmlsitemap.pages.inc:49
+msgid "Chunk size has been updated to @chunk-size."
 msgstr ""
 
-#: xmlsitemap.admin.inc:160
-msgid "Not included"
+#: xmlsitemap.pages.inc:52
+msgid "The maximum number of allowed links has been reached."
 msgstr ""
 
-#: xmlsitemap.admin.inc:161 xmlsitemap.module:262
-msgid "Default"
+#: xmlsitemap.pages.inc:245;270;281
+msgid "Could not create the cache file @file."
 msgstr ""
 
-#: xmlsitemap.admin.inc:206
-msgid "Invalid base URL."
+#: xmlsitemap.module:88
+msgid "The sitemap is located at <a href=\"@sitemap\">@sitemap</a>."
 msgstr ""
 
-#: xmlsitemap.admin.inc:234
-msgid "Select which modules' links you would like to rebuild"
+#: xmlsitemap.module:92
+msgid "XML sitemap automatically creates a sitemap that conforms to the <a href=\"@sitemaps.org\">sitemaps.org specification</a>. This helps search engines keep their search results up to date."
 msgstr ""
 
-#: xmlsitemap.admin.inc:235
-msgid "If no modules are selected, the sitemap files will just be regenerated."
-msgstr ""
-
-#: xmlsitemap.admin.inc:243
-msgid "Are you sure you want to rebuild the sitemap?"
-msgstr ""
-
-#: xmlsitemap.admin.inc:245
-msgid "This action rebuilds your site's sitemap, and may be a lengthy process. This will also recreate the sitemap files."
-msgstr ""
-
-#: xmlsitemap.admin.inc:246
-msgid "Rebuild sitemap"
-msgstr ""
-
-#: xmlsitemap.admin.inc:247
-msgid "Cancel"
-msgstr ""
-
-#: xmlsitemap.admin.inc:272
-msgid "Rebuilding Sitemap"
-msgstr ""
-
-#: xmlsitemap.pages.inc:101
-msgid "Sitemap file"
-msgstr ""
-
-#: xmlsitemap.pages.inc:102
-msgid "Generated by the <a href=\"@link-xmlsitemap\">Drupal XML sitemap module</a> @version."
-msgstr ""
-
-#: xmlsitemap.pages.inc:103
-msgid "Number of sitemaps in this index"
-msgstr ""
-
-#: xmlsitemap.pages.inc:104
-msgid "Click on the table headers to change sorting."
-msgstr ""
-
-#: xmlsitemap.pages.inc:105
-msgid "Sitemap URL"
-msgstr ""
-
-#: xmlsitemap.pages.inc:106
-msgid "Last modification date"
-msgstr ""
-
-#: xmlsitemap.pages.inc:107
-msgid "Number of URLs in this sitemap"
-msgstr ""
-
-#: xmlsitemap.pages.inc:108
-msgid "URL location"
-msgstr ""
-
-#: xmlsitemap.module:262
-msgid "Default (@value)"
-msgstr ""
-
-#: xmlsitemap.module:659
-msgid "Default variable for %variable not found."
-msgstr ""
-
-#: xmlsitemap.module:490
-msgid "Invalid sitemap link priority %priority.<br />@link"
-msgstr ""
-
-#: xmlsitemap.module:45;49
-msgid "Your sitemap is located at !sitemaps."
-msgid_plural "Your sitemaps are located at: !sitemaps"
-msgstr[0] ""
-msgstr[1] ""
-
-#: xmlsitemap.module:71
-msgid "administer xmlsitemap"
-msgstr ""
-
-#: (duplicate) xmlsitemap.module:79 xmlsitemap.install:43  xmlsitemap.info:0;0
-msgid "XML sitemap"
-msgstr ""
-
-#: xmlsitemap.module:80
-msgid "Configure the XML sitemap."
+#: xmlsitemap.module:93
+msgid "Supporting modules"
 msgstr ""
 
 #: xmlsitemap.module:94
-msgid "Rebuild"
+msgid "By itself, the XML sitemap module adds only the front page of your site to the sitemap. Other types of links are handled by supporting modules."
 msgstr ""
 
-#: xmlsitemap.module:95
-msgid "Rebuild the site map."
+#: xmlsitemap.module:103
+msgid "Links may be assigned a priority between 0.0 and 1.0. The default priority is 0.5. A priority of <em>Not in sitemap</em> excludes a link from the sitemap."
 msgstr ""
 
-#: xmlsitemap.install:302
-msgid "0.0"
+#: xmlsitemap.module:104
+msgid "For more information, see the online handbook entry for <a href=\"@xmlsitemap\">XML sitemap module</a>."
 msgstr ""
 
-#: xmlsitemap.install:303
-msgid "0.1"
+#: xmlsitemap.module:190
+msgid "Delete the sitemap cache files"
 msgstr ""
 
-#: xmlsitemap.install:304
-msgid "0.2"
+#: xmlsitemap.module:194
+msgid "Flag the sitemap as requiring update"
 msgstr ""
 
-#: xmlsitemap.install:305
-msgid "0.3"
+#: xmlsitemap.module:209
+msgid "The update has been performed."
 msgstr ""
 
-#: xmlsitemap.install:306
-msgid "0.4"
+#: xmlsitemap.module:212
+msgid "An error occurred and processing did not complete."
 msgstr ""
 
-#: xmlsitemap.install:307
-msgid "0.5"
+#: xmlsitemap.module:215
+msgid "Last items successfully processed:"
 msgstr ""
 
-#: xmlsitemap.install:308
-msgid "0.6"
+#: xmlsitemap.module:235
+msgid "2000 rows"
 msgstr ""
 
-#: xmlsitemap.install:309
-msgid "0.7"
+#: xmlsitemap.module:236
+msgid "1500 rows"
 msgstr ""
 
-#: xmlsitemap.install:310
-msgid "0.8"
+#: xmlsitemap.module:237
+msgid "1000 rows"
 msgstr ""
 
-#: xmlsitemap.install:311
-msgid "0.9"
+#: xmlsitemap.module:238
+msgid "500 rows"
 msgstr ""
 
-#: xmlsitemap.install:312
+#: xmlsitemap.module:239
+msgid "250 rows"
+msgstr ""
+
+#: xmlsitemap.module:240
+msgid "100 rows"
+msgstr ""
+
+#: xmlsitemap.module:241
+msgid "50 rows"
+msgstr ""
+
+#: xmlsitemap.module:242
+msgid "25 rows"
+msgstr ""
+
+#: xmlsitemap.module:243
+msgid "20 rows"
+msgstr ""
+
+#: xmlsitemap.module:244
+msgid "15 rows"
+msgstr ""
+
+#: xmlsitemap.module:245
+msgid "10 rows"
+msgstr ""
+
+#: xmlsitemap.module:246
+msgid "5 rows"
+msgstr ""
+
+#: xmlsitemap.module:247
+msgid "Do not process via cron"
+msgstr ""
+
+#: xmlsitemap.module:312
 msgid "1.0"
 msgstr ""
 
-#: (duplicate) xmlsitemap.install:21 
-msgid "XML sitemap cache directory"
+#: xmlsitemap.module:313
+msgid "0.9"
 msgstr ""
 
-#: (duplicate) xmlsitemap.install:22 
-msgid "Not found or writable"
+#: xmlsitemap.module:314
+msgid "0.8"
 msgstr ""
 
-#: (duplicate) xmlsitemap.install:28 
-msgid "XML sitemap anonymous access"
+#: xmlsitemap.module:315
+msgid "0.7"
 msgstr ""
 
-#: (duplicate) xmlsitemap.install:29 
-msgid "Access denied"
+#: xmlsitemap.module:316
+msgid "0.6"
 msgstr ""
 
-#: (duplicate) xmlsitemap.install:30 
-msgid "Search engines (anonymous users) cannot currently access your sitemap. Please assign the \"access content\" permission the the anonymous user role."
+#: xmlsitemap.module:317
+msgid "0.5"
 msgstr ""
 
-#: (duplicate) xmlsitemap.install:36 
-msgid "XML sitemap chunk count"
+#: xmlsitemap.module:318
+msgid "0.4"
 msgstr ""
 
-#: (duplicate) xmlsitemap.install:38 
-msgid "It is not recommended to have more than 1000 sitemap pages. Please increase the number of links per page."
+#: xmlsitemap.module:319
+msgid "0.3"
 msgstr ""
 
-#: (duplicate) xmlsitemap.install:44 
-msgid "Last generated at !date (!interval ago)."
+#: xmlsitemap.module:320
+msgid "0.2"
 msgstr ""
 
-#: (duplicate) xmlsitemap.install:44 
-msgid "Cached files have not been generated yet."
+#: xmlsitemap.module:321
+msgid "0.1"
 msgstr ""
 
-#: (duplicate) xmlsitemap.install:48 
-msgid "The sitemap data is out of sync and needs to be <a href=\"@link-rebuild\">completely rebuilt<a>."
+#: xmlsitemap.module:322
+msgid "0.0"
 msgstr ""
 
-#: (duplicate) xmlsitemap.install:52 
-msgid "The sitemap cached files are out of date and need to be regenerated. You can <a href=\"@link-cron\">run cron manually</a> to regenerate the sitemap files."
+#: xmlsitemap.module:325
+msgid "Not in sitemap"
+msgstr ""
+
+#: xmlsitemap.module:328
+msgid "Default"
+msgstr ""
+
+#: xmlsitemap.module:404;122 xmlsitemap.info:0;0 xmlsitemap_engines/xmlsitemap_engines.info:0 xmlsitemap_node/xmlsitemap_node.module:107;134 xmlsitemap_node/xmlsitemap_node.info:0 xmlsitemap_taxonomy/xmlsitemap_taxonomy.module:56;77 xmlsitemap_taxonomy/xmlsitemap_taxonomy.info:0 xmlsitemap_user/xmlsitemap_user.module:49;80 xmlsitemap_user/xmlsitemap_user.info:0
+msgid "XML sitemap"
+msgstr ""
+
+#: xmlsitemap.module:213
+msgid "1 item successfully processed."
+msgid_plural "@count items successfully processed."
+msgstr[0] ""
+msgstr[1] ""
+
+#: xmlsitemap.module:174
+msgid "override node settings"
+msgstr ""
+
+#: xmlsitemap.module:174
+msgid "override profile settings"
+msgstr ""
+
+#: xmlsitemap.module:123;131
+msgid "Configure the XML sitemap."
+msgstr ""
+
+#: xmlsitemap.module:130
+msgid "Sitemap"
+msgstr ""
+
+#: xmlsitemap.module:137
+msgid "Tools"
+msgstr ""
+
+#: xmlsitemap.module:138
+msgid "Sitemap tools."
+msgstr ""
+
+#: xmlsitemap.module:146
+msgid "Sitemap index"
+msgstr ""
+
+#: xmlsitemap.module:157
+msgid "Sitemap !number"
+msgstr ""
+
+#: xmlsitemap.install:507
+msgid "XML sitemap term has been deprecated in favor of XML sitemap taxonomy; enable it in the <a href=\"@modules\">modules page</a>."
+msgstr ""
+
+#: (duplicate) xmlsitemap.install:551 ;548
+msgid "You have not correctly followed the installation instructions for this module. You must make certain that the old xmlsitemap/xmlsitemap diretory is removed. The xmlsitemap/xmlsitemap/xmlsitemap.* files have been moved back to the modules root directory. The install instructions were to remove the modules/xmlsitemap directory completely before extracting the update. If you had followed that step you would have prevented this message."
+msgstr ""
+
+#: (duplicate) xmlsitemap.install:577 
+msgid "Installation issue"
+msgstr ""
+
+#: (duplicate) xmlsitemap.install:578 ;574
+msgid "You have not correctly followed the installation instructions for this module. You must make certain that the old xmlsitemap/xmlsitemap diretory is removed. The xmlsitemap/xmlsitemap/xmlsitemap.* files have been moved back to the modules root directory. The install instructions were to removed the modules/xmlsitemap directory completely before extracting the update. If you had followed that step you would have prevented this message."
 msgstr ""
 
 #: xmlsitemap.info:0
-msgid "Creates an XML sitemap conforming to the sitemaps.org protocol."
+msgid "Create a XML sitemap conforming to sitemaps.org specifications."
 msgstr ""
 

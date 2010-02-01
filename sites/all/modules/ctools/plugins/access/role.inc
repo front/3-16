@@ -1,5 +1,5 @@
 <?php
-// $Id: role.inc,v 1.5 2009/04/17 19:16:22 merlinofchaos Exp $
+// $Id: role.inc,v 1.7.2.1 2009/10/01 22:00:08 merlinofchaos Exp $
 
 /**
  * @file
@@ -10,7 +10,7 @@
  * Implementation of specially named hook_ctools_access().
  */
 function ctools_role_ctools_access() {
-  $args['role'] = array(
+  return array(
     'title' => t("User: role"),
     'description' => t('Control access by role.'),
     'callback' => 'ctools_role_ctools_access_check',
@@ -20,8 +20,6 @@ function ctools_role_ctools_access() {
     'summary' => 'ctools_role_ctools_acesss_summary',
     'required context' => new ctools_context_required(t('User'), 'user'),
   );
-
-  return $args;
 }
 
 /**
@@ -77,6 +75,6 @@ function ctools_role_ctools_acesss_summary($conf, $context) {
     return t('@identifier can have any role', array('@identifier' => $context->identifier));
   }
 
-  return format_plural(count($names), '@identifier must have role "@roles"', '@identifier can be one of "@roles"', array('@roles' => implode(', ', $names), '@identifier' => $context->identifier));
+  return format_plural(count($names), '@identifier has role "@roles"', '@identifier has one of "@roles"', array('@roles' => implode(', ', $names), '@identifier' => $context->identifier));
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: flexible.inc,v 1.1.2.11 2009/05/01 00:44:45 merlinofchaos Exp $
+// $Id: flexible.inc,v 1.1.2.17 2009/10/02 17:35:48 merlinofchaos Exp $
 
 /**
  * Implementation of hook_panels_layouts()
@@ -28,21 +28,22 @@ function panels_flexible_panels_layouts() {
 function panels_flexible_menu(&$items, &$info) {
   $base = array(
     'access arguments' => array('access content'),
+    'page arguments' => array(4),
     'type' => MENU_CALLBACK,
     'file' => $info['file'],
     'file path' => $info['path'],
   );
 
-  $items['panels/ajax/flexible/settings'] = array(
+  $items['panels/ajax/flexible/settings/%panels_edit_cache'] = array(
     'page callback' => 'panels_ajax_flexible_edit_settings',
   ) + $base;
-  $items['panels/ajax/flexible/add'] = array(
+  $items['panels/ajax/flexible/add/%panels_edit_cache'] = array(
     'page callback' => 'panels_ajax_flexible_edit_add',
   ) + $base;
-  $items['panels/ajax/flexible/remove'] = array(
+  $items['panels/ajax/flexible/remove/%panels_edit_cache'] = array(
     'page callback' => 'panels_ajax_flexible_edit_remove',
   ) + $base;
-  $items['panels/ajax/flexible/resize'] = array(
+  $items['panels/ajax/flexible/resize/%panels_edit_cache'] = array(
     'page callback' => 'panels_ajax_flexible_edit_resize',
   ) + $base;
 }
@@ -222,7 +223,6 @@ function panels_flexible_panels($display, $settings) {
  * Draw the flexible layout.
  */
 function theme_panels_flexible($id, $content, $settings, $display) {
-  // TEMP
   panels_flexible_convert_settings($settings);
 
   $renderer = new stdClass;
@@ -276,6 +276,7 @@ function theme_panels_flexible_admin($id, $content, $settings, $display) {
   $renderer->content = $content;
   $renderer->css_id = $id;
   $renderer->did = $display->did;
+  $renderer->cache_key = $display->cache_key;
   $renderer->id_str = $id ? 'id="' . $id . '"' : '';
   $renderer->admin = TRUE;
 
@@ -304,7 +305,7 @@ function theme_panels_flexible_admin($id, $content, $settings, $display) {
   $output .= "</div>\n</div>\n";
 
   drupal_add_js(panels_get_path('plugins/layouts/flexible/flexible-admin.js'));
-  drupal_add_js(array('flexible' => array('resize' => url('panels/ajax/flexible/resize/' . $display->did, array('absolute' => TRUE)))), 'setting');
+  drupal_add_js(array('flexible' => array('resize' => url('panels/ajax/flexible/resize/' . $display->cache_key, array('absolute' => TRUE)))), 'setting');
   return $output;
 }
 
@@ -340,6 +341,11 @@ function panels_flexible_render_items($renderer, $list, $owner_id) {
         break;
     }
 
+    // If all items are fixed then we have a special splitter on the right to
+    // control the overall width.
+    if (!empty($renderer->admin) && $max == $position && $location == 'left') {
+      $groups[$location] .= panels_flexible_render_splitter($renderer, $id, NULL);
+    }
     $prev = $id;
   }
 
@@ -365,6 +371,10 @@ function panels_flexible_render_item($renderer, $item, $base, $content, $id, $po
   }
   if ($clear) {
     $output .= ' clear-block';
+  }
+
+  if (isset($item['class'])) {
+    $output .= ' ' . check_plain($item['class']);
   }
 
   $output .= '">' . "\n";
@@ -393,16 +403,25 @@ function panels_flexible_render_item($renderer, $item, $base, $content, $id, $po
 }
 /**
  * Render a splitter div to place between the $left and $right items.
- * @param <type> $renderer
- * @param <type> $left_id
- * @param <type> $right_id
+ *
+ * If the right ID is NULL that means there isn't actually a box to the
+ * right, but we need a splitter anyway. We'll mostly use info about the
+ * left, but pretend it's 'fluid' so that the javascript won't actually
+ * modify the right item.
  */
 function panels_flexible_render_splitter($renderer, $left_id, $right_id) {
   $left = $renderer->settings['items'][$left_id];
-  $right = $renderer->settings['items'][$right_id];
 
   $left_class = 'panels-flexible-' . $left['type'] . '-' . $renderer->did . '-' . $left_id;
-  $right_class = 'panels-flexible-' . $right['type'] . '-' . $renderer->did . '-' . $right_id;
+  if ($right_id) {
+    $right = $renderer->settings['items'][$right_id];
+    $right_class = 'panels-flexible-' . $right['type'] . '-' . $renderer->did . '-' . $right_id;
+  }
+  else {
+    $right = $left;
+    $right_class = $left_class;
+  }
+
   $output = '<div class="panels-flexible-splitter flexible-splitter-for-' . $left_class . '">';
 
   // Name the left object
@@ -444,7 +463,8 @@ function panels_flexible_render_splitter($renderer, $left_id, $right_id) {
   $output .= '</span>';
 
   $output .= '<span class="panels-flexible-splitter-right-width-type">';
-  $output .= $right['width_type'];
+  // If there is no right, make it fluid.
+  $output .= $right_id ? $right['width_type'] : '%';
   $output .= '</span>';
 
   $output .= '</div>';
@@ -498,28 +518,28 @@ function panels_flexible_render_item_links($renderer, $id, $item) {
   if (!empty($settings)) {
     $links[] = array(
       'title' => $settings,
-      'href' => 'panels/ajax/flexible/settings/' . $renderer->did . '/' . $id,
+      'href' => 'panels/ajax/flexible/settings/' . $renderer->cache_key . '/' . $id,
       'attributes' => array('class' => 'ctools-use-modal'),
     );
   }
   if ($add) {
     $links[] = array(
       'title' => $add,
-      'href' => 'panels/ajax/flexible/add/' . $renderer->did . '/' . $id,
+      'href' => 'panels/ajax/flexible/add/' . $renderer->cache_key . '/' . $id,
       'attributes' => array('class' => 'ctools-use-modal'),
     );
   }
   if (isset($add2)) {
     $links[] = array(
       'title' => $add2,
-      'href' => 'panels/ajax/flexible/add/' . $renderer->did . '/' . $id . '/right',
+      'href' => 'panels/ajax/flexible/add/' . $renderer->cache_key . '/' . $id . '/right',
       'attributes' => array('class' => 'ctools-use-modal'),
     );
   }
   if ($remove) {
     $links[] = array(
       'title' => $remove,
-      'href' => 'panels/ajax/flexible/remove/' . $renderer->did . '/' . $id,
+      'href' => 'panels/ajax/flexible/remove/' . $renderer->cache_key . '/' . $id,
       'attributes' => array('class' => 'ctools-use-ajax'),
     );
   }
@@ -619,27 +639,23 @@ function panels_flexible_get_css_group(&$css, $renderer, $list, $owner_id, $type
 
     $max = count($middle) - 1;
 
-    // Because we love IE so much, auto scale everything to 99%. This
-    // means adding up the actual widths and then providing a multiplier
-    // to each so that the total is 99%.
-//    if ($max > 0) {
+    if ($middle_total) {
+      // Because we love IE so much, auto scale everything to 99%. This
+      // means adding up the actual widths and then providing a multiplier
+      // to each so that the total is 99%.
       $scale = 99.0 / $middle_total;
-//    }
-    // But we only scale if there's more than 1 item to scale.
-//    else {
-//      $scale = 1;
-//    }
-    foreach ($middle as $position => $id) {
-      $class = ".panels-flexible-$type-" . $renderer->did . "-$id";
-      $css[$class] = array(
-        'float' => 'left',
-        'width' => ($renderer->settings['items'][$id]['width'] * $scale) . "%",
-      );
+      foreach ($middle as $position => $id) {
+        $class = ".panels-flexible-$type-" . $renderer->did . "-$id";
+        $css[$class] = array(
+          'float' => 'left',
+          'width' => ($renderer->settings['items'][$id]['width'] * $scale) . "%",
+        );
 
-      // Store this so we can use it later.
-      // @todo: Store the scale, not the new width, so .js can adjust
-      // bi-directionally.
-      $renderer->scale[$id] = $scale;
+        // Store this so we can use it later.
+        // @todo: Store the scale, not the new width, so .js can adjust
+        // bi-directionally.
+        $renderer->scale[$id] = $scale;
+      }
     }
 
     // If there is any total remaining, we need to offset the splitter
@@ -681,16 +697,7 @@ function panels_flexible_get_css_group(&$css, $renderer, $list, $owner_id, $type
 /**
  * AJAX responder to edit flexible settings for an item.
  */
-function panels_ajax_flexible_edit_settings($did, $id) {
-  panels_load_include('plugins');
-  ctools_include('ajax');
-  ctools_include('modal');
-  ctools_include('context');
-
-  if ((!is_numeric($did) && $did != 'new') || !($cache = panels_cache_get('display', $did))) {
-    ctools_modal_render(t('Error'), t('Invalid display id.'));
-  }
-
+function panels_ajax_flexible_edit_settings($cache, $id) {
   $settings = &$cache->display->layout_settings;
   panels_flexible_convert_settings($settings);
 
@@ -728,10 +735,11 @@ function panels_ajax_flexible_edit_settings($did, $id) {
   if (empty($output)) {
     // If the width type changed then other nearby items will have
     // to have their widths adjusted.
-    panels_cache_set('display', $did, $cache);
+    panels_load_include('display-edit');
+    panels_edit_cache_set($cache);
     $output = array();
     // If the item is a region, replace the title.
-    $class = 'panels-flexible-' . $item['type'] . '-' . $did . '-' . $id;
+    $class = 'panels-flexible-' . $item['type'] . '-' . $cache->display->did . '-' . $id;
     if ($item['type'] == 'region') {
       $output[] = ctools_ajax_command_replace(".$class h2.label",
         '<h2 class="label">' . check_plain($item['title']) . '</h2>');
@@ -766,6 +774,13 @@ function panels_flexible_config_item_form(&$form_state) {
       '#default_value' => $item['title'],
       '#required' => TRUE,
     );
+
+    $form['class'] = array(
+      '#title' => t('Region class'),
+      '#type' => 'textfield',
+      '#default_value' => isset($item['class']) ? $item['class'] : '',
+      '#description' => t('Enter a CSS class that will be used for this region. This can be used to apply automatic styling from your theme, for example.'),
+    );
   }
 
   if ($item['type'] != 'row') {
@@ -789,13 +804,9 @@ function panels_flexible_config_item_form(&$form_state) {
       '#options' => array(
         '%' => t('Fluid'),
         'px' => t('Fixed'),
-      )
+      ),
+      '#disabled' => TRUE,
     );
-    if ($left && $right) {
-      $form['width_type']['#disabled'] = TRUE;
-      $form['width_type']['#value'] = '%';
-      $form['width_type']['#description'] = t('Items cannot be set to fixed if there are fluid items both to the right and to the left.');
-    }
   }
   else {
     $form['contains'] = array(
@@ -830,6 +841,7 @@ function panels_flexible_config_item_form_submit(&$form, &$form_state) {
   $item = &$form_state['item'];
   if ($item['type'] == 'region') {
     $item['title'] = $form_state['values']['title'];
+    $item['class'] = $form_state['values']['class'];
   }
 
   if ($item['type'] != 'row') {
@@ -843,16 +855,9 @@ function panels_flexible_config_item_form_submit(&$form, &$form_state) {
 /**
  * AJAX responder to add a new row, column or region to a flexible layout.
  */
-function panels_ajax_flexible_edit_add($did, $id, $location = 'left') {
-  panels_load_include('plugins');
-  ctools_include('ajax');
+function panels_ajax_flexible_edit_add($cache, $id, $location = 'left') {
   ctools_include('modal');
-  ctools_include('context');
-
-  if ((!is_numeric($did) && $did != 'new') || !($cache = panels_cache_get('display', $did))) {
-    ctools_modal_render(t('Error'), t('Invalid display id.'));
-  }
-
+  ctools_include('ajax');
   $settings = &$cache->display->layout_settings;
   panels_flexible_convert_settings($settings);
 
@@ -918,7 +923,8 @@ function panels_ajax_flexible_edit_add($did, $id, $location = 'left') {
   if (empty($output)) {
     // If the width type changed then other nearby items will have
     // to have their widths adjusted.
-    panels_cache_set('display', $did, $cache);
+    panels_load_include('display-edit');
+    panels_edit_cache_set($cache);
     $output = array();
 
     $css_id = isset($cache->display->css_id) ? $cache->display->css_id : '';
@@ -928,6 +934,7 @@ function panels_ajax_flexible_edit_add($did, $id, $location = 'left') {
     $renderer->content = array();
     $renderer->css_id = $css_id;
     $renderer->did = $cache->display->did;
+    $renderer->cache_key = $cache->display->cache_key;
     $renderer->id_str = $css_id ? 'id="' . $css_id . '"' : '';
     $renderer->admin = TRUE;
 
@@ -936,7 +943,7 @@ function panels_ajax_flexible_edit_add($did, $id, $location = 'left') {
       panels_load_include('display-edit');
       $panel_buttons = panels_edit_panel_get_links($cache->display, $form_state['key']);
 
-      $content = theme('panels_panel_dnd', '', $form_state['key'], $item['title'], $panel_buttons);
+      $content = panels_render_region_dnd('', $form_state['key'], $item['title'], $panel_buttons);
       // Manually add the hidden field that our region uses to store pane info.
       $content .= '<input type="hidden" name="panel[pane][' .
         $form_state['key'] . ']" id="edit-panel-pane-' . $form_state['key'] . '" value="" />';
@@ -947,14 +954,14 @@ function panels_ajax_flexible_edit_add($did, $id, $location = 'left') {
       // so that more stuff can be added inside it as needed.
       foreach (array('left', 'middle', 'right') as $position) {
         if (!empty($content) || $renderer->admin) {
-          $content .= '<div class="panels-flexible-' . $item['type'] . '-' . $did . '-' . $form_state['key'] . '-' . $position . '"></div>';
+          $content .= '<div class="panels-flexible-' . $item['type'] . '-' . $cache->display->did . '-' . $form_state['key'] . '-' . $position . '"></div>';
         }
       }
 
     }
 
     // render the item
-    $parent_class = 'panels-flexible-' . $parent['type'] . '-' . $did . '-' . $id;
+    $parent_class = 'panels-flexible-' . $parent['type'] . '-' . $cache->display->did . '-' . $id;
     $item_output = panels_flexible_render_item($renderer, $item, 'panels-flexible-' . $item['type'], $content, $form_state['key'], 0, 0, $item['type'] == 'row');
 
     // Get all the CSS necessary for the entire row (as width adjustments may
@@ -969,10 +976,19 @@ function panels_ajax_flexible_edit_add($did, $id, $location = 'left') {
     // duplicated because the order changes based on left or right.
     switch ($position) {
       case 'left':
-        if (!empty($form_state['sibling'])) {
+        if ($location == 'left') {
           $item_output .= panels_flexible_render_splitter($renderer, $form_state['key'], $form_state['sibling']);
+          $output[] = ctools_ajax_command_prepend('.' . $parent_class . '-left', $item_output);
         }
-        $output[] = ctools_ajax_command_prepend('.' . $parent_class . '-left', $item_output);
+        else if ($location == 'right') {
+          // If we are adding to the right side of the left box, there is
+          // a splitter that we have to remove; then we add our box normally,
+          // and then add a new splitter for just our guy.
+          $output[] = ctools_ajax_command_remove('panels-flexible-splitter-for-panels-flexible-' . $item['type'] . '-' . $cache->display->did . '-' . $form_state['key']);
+          $item_output = panels_flexible_render_splitter($renderer, $form_state['sibling'], $form_state['key']) .  $item_output;
+          $item_output .= panels_flexible_render_splitter($renderer, $form_state['key'], NULL);
+          $output[] = ctools_ajax_command_append('.' . $parent_class . '-left', $item_output);
+        }
         break;
       case 'right':
         if (!empty($form_state['sibling'])) {
@@ -1001,7 +1017,7 @@ function panels_ajax_flexible_edit_add($did, $id, $location = 'left') {
     $output[] = array('command' => 'flexible_fix_height');
 
     if (!empty($form_state['sibling'])) {
-      $sibling_width = '.panels-flexible-' . $item['type'] . '-' . $did . '-' . $form_state['sibling'] . '-width';
+      $sibling_width = '.panels-flexible-' . $item['type'] . '-' . $cache->display->did . '-' . $form_state['sibling'] . '-width';
       $output[] = ctools_ajax_command_html($sibling_width, $settings['items'][$form_state['sibling']]['width']);
     }
     foreach ($css as $selector => $data) {
@@ -1052,7 +1068,6 @@ function panels_flexible_add_item_form(&$form_state) {
     // must also be fixed. Otherwise it can be either and should default to
     // fluid.
     $restrict = FALSE;
-    $fluid_only = FALSE;
 
     if (!empty($parent['children'])) {
       if ($location == 'left') {
@@ -1066,9 +1081,6 @@ function panels_flexible_add_item_form(&$form_state) {
         $item['width_type'] = 'px';
       }
     }
-    else {
-      $fluid_only = TRUE;
-    }
 
     $form['width_type'] = array(
       '#type' => 'select',
@@ -1078,17 +1090,13 @@ function panels_flexible_add_item_form(&$form_state) {
         '%' => t('Fluid'),
         'px' => t('Fixed'),
       ),
-      '#disabled' => $restrict || $fluid_only,
+      '#disabled' => $restrict,
     );
     if ($restrict) {
       // This forces the value because disabled items don't always send
       // their data back.
       $form['width_type']['#value'] = $item['width_type'];
       $form['width_type']['#description'] = t('Items cannot be set to fluid if there are fixed items already on that side.');
-    }
-    else if ($fluid_only) {
-      $form['width_type']['#value'] = $item['width_type'] = '%';
-      $form['width_type']['#description'] = t('The first item within a row must be fluid.');
     }
   }
   else {
@@ -1133,25 +1141,26 @@ function panels_flexible_add_item_form_submit(&$form, &$form_state) {
 
   if ($item['type'] == 'region') {
     // derive the region key from the title
-    $key = drupal_strtolower($item['title']);
+    $key = preg_replace("/[^a-z0-9]/", '_', drupal_strtolower($item['title']));
     while (isset($settings['items'][$key])) {
       $key .= '_';
     }
-    $form_state['key'] = $key = preg_replace("/[^a-z0-9]/", '_', $key);
+    $form_state['key'] = $key;
   }
   else {
     $form_state['key'] = $key = max(array_keys($settings['items'])) + 1;
   }
 
+  $form_state['sibling'] = NULL;
   if ($item['type'] != 'row' && !empty($parent['children'])) {
     // Figure out what the width should be and adjust our sibling if
     // necessary.
-    $form_state['sibling'] = NULL;
     if ($location == 'left') {
       $form_state['sibling'] = reset($parent['children']);
     }
     else {
       $form_state['sibling'] = end($parent['children']);
+
     }
 
     // If there is no sibling, or the sibling is of a different type,
@@ -1178,15 +1187,7 @@ function panels_flexible_add_item_form_submit(&$form, &$form_state) {
  * AJAX responder to remove an existing row, column or region from a flexible
  * layout.
  */
-function panels_ajax_flexible_edit_remove($did, $id) {
-  panels_load_include('plugins');
-  ctools_include('ajax');
-  ctools_include('context');
-
-  if ((!is_numeric($did) && $did != 'new') || !($cache = panels_cache_get('display', $did))) {
-    ctools_ajax_render_error(t('Invalid display id.'));
-  }
-
+function panels_ajax_flexible_edit_remove($cache, $id) {
   $settings = &$cache->display->layout_settings;
   panels_flexible_convert_settings($settings);
 
@@ -1199,7 +1200,7 @@ function panels_ajax_flexible_edit_remove($did, $id) {
 
   $siblings = &$settings['items'][$item['parent']]['children'];
   $parent_class = '.panels-flexible-' . $settings['items'][$item['parent']]['type'] .
-    '-' . $did . '-' . $item['parent'];
+    '-' . $cache->display->did . '-' . $item['parent'];
 
   // Find the offset of our array. This will also be the key because
   // this is a simple array.
@@ -1234,8 +1235,9 @@ function panels_ajax_flexible_edit_remove($did, $id) {
   unset($settings['items'][$id]);
 
   // Save our new state.
-  panels_cache_set('display', $did, $cache);
-  $class = 'panels-flexible-' . $item['type'] . '-' . $did . '-' . $id;
+  panels_load_include('display-edit');
+  panels_edit_cache_set($cache);
+  $class = 'panels-flexible-' . $item['type'] . '-' . $cache->display->did . '-' . $id;
   $output = array();
 
   $output[] = ctools_ajax_command_remove('.' . $class);
@@ -1247,6 +1249,7 @@ function panels_ajax_flexible_edit_remove($did, $id) {
   $renderer->content = array();
   $renderer->css_id = $css_id;
   $renderer->did = $cache->display->did;
+  $renderer->cache_key = $cache->display->cache_key;
   $renderer->id_str = $css_id ? 'id="' . $css_id . '"' : '';
   $renderer->admin = TRUE;
 
@@ -1263,16 +1266,16 @@ function panels_ajax_flexible_edit_remove($did, $id) {
 
   // There are potentially two splitters linked to this item to be removed.
   if (!empty($prev)) {
-    $output[] = ctools_ajax_command_remove('.flexible-splitter-for-panels-flexible-' . $item['type'] . '-' . $did . '-' . $prev);
+    $output[] = ctools_ajax_command_remove('.flexible-splitter-for-panels-flexible-' . $item['type'] . '-' . $cache->display->did . '-' . $prev);
   }
-  if (!empty($next)) {
-    $output[] = ctools_ajax_command_remove('.flexible-splitter-for-panels-flexible-' . $item['type'] . '-' . $did . '-' . $id);
-  }
+
+  // Try to remove the 'next' one even if there isn't a $next.
+  $output[] = ctools_ajax_command_remove('.flexible-splitter-for-panels-flexible-' . $item['type'] . '-' . $cache->display->did . '-' . $id);
 
   if (!empty($prev) && !empty($next)) {
     // Add a new splitter that links $prev and $next:
     $splitter = panels_flexible_render_splitter($renderer, $prev, $next);
-    $prev_class = '.panels-flexible-' . $item['type'] . '-' . $did . '-' . $prev;
+    $prev_class = '.panels-flexible-' . $item['type'] . '-' . $cache->display->did . '-' . $prev;
     $output[] = ctools_ajax_command_after($prev_class, $splitter);
     // Send our fix height command.
     $output[] = array('command' => 'flexible_fix_height');
@@ -1294,23 +1297,19 @@ function panels_ajax_flexible_edit_remove($did, $id) {
  * AJAX responder to store resize information when the user adjusts the
  * splitter.
  */
-function panels_ajax_flexible_edit_resize($did) {
-  panels_load_include('plugins');
+function panels_ajax_flexible_edit_resize($cache) {
   ctools_include('ajax');
-  ctools_include('context');
-
-  if ((!is_numeric($did) && $did != 'new') || !($cache = panels_cache_get('display', $did))) {
-    ctools_ajax_render_error(t('Invalid display id.'));
-  }
-
   $settings = &$cache->display->layout_settings;
   panels_flexible_convert_settings($settings);
 
   $settings['items'][$_POST['left']]['width'] = $_POST['left_width'];
-  $settings['items'][$_POST['right']]['width'] = $_POST['right_width'];
+  if (!empty($_POST['right']) && $_POST['right'] != $_POST['left']) {
+    $settings['items'][$_POST['right']]['width'] = $_POST['right_width'];
+  }
 
   // Save our new state.
-  panels_cache_set('display', $did, $cache);
+  panels_load_include('display-edit');
+  panels_edit_cache_set($cache);
 
   ctools_ajax_render(array('ok'));
 }

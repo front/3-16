@@ -1,13 +1,17 @@
 <?php
-// $Id: features.views.inc,v 1.1.2.8 2009/05/31 02:44:04 yhahn Exp $
+// $Id: features.views.inc,v 1.1.2.16 2009/12/21 22:25:52 yhahn Exp $
 
 /**
  * Implementation of hook_features_api().
  */
 function views_features_api() {
   return array(
-    'feature_source' => TRUE,
-    'default_hook' => 'views_default_views',
+    'views' => array(
+      'name' => t('Views'),
+      'feature_source' => TRUE,
+      'default_hook' => 'views_default_views',
+      'default_file' => FEATURES_DEFAULTS_INCLUDED,
+    ),
   );
 }
 
@@ -37,7 +41,7 @@ function views_features_export_render($module = 'foo', $data) {
   // Build views & add to export array
   foreach ($data as $view_name) {
     // Build the view
-    $view = views_get_view($view_name);
+    $view = views_get_view($view_name, TRUE);
     if ($view) {
       $code[] = '  // Exported view: '. $view_name;
       $code[] = $view->export('  ');
@@ -54,6 +58,8 @@ function views_features_export_render($module = 'foo', $data) {
  * Implementation of hook_features_export().
  */
 function views_features_export($data, &$export, $module_name = '') {
+  views_include('view');
+
   if (!isset($export['features']['views'])) {
     $export['features']['views'] = array();
   }
@@ -65,7 +71,7 @@ function views_features_export($data, &$export, $module_name = '') {
     $export['features']['views'][$view_name] = $view_name;
 
     // Build the view
-    $view = views_get_view($view_name);
+    $view = views_get_view($view_name, TRUE);
     if ($view) {
       $view->build();
       $views[$view_name] = $view;
@@ -92,40 +98,42 @@ function views_features_export($data, &$export, $module_name = '') {
 
   foreach ($views as $view) {
     foreach ($view->display as $display) {
+      if (is_object($display->handler) && method_exists($display->handler, 'get_option')) {
 
-      // Handlers
-      foreach ($handlers as $handler) {
-        $items = $display->handler->get_option($handler);
-        if (!empty($items)) {
-          foreach ($items as $item) {
-            $module = $handler_dependencies[$item['table']];
-            $export['dependencies'][$module] = $module;
+        // Handlers
+        foreach ($handlers as $handler) {
+          $items = $display->handler->get_option($handler);
+          if (!empty($items)) {
+            foreach ($items as $item) {
+              $module = $handler_dependencies[$item['table']];
+              $export['dependencies'][$module] = $module;
+            }
           }
         }
-      }
 
-      // Plugins
-      foreach ($plugins as $plugin_type) {
-        switch ($plugin_type) {
-          case 'display':
-            $plugin_name = $display->display_plugin;
-            break;
-          case 'access':
-            $access = $display->handler->get_option("access");
-            if (!empty($access['type']) && $access['type'] != 'none') {
-              $plugin_name = $access['type'];
-            }
-            else {
-              $plugin_name = '';
-            }
-            break;
-          default:
-            $plugin_name = $display->handler->get_option("{$plugin_type}_plugin");
-            break;
-        }
-        if (!empty($plugin_name)) {
-          $module = $plugin_dependencies[$plugin_type][$plugin_name];
-          $export['dependencies'][$module] = $module;
+        // Plugins
+        foreach ($plugins as $plugin_type) {
+          switch ($plugin_type) {
+            case 'display':
+              $plugin_name = $display->display_plugin;
+              break;
+            case 'access':
+              $access = $display->handler->get_option("access");
+              if (!empty($access['type']) && $access['type'] != 'none') {
+                $plugin_name = $access['type'];
+              }
+              else {
+                $plugin_name = '';
+              }
+              break;
+            default:
+              $plugin_name = $display->handler->get_option("{$plugin_type}_plugin");
+              break;
+          }
+          if (!empty($plugin_name)) {
+            $module = $plugin_dependencies[$plugin_type][$plugin_name];
+            $export['dependencies'][$module] = $module;
+          }
         }
       }
     }
@@ -142,7 +150,7 @@ function views_features_export($data, &$export, $module_name = '') {
   views_include_default_views();
   $modules = module_implements('views_default_views');
   $conflicts = array();
-  foreach ($modules as $m) {    
+  foreach ($modules as $m) {
     $m_default_views = module_invoke($m, 'views_default_views');
     if (is_array($m_default_views)) {
       foreach ($m_default_views as $view_name => $view) {
@@ -186,9 +194,14 @@ function views_handler_dependencies() {
   if (!isset($map)) {
     $map = array();
     foreach (module_implements('views_data') as $module) {
-      $tables = array_keys(module_invoke($module, 'views_data'));
-      foreach ($tables as $table) {
-        $map[$table] = $module;
+      $tables = module_invoke($module, 'views_data');
+      foreach ($tables as $table => $info) {
+        if (isset($info['table'])) {
+          $map[$table] = $module;
+        }
+        else if (!isset($map[$table])) {
+          $map[$table] = $module;
+        }
       }
     }
   }
@@ -227,18 +240,21 @@ function views_plugin_dependencies() {
  * name of module to revert content for
  */
 function views_features_revert($module = NULL) {
+  views_include('view');
+
   // Get default views from feature
   if (module_hook($module, 'views_default_views')) {
     $default_views = module_invoke($module, 'views_default_views');
 
     // Delete Normal / Overridden views that are defined in code
     foreach ($default_views as $default_view) {
-      $current_view = views_get_view($default_view->name);
-      $current_view->delete();
+      if ($current_view = views_get_view($default_view->name)) {
+        $current_view->delete();
+      }
     }
   }
   else {
-    drupal_set_message(t('Could not load default node types.'), 'error');
+    drupal_set_message(t('Could not load default views.'), 'error');
     return FALSE;
   }
   return TRUE;

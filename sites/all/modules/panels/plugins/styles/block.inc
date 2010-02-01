@@ -1,9 +1,9 @@
 <?php
-// $Id: block.inc,v 1.1.2.3 2009/04/29 21:13:27 merlinofchaos Exp $
+// $Id: block.inc,v 1.1.2.5 2009/07/14 18:41:04 merlinofchaos Exp $
 
 /**
- * @file styles/block.inc
- * Definition of the 'default' panel style.
+ * @file
+ * Definition of the 'naked' panel style.
  */
 
 // ---------------------------------------------------------------------------
@@ -14,11 +14,9 @@
  */
 function panels_block_panels_styles() {
   return array(
-    'block' => array(
-      'title' => t('System block'),
-      'description' => t('Display the pane as a system block; this is more restrictive than the default.'),
-      'render pane' => 'panels_block_style_render_pane',
-    ),
+    'title' => t('System block'),
+    'description' => t('Display the pane as a system block; this is more restrictive than the default.'),
+    'render pane' => 'panels_block_style_render_pane',
   );
 }
 
@@ -31,6 +29,10 @@ function panels_block_panels_styles() {
  * @ingroup themeable
  */
 function theme_panels_block_style_render_pane($content, $pane, $display) {
+  if (empty($content->content)) {
+    return;
+  }
+
   if (!empty($content->title)) {
     $content->subject = $content->title;
   }
@@ -42,6 +44,7 @@ function theme_panels_block_style_render_pane($content, $pane, $display) {
   if (!isset($content->delta)) {
     $content->delta = $content->subtype;
   }
+
   return theme('block', $content);
 }
 

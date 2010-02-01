@@ -1,5 +1,5 @@
 <?php
-// $Id: node.inc,v 1.6 2009/04/23 20:53:36 merlinofchaos Exp $
+// $Id: node.inc,v 1.11.2.2 2009/10/06 18:08:24 merlinofchaos Exp $
 
 /**
  * @file
@@ -12,13 +12,14 @@
  * Implementation of specially named hook_ctools_contexts().
  */
 function ctools_node_ctools_contexts() {
-  $args['node'] = array(
+  return array(
     'title' => t("Node"),
     'description' => t('A node object.'),
     'context' => 'ctools_context_create_node',
     'settings form' => 'ctools_context_node_settings_form',
     'settings form validate' => 'ctools_context_node_settings_form_validate',
     'settings form submit' => 'ctools_context_node_settings_form_submit',
+    'defaults' => array('nid' => ''),
     'keyword' => 'node',
     'context name' => 'node',
     'convert list' => 'ctools_context_node_convert_list',
@@ -28,7 +29,6 @@ function ctools_node_ctools_contexts() {
       '#description' => t('Enter the node ID of a node for this context.'),
     ),
   );
-  return $args;
 }
 
 /**
@@ -68,26 +68,17 @@ function ctools_context_create_node($empty, $data = NULL, $conf = FALSE) {
   }
 }
 
-function ctools_context_node_settings_form($conf, $external = FALSE) {
+function ctools_context_node_settings_form($conf) {
   if (empty($conf)) {
     $conf = array(
       'nid' => '',
     );
   }
 
-  if ($external) {
-    $form['external'] = array(
-      '#type' => 'checkbox',
-      '#default_value' => $conf['external'],
-      '#title' => t('Require this context from an external source (such as a containing panel page).'),
-      '#description' => t('If selected, node selection (below) will be ignored.'),
-    );
-  }
-
   $form['node'] = array(
     '#prefix' => '<div class="no-float">',
     '#suffix' => '</div>',
-    '#title' => t('Enter the title or NID of a post'),
+    '#title' => t('Enter the title or NID of a node'),
     '#type' => 'textfield',
     '#maxlength' => 512,
     '#autocomplete_path' => 'ctools/autocomplete/node',
@@ -97,7 +88,7 @@ function ctools_context_node_settings_form($conf, $external = FALSE) {
   if (!empty($conf['nid'])) {
     $info = db_fetch_object(db_query("SELECT * FROM {node} n WHERE n.nid = %d", $conf['nid']));
     if ($info) {
-      $link = l(t("'%title' [node id %nid]", array('%title' => $info->title, '%nid' => $info->nid)), "node/$info->nid", array('target' => '_blank', 'title' => t('Open in new window')));
+      $link = l(t("'%title' [node id %nid]", array('%title' => $info->title, '%nid' => $info->nid)), "node/$info->nid", array('attributes' => array('target' => '_blank', 'title' => t('Open in new window')), 'html' => TRUE));
       $form['node']['#description'] = t('Currently set to !link', array('!link' => $link));
     }
   }
@@ -122,7 +113,7 @@ function ctools_context_node_settings_form($conf, $external = FALSE) {
  */
 function ctools_context_node_settings_form_validate($form, &$form_values, &$form_state) {
   // Validate the autocomplete
-  if (empty($form_values['external']) && empty($form_values['nid']) && empty($form_values['node'])) {
+  if (empty($form_values['nid']) && empty($form_values['node'])) {
     form_error($form['node'], t('You must select a node.'));
     return;
   }
@@ -173,8 +164,10 @@ function ctools_context_node_settings_form_submit($form, &$form_values, &$form_s
 function ctools_context_node_convert_list() {
   return array(
     'nid' => t('Node ID'),
+    'vid' => t('Node revision ID'),
     'title' => t('Node title'),
     'uid' => t('Author UID'),
+    'type' => t('Node type'),
   );
 }
 
@@ -185,9 +178,13 @@ function ctools_context_node_convert($context, $type) {
   switch ($type) {
     case 'nid':
       return $context->data->nid;
+    case 'vid':
+      return $context->data->vid;
     case 'title':
       return $context->data->title;
     case 'uid':
       return $context->data->uid;
+    case 'type':
+      return $context->data->type;
   }
 }

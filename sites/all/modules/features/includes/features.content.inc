@@ -1,12 +1,15 @@
 <?php
-// $Id: features.content.inc,v 1.1.2.6 2009/06/10 01:06:09 yhahn Exp $
+// $Id: features.content.inc,v 1.1.2.11 2009/11/18 04:36:36 yhahn Exp $
 
 /**
  * Implementation of hook_features_api().
  */
 function content_features_api() {
   return array(
-    'default_hook' => 'content_default_fields',
+    'content' => array(
+      'name' => t('CCK'),
+      'default_hook' => 'content_default_fields',
+    ),
   );
 }
 
@@ -118,65 +121,31 @@ function content_features_export_render($module = 'foo', $data) {
 
 /**
  * Implementation of hook_features_revert().
- *
- * @param $module
- * name of module to revert content for
  */
-function content_features_revert($module = NULL) {
-  // Get all fields defined in this feature
-  if (module_hook($module, 'content_default_fields')) {
-    module_load_include('inc', 'content', 'includes/content.crud');
-    $default_fields = module_invoke($module, 'content_default_fields');
-
-    // update all fields to their default values
-    foreach($default_fields as $field) {
-      content_field_instance_update($field);
-    }
-  }
-  else {
-    drupal_set_message(t('Could not load default fields.'), 'error');
-    return FALSE;
-  }
-  return TRUE;
+function content_features_revert($module) {
+  content_features_rebuild($module);
 }
 
 /**
  * Implementation of hook_features_rebuild().
  * Rebuilds CCK field definitions from code defaults.
  */
-function content_features_rebuild() {
-  module_load_include('inc', 'content', 'includes/content.crud');
-  content_clear_type_cache(TRUE);
+function content_features_rebuild($module) {
+  $fields = module_invoke($module, 'content_default_fields');
+  if (!empty($fields)) {
+    module_load_include('inc', 'content', 'includes/content.crud');
+    content_clear_type_cache(TRUE);
 
-  $fields = module_invoke_all('content_default_fields');
-  foreach ($fields as $field) {
-    $conflicts = array();
-    $existing_field = content_fields($field['field_name']);
-    $existing_instance = content_fields($field['field_name'], $field['type_name']);
-
-    // If field storage doesn't exists, create it
-    if (!$existing_field) {
-      content_field_instance_create($field);
-    }
-    // If field storage exists, check that storage and key descriptors don't conflict
-    else {
-      // Iterate through field properties to determine compatibility
-      foreach ($field as $key => $value) {
-        $excluded = array('type_name');
-        if (!is_array($value) && !in_array($key, $excluded)) {
-          if ($value !== $existing_field[$key]) {
-            $conflicts[] = $key;
-          }
-        }
+    foreach ($fields as $field) {
+      $existing_field = content_fields($field['field_name']);
+      $existing_instance = content_fields($field['field_name'], $field['type_name']);
+      if ($existing_field && $existing_instance) {
+        content_field_instance_update($field, FALSE);
       }
-      if (!empty($conflicts)) {
-        $tokens = array('!field' => $field['field_name'], '!type' => $field['type_name'], '!list' => implode(', ', $conflicts));
-        $message = t('Field <strong>!field</strong> was not created for <strong>!type</strong> because a conflict was detected for the following properties: <em>!list</em>', $tokens);
-        drupal_set_message($message);
+      else {
+        content_field_instance_create($field, FALSE);
       }
-      else if (!$existing_instance) {
-        content_field_instance_create($field);
-      }
+      variable_set('menu_rebuild_needed', TRUE);
     }
   }
 }

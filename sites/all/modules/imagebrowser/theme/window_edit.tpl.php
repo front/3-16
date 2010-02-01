@@ -1,5 +1,5 @@
 <?php
-// $Id: window_edit.tpl.php,v 1.1.2.2 2008/12/03 22:18:51 starnox Exp $
+// $Id: window_edit.tpl.php,v 1.1.2.7 2009/07/19 14:30:51 starnox Exp $
 
 /**
  * @file

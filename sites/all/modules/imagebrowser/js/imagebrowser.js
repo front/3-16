@@ -1,4 +1,4 @@
-// $Id: imagebrowser.js,v 1.1.2.7 2008/12/03 22:18:51 starnox Exp $
+// $Id: imagebrowser.js,v 1.1.2.12 2009/07/19 14:30:51 starnox Exp $
 
 /**
  * @file imagebrowser.js
@@ -9,11 +9,28 @@
 /**
  * FCKEditor insert function
  */
-function SelectFile( fileUrl, width, height, alt )
+function SelectFile(url, width, height, alt, link, link_target, styles)
 {
   if(window.opener) {
     //url, width, height, alt
-    window.opener.SetUrl( fileUrl, null, null, alt );
+    window.opener.SetUrl( url, null, null, alt );
+
+    if (window.opener.GetE('txtLnkUrl')) {
+      window.opener.GetE('txtLnkUrl').value = link ;
+    }
+
+    if (window.opener.GetE('cmbLnkTarget')) {
+      window.opener.GetE('cmbLnkTarget').value = link_target ;
+    }
+
+    if (window.opener.GetE('txtAttClasses')) {
+      if(styles == '') {
+        window.opener.GetE('txtAttClasses').value = 'ibimage';
+      }
+      else {
+        window.opener.GetE('txtAttClasses').value = 'ibimage ' + styles;
+      }
+    }
   }
   window.close();
 }
@@ -35,6 +52,25 @@ function ib_prepareLinks() {
       $(".close").click(function() {
         $("#fade").fadeOut('slow');
         $("#insert").fadeOut('slow');
+        return false;
+      });
+      
+      //Insert button
+      $(".insert").click(function() {
+        var url = $("#ib_image_preset").val();
+        var alt = 'imagebrowser image';
+        if($("#ib_link_options").val() == 'custom') {
+          var link = $("#ib_link_custom").val();
+        }
+        else {
+          var link = $("#ib_link_options").val();
+        }
+        var link_target = $("#ib_link_target").val();
+        
+        var styles = $("#ib_alignment").val();
+        var alt = $("#ib_image_alt").val();
+        
+        SelectFile(url, null, null, alt, link, link_target, styles);
         return false;
       });
       
@@ -64,12 +100,12 @@ function ib_prepareLinks() {
         var node = $(this).attr("href");
         $("#insert > .details > .options a").fadeOut('slow');
         $("#insert > .details > table").slideUp('slow', function() {
-          $("#insert > .details").append('<div class="confirm"><p>Are you sure you want to delete this image?</p><a href="#" class="button delete_confirm">Yes, Delete</a><a href="#" class="button cancel">No, Cancel</a></div>');
+          $("#insert > .details > .confirm").fadeIn('fast');
           $(".confirm").fadeIn('fast');
           
           $(".cancel").click(function() {
             $(".confirm").fadeOut('fast', function() {
-              $("#insert > .details > .confirm").remove();
+              $("#insert > .details > .confirm").fadeOut('fast');
               $("#insert > .details > .options a").fadeIn('slow');
               $("#insert > .details > table").slideDown('slow');
             });
@@ -86,6 +122,23 @@ function ib_prepareLinks() {
           });
         });
         return false;
+      });
+      
+      //Link Selection
+      $("#ib_link_options").change(function() {
+        if($("#ib_link_options").val() == 'custom') {
+          $("#ib_link_custom").css('display', 'block');
+        }
+        else if($("#ib_link_custom").css("display") == 'block') {
+          $("#ib_link_custom").css('display', 'none');
+        }
+        
+        if($("#ib_link_options").val() == '') {
+          $("#ib_link_target").css('display', 'none');
+        }
+        else {
+          $("#ib_link_target").css('display', 'block');
+        }
       });
     });
     return false;
@@ -144,18 +197,33 @@ function ib_get_messages() {
 function ib_format_filters() {
   $(".views-exposed-widgets > div:last-child").appendTo("#views-exposed-form-ib-browser-default").addClass("footer");
   $("#views-exposed-form-ib-browser-default > div:first-child").addClass("wrapper");
-  $("#views-exposed-form-ib-browser-default").prepend("<h2>Filters</h2>");
-  $("#views-exposed-form-ib-browser-default > .footer")
-  .append('<a href="#" class="button apply">Apply</a>').click(function(){
+  $("#views-exposed-form-ib-browser-default h2").prependTo("#views-exposed-form-ib-browser-default");
+  $("#views-exposed-form-ib-browser-default > .footer").click(function(){
     $(".view-filters > form").trigger('submit');
   })
-  .append('<a href="#" class="button close">Close</a>');
+}
+
+/**
+ * After an image upload refresh the view and display any messages
+ */
+function ib_refresh() {
+  //Display post upload messages
+  ib_get_messages();
+  //Trigger exposed filters submit to refresh view
+  $(".view-filters > form").trigger('submit');
+}
+
+/**
+ * When they pick an image upload the file right away
+ */
+function ib_upload() {
+  $("#edit-attach").trigger('mousedown');
 }
 
 /**
  * Make things happen on page load
  */
-$(document).ready(function(){
+Drupal.behaviors.imagebrowser = function(context) {
   ib_prepareLinks();
 
   //Button to open the Filter window
@@ -172,9 +240,9 @@ $(document).ready(function(){
     $("#fade").fadeTo('fast', 0.7);
     $("#messages").fadeIn('fast');
   });
-  
+
   //Delay display until JS has loaded
   $("#fade").fadeOut('slow', function() {
     $("#fade").css('background', '#000000');
   });
-});
+}

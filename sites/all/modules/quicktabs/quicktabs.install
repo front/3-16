@@ -1,5 +1,5 @@
 <?php
-// $Id: quicktabs.install,v 1.4.2.8 2009/03/20 21:10:21 pasqualle Exp $
+// $Id: quicktabs.install,v 1.4.2.11 2010/01/10 01:06:40 katbailey Exp $
 
 /**
  * Implementation of hook_schema().
@@ -22,6 +22,20 @@ function quicktabs_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
+      ),
+      'hide_empty_tabs' => array(
+        'description' => 'Whether this tabset hides empty tabs.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'default_tab' => array(
+        'description' => 'Default tab.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => TRUE,
       ),
       'title' => array(
         'description' => 'The title of this quicktabs block.',
@@ -84,7 +98,7 @@ function quicktabs_update_6000() {
  */
 function quicktabs_update_6001() {
   $ret = array();
-  db_add_field($ret, 'quicktabs', 'ajax', array('description' => t('Whether this is an ajax views block'), 'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0));
+  db_add_field($ret, 'quicktabs', 'ajax', array('description' => 'Whether this is an ajax views block', 'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0));
   return $ret;
 }
 
@@ -181,3 +195,23 @@ function quicktabs_update_6004() {
   }
   return $ret;
 }
+
+/**
+ * Add hide_empty_tabs column.
+ */
+function quicktabs_update_6205() {
+  $ret = array();
+  db_add_field($ret, 'quicktabs', 'hide_empty_tabs', array('description' => t('Whether this tabset hides empty tabs'), 'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0));
+  return $ret;
+}
+
+
+/**
+ * Add default_tab column.
+ */
+function quicktabs_update_6206() {
+  $ret = array();
+  db_add_field($ret, 'quicktabs', 'default_tab', array('description' => 'The default tab.', 'type' => 'int', 'size' => 'tiny', 'unsigned' => TRUE, 'not null' => TRUE));
+  return $ret;
+}
+

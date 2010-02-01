@@ -1,17 +1,13 @@
-; $Id: xmlsitemap_engines.info,v 1.2.4.4 2009/05/31 16:41:46 davereid Exp $
+; $Id: xmlsitemap_engines.info,v 1.2.2.3 2009/05/05 21:53:44 earnie Exp $
 name = XML sitemap engines
-description = "Submit the sitemap to search engines."
+description = Submit the sitemap to search engines.
 package = XML sitemap
-core = 6.x
 dependencies[] = xmlsitemap
-files[] = xmlsitemap_engines.module
-files[] = xmlsitemap_engines.admin.inc
-files[] = xmlsitemap_engines.install
-recommends[] = site_verify
+core = "6.x"
 
-; Information added by drupal.org packaging script on 2009-07-24
-version = "6.x-2.x-dev"
+; Information added by drupal.org packaging script on 2010-01-27
+version = "6.x-1.2"
 core = "6.x"
 project = "xmlsitemap"
-datestamp = "1248395891"
+datestamp = "1264572909"
 

@@ -1,4 +1,4 @@
-/* $Id: imagebrowser.css,v 1.1.2.7 2008/12/03 22:18:51 starnox Exp $ */
+/* $Id: imagebrowser.css,v 1.1.2.13 2009/07/19 14:30:51 starnox Exp $ */
 
 /*==============================*/
 /* GENERAL                      */
@@ -61,6 +61,11 @@ h2
   display: block;
 }
 
+#edit-upload {
+  height: 20px;
+  font-size: 12px;
+}
+
 #edit-upload-wrapper {
   float: left;
   width: 550px;
@@ -69,26 +74,13 @@ h2
 }
 
 #edit-attach {
-  position: absolute;
-  margin: 0;
-  top: 8px;
-  right: 8px;
-  border: 1px solid #F7DF7F;
-  background: #FFFFE9;
-  height: 24px;
-  width: 60px;
-  line-height: 24px;
-}
-
-#edit-attach:hover {
-  border: 1px solid #F0C020;
-  background: #FCF4BB;
+  display: none;
 }
 
 .ahah-progress {
   position: absolute;
   top: 9px;
-  right: 72px;
+  right: 10px;
 }
 .ahah-progress .throbber {
   width: 15px;
@@ -100,7 +92,7 @@ h2
 /*==============================*/
 
 .selectors {
-  padding: 0 29px;
+  padding: 0 25px 0 29px;
   text-align: right;
   margin-top: 13px;
   height: 22px;
@@ -154,7 +146,7 @@ h2
 }
 
 #browse .view-content ul {
-  width: 580px;
+  width: 582px;
   height: 236px;
   display: block;
   overflow: hidden;
@@ -255,6 +247,40 @@ h2
   display: none;
 }
 
+#insert h3 {
+  width: 300px;
+  margin: 0 auto;
+  margin-top: 17px;
+  border-bottom: 2px solid #D9EAF5;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+#insert h3 span {
+  font-size: 0.8em;
+  color: #CCC;
+}
+
+#insert .box {
+  width: 280px;
+  margin: 0 auto;
+  background: #F5F9FC;
+  border-bottom: 1px solid #D3E7F4;
+  padding: 8px 10px;
+}
+
+#insert .box select {
+  width: 280px;
+}
+
+#insert .box input {
+  width: 276px;
+}
+
+#insert .box #ib_link_target {
+  margin-top: 8px;
+}
+
 #insert .spacer
 {
   height: 5px;
@@ -272,41 +298,24 @@ h2
   overflow: auto;
   height:303px;
   padding: 0;
-  width: 338px;
+  width: 326px;
   display: block;
   float: left;
-}
-
-#insert .presets table {
-  width: 90%;
-  margin: 10px auto;
-}
-
-#insert .presets table tr th. {
-  width: 150px;
-}
-
-#insert .presets table tr th.dimensions {
-  width: 100px;
-}
-
-#insert .presets table tr th.actions {
-  width: 70px;
 }
 
 #insert .details {
   border-left: 1px solid #D3E7F4;
   height:303px;
   background: #F5F9FC;
-  width: 279px;
+  width: 289px;
   display: block;
-  float: left;
+  float: right;
   text-align: center;
 }
 
 #insert .details table {
   margin: 0;
-  margin: 10px 15px 0 15px;
+  margin: 10px 0px 0 15px;
   width: 260px;
   text-align: left;
 }
@@ -339,11 +348,98 @@ h2
   border: 1px solid #D9EAF5;
 }
 
+#insert .details .confirm {
+  display: none;
+}
+
+#insert .options {
+  width: 190px;
+  margin: 15px auto 0 auto;
+}
+
+.options a:link, .options a:visited {
+  border: 1px solid #D3E7F4;
+  background: #FFF;
+  height: 22px;
+  line-height: 22px;
+  display: block;
+  text-decoration: none;
+  padding: 0 5px;
+  margin: 0 5px;
+  width: 70px;
+  text-align: center;
+  font-size: 0.9em;
+  float: left;
+}
+
+.options a:hover, .options a:active {
+  border: 1px solid #439BD4;
+  background: #8CC2E4;
+  height: 22px;
+  line-height: 22px;
+  display: block;
+  text-decoration: none;
+  padding: 0 5px;
+  width: 70px;
+  text-align: center;
+  font-size: 0.9em;
+  color: #FFF;
+}
+
+.confirm p {
+  padding: 0 50px;
+}
+
+.confirm a:link, .confirm a:visited {
+  border: 1px solid #D3E7F4;
+  background: #FFF;
+  height: 22px;
+  line-height: 22px;
+  display: block;
+  text-decoration: none;
+  padding: 0 5px;
+  margin: 5px auto;
+  width: 70px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.confirm a:hover, .confirm a:active {
+  border: 1px solid #439BD4;
+  background: #8CC2E4;
+  height: 22px;
+  line-height: 22px;
+  display: block;
+  text-decoration: none;
+  padding: 0 5px;
+  width: 70px;
+  text-align: center;
+  font-size: 0.9em;
+  color: #FFF;
+}
+
 #insert .page {
   width: 598px;
   height: 357px;
   padding: 10px;
   overflow: auto;
+}
+
+#insert #ib_link_custom {
+  margin: 15px 0 5px 0;
+  display: none;
+}
+
+#insert #ib_link_target {
+  display: none;
+} 
+
+.close {
+  border-color: #B0D4EC!important;
+}
+
+.close:active, .close:hover {
+  border-color: #439BD4!important;
 }
 
 /*==============================*/
@@ -505,10 +601,6 @@ h2 {
   display: none;
 }
 
-
-
-
-
 #edit {
   width: 618px;
   height: 377px;
@@ -529,77 +621,4 @@ h2 {
   margin: 0;
   border: 0;
   display: block;
-}
-
-#edit .footer {
-}
-
-#insert .details .confirm {
-  display: none;
-}
-
-#insert .options {
-  width: 184px;
-  margin: 15px auto 0 auto;
-}
-
-.options a:link, .options a:visited {
-  border: 1px solid #D3E7F4;
-  background: #FFF;
-  height: 22px;
-  line-height: 22px;
-  display: block;
-  text-decoration: none;
-  padding: 0 5px;
-  margin: 0 5px;
-  width: 70px;
-  text-align: center;
-  font-size: 0.9em;
-  float: left;
-}
-
-.options a:hover, .options a:active {
-  border: 1px solid #439BD4;
-  background: #8CC2E4;
-  height: 22px;
-  line-height: 22px;
-  display: block;
-  text-decoration: none;
-  padding: 0 5px;
-  width: 70px;
-  text-align: center;
-  font-size: 0.9em;
-  color: #FFF;
-}
-
-.confirm p {
-  padding: 0 50px;
-}
-
-.confirm a:link, .confirm a:visited {
-  border: 1px solid #D3E7F4;
-  background: #FFF;
-  height: 22px;
-  line-height: 22px;
-  display: block;
-  text-decoration: none;
-  padding: 0 5px;
-  margin: 5px auto;
-  width: 70px;
-  text-align: center;
-  font-size: 0.9em;
-}
-
-.confirm a:hover, .confirm a:active {
-  border: 1px solid #439BD4;
-  background: #8CC2E4;
-  height: 22px;
-  line-height: 22px;
-  display: block;
-  text-decoration: none;
-  padding: 0 5px;
-  width: 70px;
-  text-align: center;
-  font-size: 0.9em;
-  color: #FFF;
 }

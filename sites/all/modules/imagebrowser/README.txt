@@ -1,19 +1,17 @@
-# $Id: README.txt,v 1.2.2.6 2008/12/03 22:18:50 starnox Exp $
+# $Id: README.txt,v 1.2.2.11 2009/07/19 14:30:50 starnox Exp $
 
 ==============================
-Help Out!
+Upgrading
 ==============================
 
-Feature set has been frozen. Testing is all that's required before the next stable release.
+After uploading and overwriting the imagebrowser directory with the new files go to your modules listings page (?q=/admin/build/modules) and click save at the bottom. You may need to clear your cache (?q=admin/settings/performance) as well.
 
 ==============================
 Installation
 ==============================
 
-Note: If you have been using previous dev versions please completely un-install using drupal's un-install method and then re-install from scratch.
-
-1. Drop these files and folder into the modules folder (/sites/all/modules/)
-2. Enable ImageBrowser module (?q=/admin/build/modules)
+ 1. Drop the imagebrowser folder into the modules directory (/sites/all/modules/)
+ 2. Enable ImageBrowser module (?q=/admin/build/modules)
 
 Required Modules:
 ------------------------------
@@ -33,9 +31,9 @@ Complete instructions found online
 ==============================
 
 http://drupal.org/node/331134
- 
+
 ==============================
-The Future  
+Image Browser 2
 ==============================
 
-If you have any questions, issues, or feature suggestions then please do leave feedback on the project page (http://drupal.org/project/imagebrowser)
+Image Browser 2 (Development) is out, why not check it out and test it offline? (http://drupal.org/project/imagebrowser)

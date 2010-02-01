@@ -1,4 +1,4 @@
-// $Id: quicktabs.js,v 1.3.2.16 2009/03/16 20:35:31 katbailey Exp $
+// $Id: quicktabs.js,v 1.3.2.18 2009/09/29 03:02:37 pasqualle Exp $
 
 Drupal.settings.views = Drupal.settings.views || {'ajax_path': 'views/ajax'};
 
@@ -13,8 +13,9 @@ Drupal.quicktabs = Drupal.quicktabs || {};
 // setting up the inital behaviours
 Drupal.quicktabs.prepare = function(el) {
   var i = 0;
-  var qtid = el.id.split('-')[1];
-  
+  // el.id format: "quicktabs-$qtid"
+  var qtid = el.id.substring(el.id.indexOf('-') +1);
+
   $(el).find('ul.quicktabs_tabs li a').each(function(){
     this.myTabIndex = i++;
     this.qtid = qtid;
@@ -145,11 +146,11 @@ var quicktabsClick = function() {
   $(this).parents('li').addClass('active');
 
   // Hide all tabpages.
-  tab.container.children().hide();
+  tab.container.children().addClass('quicktabs-hide');
 
   // Show the active tabpage.
   if (tab.tabpage.hasClass('quicktabs_tabpage')) {
-    tab.tabpage.show();
+    tab.tabpage.removeClass('quicktabs-hide');
   }
   else {
     if ($(this).hasClass('qt_ajax_tab')) {

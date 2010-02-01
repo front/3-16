@@ -1,4 +1,4 @@
-/* $Id: modal.css,v 1.5 2009/04/17 19:16:19 merlinofchaos Exp $ */
+/* $Id: modal.css,v 1.6.2.1 2009/10/02 21:57:57 merlinofchaos Exp $ */
 div.ctools-modal-content {
   background: #fff;
   color: #000;
@@ -85,8 +85,9 @@ div.ctools-modal-content .modal-form .no-float label  {
   width: auto;
 }
 
-div.ctools-modal-content .modal-form fieldset,
-div.ctools-modal-content .modal-form .form-checkboxes {
+div.ctools-modal-content fieldset,
+div.ctools-modal-content .form-radios,
+div.ctools-modal-content .form-checkboxes {
   clear: left;
 }
 
@@ -95,4 +96,9 @@ div.ctools-modal-content .resizable-textarea {
   margin-left: 15em;
   margin-right: 5em;
 }
+
+div.ctools-modal-content .container-inline .form-item {
+  margin-right: 2em;
+}
+
 

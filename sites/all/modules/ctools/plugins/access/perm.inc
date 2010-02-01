@@ -1,5 +1,5 @@
 <?php
-// $Id: perm.inc,v 1.5 2009/04/17 19:16:22 merlinofchaos Exp $
+// $Id: perm.inc,v 1.6.2.1 2009/10/01 22:00:08 merlinofchaos Exp $
 
 /**
  * @file
@@ -10,8 +10,8 @@
  * Implementation of specially named hook_ctools_access().
  */
 function ctools_perm_ctools_access() {
-  $args['perm'] = array(
-    'title' => t("User: Permission string"),
+  return array(
+    'title' => t("User: permission"),
     'description' => t('Control access by permission string.'),
     'callback' => 'ctools_perm_ctools_access_check',
     'default' => array('perm' => 'access content'),
@@ -19,8 +19,6 @@ function ctools_perm_ctools_access() {
     'summary' => 'ctools_perm_ctools_acesss_summary',
     'required context' => new ctools_context_required(t('User'), 'user'),
   );
-
-  return $args;
 }
 
 /**
@@ -67,6 +65,6 @@ function ctools_perm_ctools_acesss_summary($conf, $context) {
     return t('Error, unset permission');
   }
 
-  return t('@identifier must have "@perm"', array('@identifier' => $context->identifier, '@perm' => $conf['perm']));
+  return t('@identifier has "@perm"', array('@identifier' => $context->identifier, '@perm' => $conf['perm']));
 }
 

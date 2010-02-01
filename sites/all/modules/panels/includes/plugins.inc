@@ -1,5 +1,5 @@
 <?php
-// $Id: plugins.inc,v 1.13.2.10 2009/04/20 22:31:26 merlinofchaos Exp $
+// $Id: plugins.inc,v 1.13.2.12 2009/10/14 20:00:40 merlinofchaos Exp $
 
 /**
  * @file
@@ -83,6 +83,11 @@ function panels_get_pane_content($display, $pane, $keywords, $args = array(), $c
  *   The cached content, or FALSE to indicate no cached content exists.
  */
 function panels_get_cached_content($display, $args, $context, $pane = NULL) {
+  // Never use cache on a POST
+  if (!empty($_POST)) {
+    return FALSE;
+  }
+
   $method = $pane ? $pane->cache['method'] : $display->cache['method'];
   $function = panels_plugin_get_function('cache', $method, 'cache get');
 
@@ -105,6 +110,11 @@ function panels_get_cached_content($display, $args, $context, $pane = NULL) {
  * Store cached content for a given display and possibly pane.
  */
 function panels_set_cached_content($cache, $display, $args, $context, $pane = NULL) {
+  // Never use cache on a POST
+  if (!empty($_POST)) {
+    return FALSE;
+  }
+
   $method = $pane ? $pane->cache['method'] : $display->cache['method'];
   $function = panels_plugin_get_function('cache', $method, 'cache set');
 
@@ -151,6 +161,7 @@ class panels_cache_object {
   var $head = NULL;
   var $css = NULL;
   var $js = NULL;
+  var $tokens = NULL;
   var $ready = FALSE;
 
   /**
@@ -159,6 +170,7 @@ class panels_cache_object {
   function panels_cache_object() {
     $this->head = drupal_set_html_head();
     $this->css = drupal_add_css();
+    $this->tokens = ctools_set_page_token();
 
     foreach (array('header', 'footer') as $scope) {
       $this->js[$scope] = drupal_add_js(NULL, NULL, $scope);
@@ -234,6 +246,16 @@ class panels_cache_object {
         }
       }
     }
+
+    // And for tokens:
+    $tokens = ctools_set_page_token();
+    foreach ($this->tokens as $token => $argument) {
+      if (isset($tokens[$token])) {
+        unset($tokens);
+      }
+    }
+
+    $this->tokens = $tokens;
   }
 
   /**
@@ -251,6 +273,13 @@ class panels_cache_object {
     if (!empty($this->js)) {
       foreach ($this->js as $args) {
         call_user_func_array('drupal_add_js', $args);
+      }
+    }
+
+    if (!empty($this->tokens)) {
+      foreach ($this->tokens as $token => $key) {
+        list($type, $argument) = $key;
+        ctools_set_page_token($token, $type, $argument);
       }
     }
   }

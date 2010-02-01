@@ -1,5 +1,5 @@
 <?php
-// $Id: nodequeue.install,v 1.15 2009/04/06 22:38:12 ezrag Exp $
+// $Id: nodequeue.install,v 1.19 2009/10/24 20:23:16 ezrag Exp $
 
 function nodequeue_schema() {
   $schema['nodequeue_queue'] = array(
@@ -207,6 +207,7 @@ function nodequeue_schema() {
     'indexes' => array(
       '{nodequeue_nodes}_sqid_idx' => array('sqid', 'position'),
       '{nodequeue_subqueue}_nid_idx' => array('nid'),
+      '{nodequeue_nodes}_qid_nid_idx' => array('qid', 'nid'),
     ), // indexes
   ); // nodequeue_nodes
   
@@ -280,7 +281,7 @@ function nodequeue_update_5201() {
   // Create the nodequeue_subqueue table.
   $ret[] = update_sql("UPDATE {nodequeue_queue} SET owner = 'nodequeue', show_in_ui = 1, show_in_tab = 1, show_in_links = 1, reference = 0");
   
-  db_add_table($ret, 'nodequeue_subqueue', array(
+  db_create_table($ret, 'nodequeue_subqueue', array(
     'description' => t('Subqueues are minor queues that inherit all of the properties of the parent queue. A parent queue must have at least 1 subqueue to do anything. Reference is for the use of whatever is creating the subqueues in order to link it to some other ID easily.'),
     'fields' => array(
       'sqid' => array(
@@ -387,6 +388,32 @@ function nodequeue_update_6001() {
 
 //The previous 6002 update has been moved to 5205.
 
+/*
+ * Remove invalid entries from the nodequeue_nodes table created as a result of bugs like http://drupal.org/node/593858.
+ */
+function nodequeue_update_6003() {
+  $ret = array();
+  $invalid = db_result(db_query("SELECT count(nid) FROM {nodequeue_nodes} WHERE nid = 0"));
+  if (!empty($invalid)) {
+    db_query("DELETE FROM {nodequeue_nodes} WHERE nid = 0");
+    $t = get_t();
+    $ret[] = array('success' => TRUE, 'query' => $t("Deleted @invalid invalid entries from the {nodequeue_nodes} table.", array('@invalid' => $invalid)));
+  }
+  else {
+    $ret[] = array('success' => TRUE, 'query' => "No invalid entries found in the {nodequeue_nodes} table.");
+  }
+  return $ret;
+}
+
+/**
+ * Add a new index to {nodequeue_nodes}
+ */
+function nodequeue_update_6004() {
+  $ret = array();
+  db_add_index($ret, 'nodequeue_nodes', '{nodequeue_nodes}_qid_nid_idx', array('qid', 'nid'));
+  return $ret;
+}
+
 function nodequeue_install() {
   drupal_install_schema('nodequeue');
 }
@@ -403,7 +430,7 @@ function nodequeue_uninstall() {
 function nodequeue_requirements($phase) {
   $requirements = array();
   $t = get_t();
-  if ($phase == 'install' || $phase == 'runtime' && module_exists('translation') && !module_exists('translation_helpers')) {
+  if (($phase == 'install' || $phase == 'runtime') && module_exists('translation') && !module_exists('translation_helpers')) {
     $requirements['nodequeue_translation']['title'] = $t('Nodequeue');
     $requirements['nodequeue_translation']['severity'] = REQUIREMENT_WARNING;
     $requirements['nodequeue_translation']['description'] = $t('To have the nodequeue module work with translations, you need to install and enable the !url module.', array('!url' => l('translation_helpers', 'http://drupal.org/project/translation_helpers')));

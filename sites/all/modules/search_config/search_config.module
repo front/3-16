@@ -1,5 +1,5 @@
 <?php
-//$Id: search_config.module,v 1.9.2.2 2009/01/06 01:48:49 canen Exp $
+//$Id: search_config.module,v 1.9.2.6 2009/05/30 20:22:53 canen Exp $
 
 /**
  * @file
@@ -7,7 +7,7 @@
  *
  * @author Nesta Campbell <nesta.campbell@gmail.com>
  * @todo Look at multiple hierarchy taxonomies
- * 
+ *
  */
 
 /**
@@ -23,119 +23,118 @@ function search_config_perm() {
  * Implementation of hook_form_alter()
  */
 function search_config_form_alter(&$form, &$form_state, $form_id) {
-  // Present the user with the appropriate search results tab as defined by 
+  // Present the user with the appropriate search results tab as defined by
   // variable "search_config_default_search" (labeled "Default Search")
   // in the "Advanced search settings" fieldset in admin/settings/search
   if ($form_id == 'search_theme_form') {
     $form['#submit'] = array('search_config_form_submit');
     $form['module']['#value'] = variable_get('search_config_default_search', 'node');
     $form['module']['#type'] = 'value';
-    $form['processed_keys'] = $form['search_theme_form_keys'];    
-    $form['processed_keys']['#weight'] = -1;    
+    $form['processed_keys'] = $form['search_theme_form_keys'];
+    $form['processed_keys']['#weight'] = -1;
     unset($form['search_theme_form_keys']);
   }
 
   if ($form_id == 'search_form') {
-    if (arg(1) == 'node') {
-      
-      // Keywords
-      if (user_access('use keyword search')) {
-        if (variable_get('search_config_disable_or', 0)) {
-          unset($form['advanced']['keywords']['or']);
-        }
-        if (variable_get('search_config_disable_phrase', 0)) {
-          unset($form['advanced']['keywords']['phrase']);
-        }
-        if (variable_get('search_config_disable_negative', 0)) {
-          unset($form['advanced']['keywords']['negative']);
+    $default_search = variable_get('search_config_default_search', 'node');
+
+    // Keywords
+    if (user_access('use keyword search')) {
+      if (variable_get('search_config_disable_or', 0)) {
+        unset($form['advanced']['keywords']['or']);
+      }
+      if (variable_get('search_config_disable_phrase', 0)) {
+        unset($form['advanced']['keywords']['phrase']);
+      }
+      if (variable_get('search_config_disable_negative', 0)) {
+        unset($form['advanced']['keywords']['negative']);
+      }
+    }
+    // Remove all the keyword search fields
+    else {
+      unset($form['advanced']['keywords']);
+    }
+
+    // Node types
+    // We will need to rebuild the checkboxes for the node types
+    $remove = variable_get('search_config_disable_type', array());
+
+    if ($remove['all'] || !user_access('search by node type')) {
+      unset($form['advanced']['type']);
+    }
+    else {
+      $types = node_get_types('names');
+
+      foreach ($types as $module => $type) {
+        if ($remove[$module]) {
+          unset($types[$module]);
         }
       }
-      // Remove all the keyword search fields
-      else { 
-        unset($form['advanced']['keywords']);
-      }
 
-      // Node types
-      // We will need to rebuild the checkboxes for the node types
-      $remove = variable_get('search_config_disable_type', array());
-
-      if ($remove['all'] || !user_access('search by node type')) {
-        unset($form['advanced']['type']);
+      // Rebuild form item -- copied from node.module
+      if (count($types) == 1) {
+        $type_keys = array_keys($types);
+        $form['advanced']['type'] = array(
+          '#type' => 'hidden',
+          '#default_value' => $type_keys[0],
+        );
       }
       else {
-        $types = node_get_types('names');
-        
-        foreach ($types as $module => $type) {
-          if ($remove[$module]) {
-            unset($types[$module]);
+        $form['advanced']['type'] = array(
+          '#type' => 'checkboxes',
+          '#title' => t('Only of the type(s)'),
+          '#prefix' => '<div class="criterion">',
+          '#suffix' => '</div>',
+          '#options' => $types,
+        );
+      }
+    }
+
+    if ($taxonomy = module_invoke('taxonomy', 'form_all', 1)) {
+      // Taxonomy
+      if (variable_get('search_config_disable_category_all', 0) || !user_access('search by category')) {
+        unset($form['advanced']['category']);
+      }
+      else {
+        $terms = variable_get('search_config_disable_category', array());
+
+        if (module_exists('og_vocab')) {
+          $groupnode = og_get_group_context();
+          $sql = "SELECT t.tid FROM {vocabulary} v, {term_data} t LEFT JOIN {og_vocab} ov ON v.vid = ov.vid WHERE (v.module = 'og_vocab' AND ov.nid != %d) AND t.vid=v.vid";
+          $result = db_query($sql, $groupnode->nid);
+
+          while ($row = db_fetch_object($result)) {
+            $terms[$row->tid] = $row->tid;
           }
         }
-      
-        // Rebuild form item -- copied from node.module
-        if (count($types) == 1) {
-          $type_keys = array_keys($types);
-          $form['advanced']['type'] = array(
-            '#type' => 'hidden',
-            '#default_value' => $type_keys[0],
-          );
-        } 
-        else {
-          $form['advanced']['type'] = array(
-            '#type' => 'checkboxes',
-            '#title' => t('Only of the type(s)'),
-            '#prefix' => '<div class="criterion">',
-            '#suffix' => '</div>',
-            '#options' => $types,
-          );
-        }
-      }
 
-      if ($taxonomy = module_invoke('taxonomy', 'form_all', 1)) {
-        // Taxonomy
-        if (variable_get('search_config_disable_category_all', 0) || !user_access('search by category')) {
+        // FIXME: What about multiple hierarchy categories?
+        foreach ($taxonomy as $vocab => $term) {
+          foreach ($term as $k => $v) {
+            if(in_array($k, $terms)) {
+              unset($taxonomy[$vocab][$k]);
+            }
+          }
+          // Remove empty vocabs
+          if (count($taxonomy[$vocab]) == 0) {
+            unset($taxonomy[$vocab]);
+          }
+        }
+
+        if (count($taxonomy) == 0) {
           unset($form['advanced']['category']);
         }
         else {
-          $terms = variable_get('search_config_disable_category', array());
-
-          if (module_exists('og_vocab')) {
-            $groupnode = og_get_group_context();
-            $sql = "SELECT t.tid FROM {vocabulary} v, {term_data} t LEFT JOIN {og_vocab} ov ON v.vid = ov.vid WHERE (v.module = 'og_vocab' AND ov.nid != %d) AND t.vid=v.vid";
-            $result = db_query($sql, $groupnode->nid);
-
-            while ($row = db_fetch_object($result)) {           
-              $terms[$row->tid] = $row->tid;
-            }         
-          }
-
-          // FIXME: What about multiple hierarchy categories?
-          foreach ($taxonomy as $vocab => $term) {
-            foreach ($term as $k => $v) {
-              if(in_array($k, $terms)) {
-                unset($taxonomy[$vocab][$k]);
-              }
-            }
-            // Remove empty vocabs
-            if (count($taxonomy[$vocab]) == 0) {
-              unset($taxonomy[$vocab]);
-            }
-          }
-
-          if (count($taxonomy) == 0) {
-            unset($form['advanced']['category']);
-          }
-          else {
-            // Taxonomy box:
-            $form['advanced']['category'] = array(
-              '#type' => 'select',
-              '#title' => t('Only in the category(s)'),
-              '#prefix' => '<div class="criterion">',
-              '#size' => 10,
-              '#suffix' => '</div>',
-              '#options' => $taxonomy,
-              '#multiple' => TRUE,
-            );
-          }
+          // Taxonomy box:
+          $form['advanced']['category'] = array(
+            '#type' => 'select',
+            '#title' => t('Only in the category(s)'),
+            '#prefix' => '<div class="criterion">',
+            '#size' => 10,
+            '#suffix' => '</div>',
+            '#options' => $taxonomy,
+            '#multiple' => TRUE,
+          );
         }
       }
     }
@@ -145,8 +144,8 @@ function search_config_form_alter(&$form, &$form_state, $form_id) {
 /**
  * Process a block search form submission.
  *
- * Taken from the core search module. It allows the search block to work 
- * with other default search types. 
+ * Taken from the core search module. It allows the search block to work
+ * with other default search types than node.
  */
 function search_config_form_submit($form, &$form_state) {
   $form_id = $form['form_id']['#value'];
@@ -160,7 +159,7 @@ function search_config_form_submit($form, &$form_state) {
 function search_config_search($op) {
   switch ($op) {
     case 'admin':
-      $form['search_config'] = array(        
+      $form['search_config'] = array(
         '#type' => 'fieldset',
         '#title' => t('Advanced search configuration'),
         '#collapsible' => TRUE,
@@ -169,10 +168,10 @@ function search_config_search($op) {
 
       // Search results default tab
       $description = t('Which tab on the search results will be presented by default. The standard Drupal installation defaults to node_search ("Content" tab). This option allows you to default to the "User" tab or any other tab from contributed search modules, e.g. Apachesolr which implements a tab called "Search" to display its results');
-      
+
       $searches = drupal_map_assoc(module_implements('search', false, false));
       unset ($searches['search_config']);
-      
+
       $form['search_config']['search_config_default_search'] = array(
         '#type' => 'radios',
         '#title' => t('Default Search'),
@@ -181,7 +180,7 @@ function search_config_search($op) {
         '#default_value' => variable_get('search_config_default_search', 'node'),
         '#description' => t($description)
       );
-       
+
       // Keyword boxes:
       $form['search_config']['keywords'] = array(
         '#type' => 'fieldset',
@@ -190,25 +189,25 @@ function search_config_search($op) {
         '#collapsed' => TRUE ,
         '#description' => t('Configuration for which keyword search fields should not be displayed.')
       );
-      
-      $form['search_config']['keywords']['search_config_disable_or'] = array( 
+
+      $form['search_config']['keywords']['search_config_disable_or'] = array(
         '#type' => 'checkbox',
         '#title' => t('Containing any of the words'),
         '#default_value' => variable_get('search_config_disable_or', 0)
       );
-      
+
       $form['search_config']['keywords']['search_config_disable_phrase'] = array(
         '#type' => 'checkbox',
         '#title' => t('Containing the phrase'),
         '#default_value' => variable_get('search_config_disable_phrase', 0)
       );
-      
+
       $form['search_config']['keywords']['search_config_disable_negative'] = array(
         '#type' => 'checkbox',
         '#title' => t('Containing none of the words'),
         '#default_value' => variable_get('search_config_disable_negative', 0)
       );
-      
+
       // Taxonomy box
       if ($taxonomy = module_invoke('taxonomy', 'form_all', 1)) {
         $form['search_config']['category'] = array(
@@ -236,7 +235,7 @@ function search_config_search($op) {
         );
       }
 
-      // Node types 
+      // Node types
       $types = node_get_types('names');
       $types = array_merge(array('all' => 'Disable all'), $types);
 
@@ -245,9 +244,8 @@ function search_config_search($op) {
         '#title' => t('Node types'),
         '#collapsible' => TRUE,
         '#collapsed' => TRUE ,
-        '#validate' => array('search_config_validate' => array())
       );
-      
+
       $form['search_config']['type']['form'] = array(
         '#type' => 'fieldset',
         '#title' => t('Search Form'),
@@ -255,12 +253,12 @@ function search_config_search($op) {
         '#description' => t('Node types that users shouldn\'t be allowed to search by using the the advanced search form.')
       );
 
-      $form['search_config']['type']['search_config_disable_type'] = array(
+      $form['search_config']['type']['form']['search_config_disable_type'] = array(
         '#type' => 'checkboxes',
         '#options' => $types,
         '#default_value' => variable_get('search_config_disable_type', array())
       );
-      
+
       $form['search_config']['type']['index'] = array(
         '#type' => 'fieldset',
         '#title' => t('Search Index'),
@@ -278,64 +276,64 @@ function search_config_search($op) {
         '#default_value' => variable_get('search_config_disable_index_type', array())
       );
 
+      $form['#validate'][] = 'search_config_validate';
       return $form;
   }
 }
 
-function search_config_validate($form_values) {
-  if ($form_values['#post']['form_id'] == 'search_admin_settings' && $form_values['#post']['op'] == 'Save configuration') {
-    $post_values = $form_values['#post'];
+function search_config_validate($form, &$form_state) {
+  if ($form_state['values']['form_id'] == 'search_admin_settings' && $form_state['values']['op'] == 'Save configuration') {
+    $post_values = $form_state['values'];
     $node_types = node_get_types('names');
 
     if (!isset($post_values['search_config_disable_index_type'])) {
       return;
     }
-    
-    $index_types = $post_values['search_config_disable_index_type'];
+
+    $index_types = array_filter($post_values['search_config_disable_index_type']);
 
     if (!isset($post_values['search_config_disable_type'])) {
       $post_values['search_config_disable_type'] = array();
     }
-    
-    $form_types = $post_values['search_config_disable_type'];
+
+    $form_types = array_filter($post_values['search_config_disable_type']);
 
     if (count($index_types) != 0 && count($index_types) == count($node_types)) {
       form_set_error('search_config_disable_index_type', t('You can not set all node types to be not indexed by the search module. Disable the search module if that is what you want.'));
     }
 
-    if (isset($post_values['search_config_disable_type']['all'])) {
+    if ($form_types['all']) {
       return;
     }
-    
+
     $type_diff = array_diff($index_types, $form_types);
 
     if (count($type_diff)) {
       $node_errors = array();
+
       foreach ($type_diff as $type) {
         $node_errors[] = $node_types[$type];
       }
+
       form_set_error('search_config_disable_type', t('Search index node types do not match form node types. Please check the setting for %nodes.', array('%nodes' => implode(', ', $node_errors))));
     }
  }
 }
 
 /**
- * Implementation of hook_update_index()
+ * Rewrite the search query to exclude selected node types.
+ *
+ * I feel dirty; This is such a hack.
+ * @see http://www.lullabot.com/articles/hiding-content-drupals-search-system
+ * @see http://drupal.org/node/111744 if you want to help get something
+ * sensible into core.
  */
-function search_config_update_index() {
-  // This hook is only called when the search module is enabled
-  // The function_exists check can be removed, but there is no harm in leaving it in
-  if (function_exists('search_wipe')) {
-    $types = node_get_types('names');
-    $remove = variable_get('search_config_disable_index_type', array());
-    foreach ($remove as $type => $value) {
-      if (isset($types[$type]) && $value === $type) {
-        $result = db_query("SELECT n.nid FROM {node} n INNER JOIN {search_dataset} s ON n.nid=s.sid WHERE n.type = '%s'", $type);
-        while ($data = db_fetch_object($result)) {
-          search_wipe($data->nid, 'node');
-        }
-      }
+function search_config_db_rewrite_sql($query, $primary_table, $primary_field, $args) {
+  if ($query == '' && $primary_table == 'n' && $primary_field = 'nid' && empty($args)) {
+    $excluded_types = array_filter(variable_get('search_config_disable_index_type', array()));
+    if (!empty($excluded_types)) {
+      $where = " n.type NOT IN ('". join("','", $excluded_types) ."') ";
+      return array('where' => $where);
     }
   }
 }
-

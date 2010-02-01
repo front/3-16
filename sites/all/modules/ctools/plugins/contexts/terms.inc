@@ -1,5 +1,5 @@
 <?php
-// $Id: terms.inc,v 1.2 2009/02/04 22:32:34 merlinofchaos Exp $
+// $Id: terms.inc,v 1.4.2.1 2009/10/01 22:00:08 merlinofchaos Exp $
 
 
 /**
@@ -12,7 +12,7 @@
  * Implementation of specially named hook_ctools_contexts().
  */
 function ctools_terms_ctools_contexts() {
-  $args['terms'] = array(
+  return array(
     'title' => t("Taxonomy terms"),
     'description' => t('Multiple taxonomy terms, as a group.'),
     'context' => 'ctools_context_create_terms',
@@ -21,8 +21,15 @@ function ctools_terms_ctools_contexts() {
     'keyword' => 'terms',
     'no ui' => TRUE,
     'context name' => 'terms',
+    'convert list' => array(
+      'tid' => t('Term ID of first term'),
+      'tids' => t('Term ID of all term, separated by + or ,'),
+      'name' => t('Term name of first term'),
+      'names' => t('Term name of all terms, separated by + or ,'),
+      'vid' => t('Vocabulary ID of first term'),
+    ),
+    'convert' => 'ctools_context_terms_convert',
   );
-  return $args;
 }
 
 /**
@@ -50,7 +57,38 @@ function ctools_context_create_terms($empty, $data = NULL, $conf = FALSE) {
     }
     $context->data     = $data->term;
     $context->title    = $data->term->name;
-    $context->argument = implode($context->operator == 'or' ? '+' : ',', $context->tids);
+    $context->argument = implode($context->operator == 'or' ? '+' : ',', array_unique($context->tids));
     return $context;
+  }
+}
+
+/**
+ * Convert a context into a string.
+ */
+function ctools_context_terms_convert($context, $type) {
+  switch ($type) {
+    case 'tid':
+      return $context->data->tid;
+    case 'tids':
+      return $context->argument;
+    case 'name':
+      return $context->data->name;
+    case 'names':
+      // We only run this query if this item was requested:
+      if (!isset($context->names)) {
+        if (empty($context->tids)) {
+          $context->names = '';
+        }
+        else {
+          $result = db_query("SELECT tid, name FROM {term_data} WHERE tid IN (" . db_placeholders($context->tids) . ")", $context->tids);
+          while ($term = db_fetch_object($result)) {
+            $names[$term->tid] = $term->name;
+          }
+          $context->names = implode($context->operator == 'or' ? ' + ' : ', ', $names);
+        }
+      }
+      return $context->names;
+    case 'vid':
+      return $context->data->vid;
   }
 }

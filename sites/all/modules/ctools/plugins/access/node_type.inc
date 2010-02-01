@@ -1,5 +1,5 @@
 <?php
-// $Id: node_type.inc,v 1.5 2009/04/23 20:53:36 merlinofchaos Exp $
+// $Id: node_type.inc,v 1.7.2.1 2009/10/01 22:00:08 merlinofchaos Exp $
 
 /**
  * @file
@@ -10,19 +10,17 @@
  * Implementation of specially named hook_ctools_access().
  */
 function ctools_node_type_ctools_access() {
-  $args['node_type'] = array(
-    'title' => t("Node: Type"),
+  return array(
+    'title' => t("Node: type"),
     'description' => t('Control access by node_type.'),
     'callback' => 'ctools_node_type_ctools_access_check',
     'default' => array('type' => array()),
     'settings form' => 'ctools_node_type_ctools_access_settings',
     'settings form submit' => 'ctools_node_type_ctools_access_settings_submit',
-    'summary' => 'ctools_node_type_ctools_acesss_summary',
+    'summary' => 'ctools_node_type_ctools_access_summary',
     'required context' => new ctools_context_required(t('Node'), 'node'),
     'restrictions' => 'ctools_node_type_ctools_access_restrictions',
   );
-
-  return $args;
 }
 
 /**
@@ -83,7 +81,7 @@ function ctools_node_type_ctools_access_restrictions($conf, &$context) {
 /**
  * Provide a summary description based upon the checked node_types.
  */
-function ctools_node_type_ctools_acesss_summary($conf, $context) {
+function ctools_node_type_ctools_access_summary($conf, $context) {
   if (!isset($conf['type'])) {
     $conf['type'] = array();
   }
@@ -95,9 +93,9 @@ function ctools_node_type_ctools_acesss_summary($conf, $context) {
   }
 
   if (empty($names)) {
-    return t('@identifier can be any node type', array('@identifier' => $context->identifier));
+    return t('@identifier is any node type', array('@identifier' => $context->identifier));
   }
 
-  return format_plural(count($names), '@identifier can be type "@types"', '@identifier can be types "@types"', array('@types' => implode(', ', $names), '@identifier' => $context->identifier));
+  return format_plural(count($names), '@identifier is type "@types"', '@identifier type is one of "@types"', array('@types' => implode(', ', $names), '@identifier' => $context->identifier));
 }
 

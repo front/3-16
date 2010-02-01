@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.5 2008/02/06 16:35:17 robloach Exp $
+$Id: README.txt,v 1.6.2.2 2009/12/24 20:35:08 davereid Exp $
 
 Description
 -----------
@@ -6,37 +6,30 @@ Description
 Poormanscron is a module which runs the Drupal cron operations without
 needing the cron application.
 
-For every page view, this module checks to see if our last cron run was more
-than 1 hour ago (this period is configurable). If so, the cron hooks are
-executed (which, for example, update RSS/syndication blocks), and Drupal
-is happy. These cron hooks fire after all HTML is returned to the browser,
-so the user who kicks off the cron jobs should not notice any delay.
+The module inserts a small amount of JavaScript on each page of your site that
+when a certain amount of time has passed since the last cron run, calls an AJAX
+request to run the cron tasks. Your users should not notice any kind of delay
+or disruption when viewing your site.
 
-
-Requirements
-------------
-
-This module requires Drupal 4.7 or a later version.
+This is a Drupal 6 backport of the simple Poormanscron feature that was added
+to Drupal 7 (http://drupal.org/node/331611).
 
 
 Installation
 ------------
 
-1) Copy/upload the poormanscron.module to the sites/all/modules directory of
-   your Drupal installation.
-2) Enable the poormanscron module in Drupal (administer -> modules).
+Read http://drupal.org/getting-started/install-contrib on how to download
+and install Drupal modules. The typical location for the module's files is
+sites/all/modules/poormanscron in the Drupal directory.
 
-
-Configuration
--------------
-
-Poormanscron can be configured at:
-  Administer -> Site configuration -> Poormanscron
+Once the module is enabled, you can configure the module at:
+  Administer > Site configuration > Site information
 
 
 Authors
 -------
 
- * Moshe Weitzman <weitzman@tejasa.com> - original author
- * Uwe Hermann <uwe@hermann-uwe.de> - current maintainer
-
+ * Moshe Weitzman <http://drupal.org/user/23> - original author
+ * Uwe Hermann <http://drupal.org/user/12054> - current maintainer
+ * Rob Loach <http://drupal.org/user/61114> - co-maintainer
+ * Dave Reid <http://drupal.org/user/53892> - co-maintainer

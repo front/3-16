@@ -1,12 +1,151 @@
-/* $Id: changelog.txt,v 1.1.2.39 2009/05/21 02:29:19 aaron Exp $ */
+/* $Id: CHANGELOG.txt,v 1.1.2.43 2009/12/07 22:24:59 aaron Exp $ */
 
 /**
  *  @file
  *  Changelog for Embedded Video Field (emvideo).
  */
 
+================
+ DRUPAL-6--1-18
+================
+
+#612406 by cityreader: Fix RegEx pattern bug in provider Tudou.
+by aaron: Add wmode transparent to YouTube w/ raw flvplayer.
+by aaron: Add Kitten Killers to YouTube devel generate...
+#601944 by aaron: Fix EM Video 1.4 -> 1.11 update stuck.
+by aaron: Add name to youtube object w/ raw flvmediaplayer to avoid IE error.
+
+================
+ DRUPAL-6--1-15
+================
+
+by aaron: Valid W3 code for youtube flashparams when using w/ flv player.
+
+================
+ DRUPAL-6--1-14
+================
+
+by aaron: Use object tags rather than embed. See http://www.alistapart.com/articles/flashsatay
+#597664 by kratib: Fixed Parameter 6 to emvideo_vimeo_video() expected to be a reference, value given in /var/www/adhack/live/modules/emfield/emfield.mod.
+
+================
+ DRUPAL-6--1-13
+================
+
+by aaron: Add wmode=transparent to youtube.
+by aaron: Remove thumbnail support from uStream.
+by aaron: Fix google embedded links.
+#591700 by aaron: Add new formatters for thumbnails.
+
+================
+ DRUPAL-6--1-12
+================
+
+#289722 by marcp | bonobo: Added Voicethread support.
+#600310 by apb1991: Added m4v Custom Videos.
+#280466 by cogapp_alx | pribeh: Fixed MY Vimeo Not Worky.
+by aaron: Add NOEMBED tag to default flv media player output for youtube.
+by aaron: Fix blip.tv link.
+by aaron: Add FLV Media Player support to custom url videos.
+
+================
+ DRUPAL-6--1-11
+================
+
+by aaron: Clean up youtube to send through emfield's swfobject theme by default.
+by aaron: Use all flashvars w/ flvmediaplayer fallback.
+
+================
+ DRUPAL-6--1-10
+================
+
+by aaron: Fix display of youtube w/ flvmediaplayer.
+#592284 by aaron: Fix botched update for duration import.
+
+===============
+ DRUPAL-6--1-8
+===============
+
+by aaron: Add views handlers for duration.
+by aaron: Fix malformed updates.
+by aaron: Add data hook to Blip.tv.
+by aaron: Move modal iframe to template file.
+by aaron: Update all existing field duration data.
+by aaron: Add devel content generate to Vimeo video.
+by aaron: Add duration and devel content generate to UStream video.
+by aaron: Add duration and devel content generate to MySpace video.
+by aaron: Remove jumpcut provider, as they are now dead.
+by aaron: Add duration and devel content generate to Google video.
+by aaron: Implement hook_emvideo_PROVIDER_content_generate for Daily Motion.
+by aaron: Add duration data to Blip.tv.
+by aaron: Refactor theme to supply field duration column data.
+by aaron: Add hook for provider data version.
+by aaron: Add duration column to Archive.org.
+by aaron: Add duration column to fields.
+
+===============
+ DRUPAL-6--1-7
+===============
+
+#588452 by Benjamin Melançon | swevel: Fixed phptemplate_get_ie_styles().
+
+===============
+ DRUPAL-6--1-6
+===============
+
+by aaron: Add support for flvmediaplayer profiles.
+by aaron: Suppress admin_menu from modal iframe.
+#491930 by aaron: Place html/head/body tags around modal iframe; add scripts.
+#491930 by aaron: Don't load swfobject.api when using YouTube in modal.
+
+===============
+ DRUPAL-6--1-5
+===============
+
+#293153 by aaron: Work-around for not being able to paste Blip.tv embed codes.
+#552388 by nick_robillard | srobert72: Fixed Default thumbnail doesn't appear.
+by aaron: Add wrapper div w/ classes to video & preview.
+by aaron: Change modal thumbnail position: relative.
+by aaron: Fix YouTube duration and display of such.
+by aaron: Fix new theme function names.
+by aaron: Fix new formatters.
+by aaron: Fetch YouTube duration.
+by aaron: Remove the YouTube API secret key, which no longer exists.
+by aaron: Change API info for YouTube.
+by aaron: Add formatters for link & duration.
+by aaron: Honor emfield option for thumbnail play button overlay.
+#462170 by aaron: Add support for Shadowbox.
+#445742 by aaron: Separate formatters for thickbox/lightbox.
+#457608 by brianbrown | Manuel Garcia: Remove Veoh provider.
+by aaron: Implement hook_emvideo_PROVIDER_content_generate: YouTube, Blip.TV,
+and Archive.org.
+
+===============
+ DRUPAL-6--1-4
+===============
+
+#370882 by jdwfly | aaron: Fix menu creation.
+#542994 by chenba | Rob Loach: Remove emvideo_requirements.
+#397802 by jjkiesch: blip.tv enclosures seem to not be showing up.
+#457452 by aaron: Remove API info from Guba.
+by aaron: Don't allow spaces in YouTube URL.
+
+DRUPAL-6--1-3
+=============
+
+by mikey_p | Dave Reid: Fix emvideo_requirements.
+by aaron: Add a 'return_url' option to thumbnails.
+by aaron: Add ability to play YouTube videos with JW FLV Player.
+by aaron: Rebuild theme in update.
+by aaron: Add $options to YouTube theme.
+by aaron: Absolute URL's for custom URL's.
+#207224 by aaron | seanr: Fix amphersands in HTML.
+
+DRUPAL-6--1-2
+=============
+
 May 2009
-----------
+---------
  * Redo #351145 and fix autoplay for blip in new player (aaron).
  * Pass $node to $options in theme functions (aaron).
  * Pass $options to theme_video_cck_bliptv_flash (aaron).

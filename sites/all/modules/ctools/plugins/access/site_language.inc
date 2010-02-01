@@ -1,5 +1,5 @@
 <?php
-// $Id: site_language.inc,v 1.5 2009/04/17 19:16:22 merlinofchaos Exp $
+// $Id: site_language.inc,v 1.6.2.1 2009/10/01 22:00:08 merlinofchaos Exp $
 
 /**
  * @file
@@ -11,7 +11,7 @@
  */
 function ctools_site_language_ctools_access() {
   if (module_exists('locale')) {
-    $items['site_language'] = array(
+    return array(
       'title' => t("User: language"),
       'description' => t('Control access by the language the user or site currently uses.'),
       'callback' => 'ctools_site_language_ctools_access_check',
@@ -20,7 +20,6 @@ function ctools_site_language_ctools_access() {
       'settings form submit' => 'ctools_site_language_ctools_access_settings_submit',
       'summary' => 'ctools_site_language_ctools_acesss_summary',
     );
-    return $items;
   }
 }
 
@@ -81,9 +80,9 @@ function ctools_site_language_ctools_acesss_summary($conf, $context) {
   }
 
   if (empty($names)) {
-    return t('Site language can be in any language');
+    return t('Site language is any language');
   }
 
-  return format_plural(count($names), 'Site language can be languages "@languages"', 'Site language can be language "@languages"', array('@languages' => implode(', ', $names)));
+  return format_plural(count($names), 'Site language is "@languages"', 'Site language is one of "@languages"', array('@languages' => implode(', ', $names)));
 }
 

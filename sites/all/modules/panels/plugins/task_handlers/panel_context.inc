@@ -1,37 +1,145 @@
 <?php
-// $Id: panel_context.inc,v 1.1.2.20 2009/04/30 23:59:55 merlinofchaos Exp $
+// $Id: panel_context.inc,v 1.1.2.40 2009/10/07 22:20:29 merlinofchaos Exp $
 
 /**
  * @file
  *
  * This is the task handler plugin to handle attaching a panel to any
  * task that advertises itself as a 'context' type, which all of the
- * basic page tasks provided by delegator.module do by default.
- *
- * Most of our config is handled by panels delegator.inc, but we do have
- * to customize it a little bit to match what we're doing with this task.
+ * basic page tasks provided by page_manager.module do by default.
  */
 
 /**
- * Specialized implementation of hook_delegator_task_handlers().
+ * Specialized implementation of hook_page_manager_task_task_handlers().
  */
-function panels_panel_context_delegator_task_handlers() {
+function panels_panel_context_page_manager_task_handlers() {
   return array(
-    'handler type' => 'context', // is a 'context' handler type
+    // is a 'context' handler type, meaning it supports the API of the
+    // context handlers provided by ctools context plugins.
+    'handler type' => 'context',
+    'visible' => TRUE, // may be added up front.
+
+    // Administrative fields.
     'title' => t('Panel'),
     'admin summary' =>'panels_panel_context_admin_summary',
     'admin title' => 'panels_panel_context_title',
+    'admin css' => array(
+      panels_get_path('css/panels_admin.css'),
+    ),
+    'admin js' => array(
+      panels_get_path('js/layout.js'),
+    ),
+    'operations' => array(
+      'settings' => array(
+        'title' => t('General'),
+        'description' => t('Change general settings about this variant.'),
+        'form' => 'panels_panel_context_edit_settings',
+      ),
+      'criteria' => array(
+        'title' => t('Selection rules'),
+        'description' => t('Control the criteria used to decide whether or not this variant is used.'),
+        'form' => array(
+          'order' => array(
+            'form' => t('Selection rules'),
+          ),
+          'forms' => array(
+            'form' => array(
+              'include' => drupal_get_path('module', 'ctools') . '/includes/context-task-handler.inc',
+              'form id' => 'ctools_context_handler_edit_criteria',
+            ),
+          ),
+        ),
+      ),
+      'context' => array(
+        'title' => t('Contexts'),
+        'description' => t('Add additional context objects to this variant that can be used by the content.'),
+        'form' => array(
+          'order' => array(
+            'form' => t('Context'),
+          ),
+          'forms' => array(
+            'form' => array(
+              'include' => drupal_get_path('module', 'ctools') . '/includes/context-task-handler.inc',
+              'form id' => 'ctools_context_handler_edit_context',
+            ),
+          ),
+        ),
+      ),
+      'layout' => array(
+        'title' => t('Layout'),
+        'description' => t('Change the layout of this panel.'),
+        // No AJAX so we get our CSS loaded.
+        'ajax' => FALSE,
+        'form' => array(
+          'order' => array(
+            'choose' => t('Change layout'),
+            'move' => t('Move content from old layout'),
+          ),
+          'forms' => array(
+            'choose' => array(
+              'form id' => 'panels_panel_context_edit_layout',
+            ),
+            'move' => array(
+              'include' => array(
+                drupal_get_path('module', 'panels') . '/includes/display-layout.inc',
+              ),
+              'form id' => 'panels_panel_context_edit_move',
+              'submit' => 'panels_change_layout_submit',
+            ),
+          ),
+        ),
+      ),
+      'content' => array(
+        'title' => t('Content'),
+        'description' => t('Add content items and change their location with a drag and drop interface.'),
+        'ajax' => FALSE,
+        'form' => array(
+          'order' => array(
+            'form' => t('Content'),
+          ),
+          'forms' => array(
+            'form' => array(
+              'include' => array(
+                drupal_get_path('module', 'panels') . '/includes/display-edit.inc',
+              ),
+              'form id' => 'panels_panel_context_edit_content',
+              'no blocks' => TRUE,
+            ),
+          ),
+        ),
+      ),
+      'preview' => array(
+        'title' => t('Preview'),
+        'description' => t('Get a preview of what this variant will look like.'),
+        'form' => 'panels_panel_context_edit_preview',
+        'ajax' => FALSE,
+        'silent' => TRUE,
+        'form info' => array('finish text' => t('Preview')),
+      ),
+    ),
+
+    // Callback to render the data.
     'render' => 'panels_panel_context_render',
+
+    // Various callbacks for operations performed on the handler to ensure
+    // related data is updated properly.
     'save' => 'panels_panel_context_save',
     'delete' => 'panels_panel_context_delete',
     'export' => 'panels_panel_context_export',
     'clone' => 'panels_panel_context_clone',
 
-    'add forms' => array(
+    'add features' => array(
       'criteria' => t('Selection rules'),
+      'context' => t('Contexts'),
+    ),
+    // Where to go when finished.
+    'add finish' => 'content',
+
+    'required forms' => array(
       'choose' => t('Choose layout'),
       'content' => t('Panel content'),
     ),
+
     'edit forms' => array(
       'content' => t('Panel content'),
       'criteria' => t('Selection rules'),
@@ -46,6 +154,7 @@ function panels_panel_context_delegator_task_handlers() {
       ),
       'choose' => array(
         'form id' => 'panels_panel_context_edit_choose',
+        'no back validate' => TRUE,
       ),
       'layout' => array(
         'no return' => TRUE,
@@ -63,7 +172,6 @@ function panels_panel_context_delegator_task_handlers() {
           drupal_get_path('module', 'panels') . '/includes/display-edit.inc',
         ),
         'form id' => 'panels_panel_context_edit_content',
-        'submit' => 'panels_edit_display_form_submit',
         'no blocks' => TRUE,
       ),
       'context' => array(
@@ -76,12 +184,10 @@ function panels_panel_context_delegator_task_handlers() {
       ),
     ),
     'default conf' => array(
-      'autogenerate_title' => TRUE,
       'title' => t('Panel'),
       'no_blocks' => FALSE,
       'css_id' => '',
       'css' => '',
-      'css_cache_file' => '',
       'contexts' => array(),
       'relationships' => array(),
     ),
@@ -141,6 +247,10 @@ function panels_panel_context_render($handler, $base_contexts, $args, $test = TR
     return;
   }
 
+  if (isset($handler->handler)) {
+    ctools_context_handler_pre_render($handler, $contexts, $args);
+  }
+
   // Load the display
   $display = panels_panel_context_get_display($handler);
 
@@ -149,12 +259,14 @@ function panels_panel_context_render($handler, $base_contexts, $args, $test = TR
   $display->css_id = $handler->conf['css_id'];
 
   // Check to see if there is any CSS.
-  if ($handler->conf['css_cache']) {
-    if (!file_exists($handler->conf['css_cache'])) {
-      // This will force the task handler to re-cache the CSS and save the filename:
-      delegator_save_task_handler($handler);
+  if (!empty($handler->conf['css'])) {
+    ctools_include('css');
+    $css_id = 'panel_context:' . $handler->name;
+    $filename = ctools_css_retrieve($css_id);
+    if (!$filename) {
+      $filename = ctools_css_store($css_id, $handler->conf['css']);
     }
-    drupal_add_css($handler->conf['css_cache']);
+    drupal_add_css($filename);
   }
 
   // With an argument, this actually sets the display.
@@ -165,27 +277,9 @@ function panels_panel_context_render($handler, $base_contexts, $args, $test = TR
     'no_blocks' => !empty($handler->conf['no_blocks']),
   );
 
-  // If the hide title flag is set, just remove the title altogether.
-  if (!empty($display->hide_title)) {
-    $info['title'] = '';
-  }
-  else if (!empty($display->title)) {
-    $info['title'] = filter_xss_admin(ctools_context_keyword_substitute($display->title, array(), $contexts));
-  }
+  $info['title'] = panels_display_get_title($display);
 
   return $info;
-}
-
-/**
- * Set up a title for the panel based upon the selection rules.
- */
-function panels_panel_context_title($handler, $task, $subtask_id) {
-  if (isset($handler->conf['title'])) {
-    return $handler->conf['title'];
-  }
-  else {
-    return t('Panel');
-  }
 }
 
 /**
@@ -206,20 +300,9 @@ function panels_panel_context_save(&$handler, $update) {
     unset($handler->conf['display']);
   }
 
-  // Re-cache the CSS.
-  // Delete any previous cache file.
-  if (!empty($handler->conf['css_cache'])) {
-    file_delete($handler->conf['css_cache']);
-  }
-
-  if (!empty($handler->conf['css'])) {
-    // And generate a new one.
-    ctools_include('css');
-    $handler->conf['css_cache'] = ctools_css_cache($handler->conf['css']);
-  }
-  else {
-    $handler->conf['css_cache'] = '';
-  }
+  // Delete any previous CSS cache file.
+  ctools_include('css');
+  ctools_css_clear('panel_context:' . $handler->name);
 
   if (isset($page->conf['temp_layout'])) {
     unset($page->conf['temp_layout']);
@@ -272,6 +355,18 @@ function panels_panel_context_delete(&$handler) {
 }
 
 /**
+ * Set up a title for the panel based upon the selection rules.
+ */
+function panels_panel_context_title($handler, $task, $subtask) {
+  if (isset($handler->conf['title'])) {
+    return check_plain($handler->conf['title']);
+  }
+  else {
+    return t('Panel');
+  }
+}
+
+/**
  * Provide a nice little summary of what's in a panel.
  *
  * The task handler manager provides a summary of a given handler in a
@@ -279,7 +374,8 @@ function panels_panel_context_delete(&$handler) {
  * provide a summary of the layout type and content on one side, and
  * a summary of the contexts in use on the other.
  */
-function panels_panel_context_admin_summary($handler, $task, $subtask_id) {
+function panels_panel_context_admin_summary($handler, $task, $subtask, $page, $show_title = TRUE) {
+  $task_name = page_manager_make_task_name($task['name'], $subtask['name']);
   $output = '';
 
   $display = panels_panel_context_get_display($handler);
@@ -288,28 +384,111 @@ function panels_panel_context_admin_summary($handler, $task, $subtask_id) {
   ctools_include('context');
   ctools_include('context-task-handler');
 
+  // Get the operations
+  $operations = page_manager_get_operations($page);
+
+  // Get operations for just this handler.
+  $operations = $operations['handlers']['children'][$handler->name]['children']['actions']['children'];
+  $args = array('handlers', $handler->name, 'actions');
+  $rendered_operations = page_manager_render_operations($page, $operations, array(), array('class' => 'actions'), 'actions', $args);
+
   $layout = panels_get_layout($display->layout);
-  $icon = panels_print_layout_icon($display->layout, $layout);
 
-  $plugin = delegator_get_task_handler($handler->handler);
+  $plugin = page_manager_get_task_handler($handler->handler);
 
-  $object = ctools_context_handler_get_task_object($task, $subtask_id, $handler);
+  $object = ctools_context_handler_get_task_object($task, $subtask, $handler);
   $display->context = ctools_context_load_contexts($object, TRUE);
 
+  $access = ctools_access_group_summary(!empty($handler->conf['access']) ? $handler->conf['access'] : array(), $display->context);
+  if ($access) {
+    $access = t('This panel will be selected if @conditions.', array('@conditions' => $access));
+  }
+  else {
+    $access = t('This panel will always be selected.');
+  }
+
+  $rows = array();
+
+  $type = $handler->type == t('Default') ? t('In code') : $handler->type;
+  $rows[] = array(
+    array('class' => t('page-summary-label'), 'data' => t('Storage')),
+    array('class' => t('page-summary-data'), 'data' => $type),
+    array('class' => t('page-summary-operation'), 'data' => ''),
+  );
+
+  if (!empty($handler->disabled)) {
+    $link = l(t('Enable'), page_manager_edit_url($task_name, array('handlers', $handler->name, 'actions', 'enable')));
+    $text = t('Disabled');
+  }
+  else {
+    $link = l(t('Disable'), page_manager_edit_url($task_name, array('handlers', $handler->name, 'actions', 'disable')));
+    $text = t('Enabled');
+  }
+
+  $rows[] = array(
+    array('class' => t('page-summary-label'), 'data' => t('Status')),
+    array('class' => t('page-summary-data'), 'data' => $text),
+    array('class' => t('page-summary-operation'), 'data' => $link),
+  );
+
+  $link = l(t('Edit'), page_manager_edit_url($task_name, array('handlers', $handler->name, 'criteria')));
+  $rows[] = array(
+    array('class' => t('page-summary-label'), 'data' => t('Selection rule')),
+    array('class' => t('page-summary-data'), 'data' => $access),
+    array('class' => t('page-summary-operation'), 'data' => $link),
+  );
+
+  $link = l(t('Change layout'), page_manager_edit_url($task_name, array('handlers', $handler->name, 'layout')));
+  $link .= '<br />' . l(t('Edit content'), page_manager_edit_url($task_name, array('handlers', $handler->name, 'content')));
+  $link .= '<br />' . l(t('Preview'), page_manager_edit_url($task_name, array('handlers', $handler->name, 'preview')));
+  $rows[] = array(
+    array('class' => t('page-summary-label'), 'data' => t('Layout')),
+    array('class' => t('page-summary-data'), 'data' => check_plain($layout['title'])),
+    array('class' => t('page-summary-operation'), 'data' => $link),
+  );
+
+  $content_link = ' [' . l(t('Edit'), page_manager_edit_url($task_name, array('handlers', $handler->name, 'content'))) . ']';
+  $context_link = ' [' . l(t('Edit'), page_manager_edit_url($task_name, array('handlers', $handler->name, 'context'))) . ']';
+
+
+  $info = theme('table', array(), $rows, array('class' => 'page-manager-handler-summary'));
+
   $content = theme('panels_common_content_list', $display);
+  if (empty($contents)) {
+    $contents = t('This panel has no content.');
+  }
   $contexts = theme('ctools_context_list_no_table', $object);
+  if (empty($contexts)) {
+    $contexts = t('This panel has no contexts.');
+  }
 
-  $title = '<h2 class="content-title">' . check_plain($layout['title']) . '</h2>';
+  $title = $handler->conf['title'];
+  if ($title != t('Panel')) {
+    $title = t('Panel: @title', array('@title' => $title));
+  }
 
+  $output .= '<div class="clear-block">';
+  if ($show_title) {
+  $output .= '<div class="handler-title clear-block">';
+    $output .= '<div class="actions handler-actions">' . $rendered_operations['actions'] . '</div>';
+    $output .= '<span class="title-label">' . $title . '</span>';
+  }
+
+  $output .= '</div>';
+  $output .= $info;
+  $output .= '</div>';
+/*
   $output .= '<div class="right-container">';
-  $output .= '<h2 class="context-title">' . t('Contexts') . '</h2>';
+  $output .= '<h3 class="context-title">' . t('Contexts') . $context_link . '</h3>';
   $output .= $contexts;
   $output .= '</div>';
 
   $output .= '<div class="left-container">';
-  $output .= $icon . $title . $content;
+//  $output .= $icon;
+  $output .= '<h3 class="handler-title">' . t('Content') . $content_link . '</h3>';
+  $output .= $content;
   $output .= '</div>';
-
+*/
   return $output;
 }
 
@@ -370,6 +549,9 @@ function panels_panel_context_edit_choose_validate(&$form, &$form_state) {
 function panels_panel_context_edit_choose_submit(&$form, &$form_state) {
   $form_state['display']->layout = $form_state['values']['layout'];
   $form_state['handler']->conf['display'] = $form_state['display'];
+  if (isset($form_state['page']->display_cache[$form_state['handler_id']])) {
+    $form_state['page']->display_cache[$form_state['handler_id']]->display = $form_state['display'];
+  }
 }
 
 /**
@@ -402,8 +584,13 @@ function panels_panel_context_edit_layout(&$form, &$form_state) {
  * Validate that a layout was chosen.
  */
 function panels_panel_context_edit_layout_validate(&$form, &$form_state) {
+  $display = &panels_panel_context_get_display($form_state['handler']);
+
   if (empty($form_state['values']['layout'])) {
     form_error($form['layout'], t('You must select a layout.'));
+  }
+  if ($form_state['values']['layout'] == $display->layout) {
+    form_error($form['layout'], t('You must select a different layout if you wish to change layouts.'));
   }
 }
 
@@ -411,13 +598,10 @@ function panels_panel_context_edit_layout_validate(&$form, &$form_state) {
  * A layout has been selected, set it up.
  */
 function panels_panel_context_edit_layout_submit(&$form, &$form_state) {
-  // By default, 'next' takes us to whatever is next, but if they changed
-  // the layout we need to interject a form.
   $display = &panels_panel_context_get_display($form_state['handler']);
 
   if ($form_state['values']['layout'] != $display->layout) {
     $form_state['handler']->conf['temp_layout'] = $form_state['values']['layout'];
-    $form_state['clicked_button']['#next'] = 'move';
   }
 }
 
@@ -447,6 +631,8 @@ function panels_panel_context_edit_move(&$form, &$form_state) {
   // previous/next forms.
   $form['buttons']['previous']['#next'] = 'layout';
   $form['buttons']['next']['#next'] = 'content';
+
+  $form_state['form_info']['return path'] = page_manager_edit_url($form_state['page']->task_name, array('handlers', $form_state['handler_id'], 'content'));
 }
 
 /**
@@ -460,32 +646,38 @@ function panels_panel_context_edit_content(&$form, &$form_state) {
   ctools_include('context');
   ctools_include('context-task-handler');
 
-  $display = &panels_panel_context_get_display($form_state['handler']);
+  $cache = panels_edit_cache_get('panel_context:' . $form_state['task_name'] . ':' . $form_state['handler_id']);
 
-  $display->context = ctools_context_handler_get_all_contexts($form_state['task'], $form_state['subtask_id'], $form_state['handler']);
-  $content_types = panels_common_get_allowed_types('panels_page', $display->context);
-
-// Load the display being edited from cache, if possible.
-  if (!empty($_POST) && is_object($cache = panels_cache_get('display', $display->did))) {
-    $display = $cache->display;
-  }
-  else {
-    panels_cache_clear('display', $display->did);
-    $cache = new stdClass();
-    $cache->display = $display;
-    $cache->content_types = $content_types;
-    $cache->display_title = TRUE;
-    panels_cache_set('display', $display->did, $cache);
-  }
-
-  $form_state['display'] = &$display;
-  $form_state['content_types'] = $content_types;
+  $form_state['display'] = &$cache->display;
+  $form_state['content_types'] = $cache->content_types;
   // Tell the Panels form not to display buttons.
   $form_state['no buttons'] = TRUE;
+  $form_state['display_title'] = !empty($cache->display_title);
+  $form_state['no preview'] = TRUE;
+  $form_state['page']->display_cache[$form_state['handler_id']] = $cache;
 
   $form = array_merge($form, panels_edit_display_form($form_state));
   // Make sure the theme will work since our form id is different.
   $form['#theme'] = 'panels_edit_display_form';
+
+  if (!isset($form_state['type']) || $form_state['type'] != 'add' && !empty($form_state['handler_id']) && !empty($form['buttons'])) {
+    $form['buttons']['preview'] = $form['buttons']['return'];
+    $form['buttons']['preview']['#value'] = t('Update and preview');
+  }
+}
+
+function panels_panel_context_edit_content_submit(&$form, &$form_state) {
+  panels_edit_display_form_submit($form, $form_state);
+  $handler = &$form_state['handler'];
+
+  // update the cached display:
+  $display = $form_state['page']->display_cache[$form_state['handler_id']]->display;
+  $handler->conf['display'] = $display;
+  unset($form_state['page']->display_cache[$form_state['handler_id']]);
+
+  if ($form_state['clicked_button']['#value'] == t('Update and preview')) {
+    $form_state['new trail'] = array('handlers', $form_state['handler_id'], 'preview');
+  }
 }
 
 /**
@@ -493,25 +685,18 @@ function panels_panel_context_edit_content(&$form, &$form_state) {
  */
 function panels_panel_context_edit_settings(&$form, &$form_state) {
   $conf = $form_state['handler']->conf;
-  $form['conf']['autogenerate_title'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Automatically generate title'),
-    '#description' => t('If checked, the administrative title will be automatically regenerated whenever the selection rules changes. If you change the title and leave this check, your changes may disappear.'),
-    '#default_value' => $conf['autogenerate_title'],
-  );
-
   $form['conf']['title'] = array(
     '#type' => 'textfield',
     '#default_value' => $conf['title'],
     '#title' => t('Administrative title'),
-    '#description' => t('Administrative title of this task handler.'),
+    '#description' => t('Administrative title of this variant.'),
   );
 
   $form['conf']['no_blocks'] = array(
     '#type' => 'checkbox',
     '#default_value' => $conf['no_blocks'],
     '#title' => t('Disable Drupal blocks/regions'),
-    '#description' => t('Check this to have the panel page disable all regions displayed in the theme.'),
+    '#description' => t('Check this to have the page disable all regions displayed in the theme. Note that some themes support this setting better than others. If in doubt, try with stock themes to see.'),
   );
 
   $form['conf']['css_id'] = array(
@@ -537,5 +722,51 @@ function panels_panel_context_edit_settings_submit(&$form, &$form_state) {
   $form_state['handler']->conf['no_blocks'] = $form_state['values']['no_blocks'];
   $form_state['handler']->conf['css_id'] = $form_state['values']['css_id'];
   $form_state['handler']->conf['css'] = $form_state['values']['css'];
+  $form_state['handler']->conf['title'] = $form_state['values']['title'];
 }
 
+/**
+ * Form to show a nice preview.
+ */
+function panels_panel_context_edit_preview(&$form, &$form_state) {
+  ctools_include('context');
+  ctools_include('context-task-handler');
+
+  $contexts = ctools_context_handler_get_all_contexts($form_state['task'], $form_state['subtask'], $form_state['handler']);
+  $form['preview'] = array();
+  ctools_context_replace_form($form['preview'], $contexts);
+
+  // automatically preview if there are no argument placeholders.
+  if (empty($form['preview'])) {
+    $display = panels_panel_context_get_display($form_state['handler']);
+    $display->context = $contexts;
+    $output = panels_render_display($display);
+    if (isset($form['buttons'])) {
+      unset($form['buttons']);
+    }
+  }
+  else {
+    $form['preview']['#tree'] = TRUE;
+    $form_state['contexts'] = $contexts;
+  }
+
+  if (!empty($output)) {
+    $form['output'] = array(
+      '#value' => $output,
+    );
+  }
+
+  $form_state['do not cache'] = TRUE;
+}
+
+/**
+ * Display a preview upon submit if arguments were needed.
+ */
+function panels_panel_context_edit_preview_submit(&$form, &$form_state) {
+  $display = panels_panel_context_get_display($form_state['handler']);
+  $display->context = ctools_context_replace_placeholders($form_state['contexts'], $form_state['values']['preview']);
+
+  $form_state['content'] = panels_render_display($display);
+  $form_state['redirect'] = FALSE;
+  $form_state['rerender'] = TRUE;
+}

@@ -1,5 +1,5 @@
 <?php
-// $Id: emimage.module,v 1.1.2.11 2009/05/29 01:59:57 aaron Exp $
+// $Id: emimage.module,v 1.1.2.14 2009/09/21 16:20:09 aaron Exp $
 
 /**
  * @file
@@ -23,9 +23,7 @@ define('EMIMAGE_DEFAULT_THUMBNAIL_LINK', EMIMAGE_LINK_CONTENT);
  * Implementation of hook_menu().
  */
 function emimage_menu() {
-  $items = array();
-
-  $items += module_invoke('emfield', 'provider_menus', 'emimage');
+  $items = module_invoke('emfield', 'provider_menus', 'emimage');
 
   return $items;
 }
@@ -204,7 +202,7 @@ function emimage_widget_settings($op, $widget) {
           '#title' => t('Preview size link'),
           '#description' => t("Where the image will link when displayed in its preview size. 'Content' links to the content page, 'provider' links to the provider's image page, and 'none' displays the image with no link."),
           '#options' => $link_options,
-          '#default_value' => is_null($widget['preview_link']) ? $preview_link : $widget['preview_link_link'],
+          '#default_value' => isset($widget['preview_link']) ? $widget['preview_link'] : $preview_link,
         );
         $width = variable_get('emimage_default_thumbnail_width', EMIMAGE_DEFAULT_THUMBNAIL_WIDTH);
         $height = variable_get('emimage_default_thumbnail_height', EMIMAGE_DEFAULT_THUMBNAIL_HEIGHT);
@@ -305,17 +303,20 @@ function emimage_theme(){
           'width' => NULL,
           'height' => NULL,
           'title' => NULL,
-          'link' => NULL
+          'link' => NULL,
+          'options' => array(),
         ),
-	'file' => 'emimage.theme.inc',
+    'file' => 'emimage.theme.inc',
     ),
     'emimage_image_embed' => array(
       'arguments' => array(
         'field' => NULL,
         'item' => NULL,
         'formatter' => NULL,
-        'node' => NULL),
-	  'file' => 'emimage.theme.inc',
+        'node' => NULL,
+        'options' => array(),
+      ),
+      'file' => 'emimage.theme.inc',
     ),
     'emimage_image_image' => array(
       'arguments' => array(
@@ -327,65 +328,74 @@ function emimage_theme(){
         'width' => NULL,
         'height' => NULL,
         'title' => '',
-        'link' => NULL),
-	  'file' => 'emimage.theme.inc',
-	),
+        'link' => NULL,
+        'options' => array(),
+      ),
+      'file' => 'emimage.theme.inc',
+    ),
     'emimage_image_thumbnail' => array(
       'arguments' => array(
         'field' => NULL,
         'item' => NULL,
         'formatter' => NULL,
-        'node' => NULL),
-	  'file' => 'emimage.theme.inc',
-	),
+        'node' => NULL,
+        'options' => array(),
+      ),
+      'file' => 'emimage.theme.inc',
+    ),
     'emimage_image_full' => array(
       'arguments' => array(
         'field' => NULL,
         'item' => NULL,
         'formatter' => NULL,
-        'node' => NULL),
-	  'file' => 'emimage.theme.inc',
+        'node' => NULL,
+        'options' => array(),
+      ),
+      'file' => 'emimage.theme.inc',
     ),
     'emimage_image_preview' => array(
       'arguments' => array(
         'field' => NULL,
         'item' => NULL,
         'formatter' => NULL,
-        'node' => NULL),
-	  'file' => 'emimage.theme.inc',
+        'node' => NULL,
+        'options' => array(),
+      ),
+      'file' => 'emimage.theme.inc',
     ),
     'emimage_default' => array(
       'arguments' => array(
         'field' => NULL,
         'item' => NULL,
         'formatter' => NULL,
-        'node' => NULL),
-	  'file' => 'emimage.theme.inc',
-
+        'node' => NULL,
+        'options' => array(),
+      ),
+      'file' => 'emimage.theme.inc',
     ),
     'emimage_formatter_image_image' => array(
-        'arguments' => array('element' => NULL),
-		'file' => 'emimage.theme.inc',
+      'arguments' => array('element' => NULL),
+      'file' => 'emimage.theme.inc',
     ),
     'emimage_formatter_image_thumbnail' => array(
-        'arguments' => array('element' => NULL),
-		'file' => 'emimage.theme.inc',
+      'arguments' => array('element' => NULL),
+      'file' => 'emimage.theme.inc',
     ),
     'emimage_formatter_image_embed' => array(
         'arguments' => array('element' => NULL),
-		'file' => 'emimage.theme.inc',
+        'file' => 'emimage.theme.inc',
     ),
     'emimage_formatter_image_preview' => array(
         'arguments' => array('element' => NULL),
-		'file' => 'emimage.theme.inc',
+        'file' => 'emimage.theme.inc',
     ),
     'emimage_formatter_image_full' => array(
         'arguments' => array('element' => NULL),
-		'file' => 'emimage.theme.inc',
+        'file' => 'emimage.theme.inc',
     ),
     'emimage_formatter_default' => array(
         'arguments' => array('element' => NULL),
-		'file' => 'emimage.theme.inc',
+        'file' => 'emimage.theme.inc',
     )
   );
 

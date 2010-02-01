@@ -1,5 +1,5 @@
 <?php
-// $Id: imagebrowser.views.inc,v 1.1.2.4 2008/12/03 22:18:51 starnox Exp $
+// $Id: imagebrowser.views.inc,v 1.1.2.8 2009/07/19 14:30:51 starnox Exp $
 
 /**
  * @file

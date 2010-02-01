@@ -1,5 +1,5 @@
 <?php
-// $Id: node_add_form.inc,v 1.7 2009/05/06 01:10:05 merlinofchaos Exp $
+// $Id: node_add_form.inc,v 1.9.2.1 2009/10/01 22:00:08 merlinofchaos Exp $
 
 /**
  * @file
@@ -11,7 +11,7 @@
  * Implementation of specially named hook_ctools_contexts().
  */
 function ctools_node_add_form_ctools_contexts() {
-  $args['node_add_form'] = array(
+  return array(
     'title' => t("Node add form"),
     'description' => t('A node add form.'),
     'context' => 'ctools_context_create_node_add_form',
@@ -25,7 +25,6 @@ function ctools_node_add_form_ctools_contexts() {
       '#description' => t('Enter the node type this context.'),
     ),
   );
-  return $args;
 }
 
 /**
@@ -40,7 +39,7 @@ function ctools_context_create_node_add_form($empty, $data = NULL, $conf = FALSE
     return $context;
   }
 
-  if ($conf) {
+  if ($conf && (isset($data['types']) || isset($data['type']))) {
     // Holdover from typo'd config.
     $data = isset($data['types']) ? $data['types'] : $data['type'];
   }
@@ -84,30 +83,26 @@ function ctools_context_create_node_add_form($empty, $data = NULL, $conf = FALSE
   }
 }
 
-function ctools_context_node_add_form_settings_form($conf, $external = FALSE) {
-  if ($external) {
-    $options[0] = t('External source');
-  }
-
+function ctools_context_node_add_form_settings_form($conf) {
   foreach (node_get_types() as $type => $info) {
     $options[$type] = $info->name;
   }
+  asort($options);
 
   if (isset($conf['types']) && !isset($conf['type'])) {
     $conf['type'] = $conf['types'];
+  }
+  if (empty($conf)) {
+    $conf = array('type' => '');
   }
 
   $form['type'] = array(
     '#title' => t('Node type'),
     '#type' => 'select',
     '#options' => $options,
-    '#default_value' => $conf['types'],
+    '#default_value' => $conf['type'],
     '#description' => t('Select the node type for this form.'),
   );
-
-  if ($external) {
-    $form['type']['#description'] .= ' ' . t('Select external to require this from an external source (such as a containing panel page).');
-  }
 
   return $form;
 }

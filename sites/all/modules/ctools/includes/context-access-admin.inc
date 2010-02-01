@@ -1,5 +1,5 @@
 <?php
-// $Id: context-access-admin.inc,v 1.5 2009/03/24 18:32:45 merlinofchaos Exp $
+// $Id: context-access-admin.inc,v 1.7 2009/08/16 21:59:42 merlinofchaos Exp $
 
 /**
  * @file
@@ -213,11 +213,11 @@ function ctools_access_admin_render_table($access, $fragment, $contexts) {
   $header = array(
     array('data' => t('Title'), 'class' => 'ctools-access-title'),
     array('data' => t('Description'), 'class' => 'ctools-access-description'),
-    array('data' => t(''), 'class' => 'ctools-access-operations', 'align' => 'right'),
+    array('data' => '', 'class' => 'ctools-access-operations', 'align' => 'right'),
   );
 
   if (empty($rows)) {
-    $rows[] = array(array('data' => t('No criteria selected, access will automatically be granted.'), 'colspan' => count($header)));
+    $rows[] = array(array('data' => t('No criteria selected, this test will pass.'), 'colspan' => count($header)));
   }
 
   ctools_modal_add_js();

@@ -1,18 +1,38 @@
 <?php
-// $Id: xmlsitemap_engines.module,v 1.5.2.12.2.17 2009/07/03 21:24:25 davereid Exp $
+// $Id: xmlsitemap_engines.module,v 1.5.2.54 2010/01/27 00:33:17 davereid Exp $
 
 /**
- * Implementation of hook_help().
+ * @file
+ * Define actions for Google, Yahoo!, Ask, and Bing.
  */
-function xmlsitemap_engines_help($path, $arg) {
-  $output = '';
-  switch ($path) {
-    case 'admin/settings/xmlsitemap/engines':
-      $output .= t('In order to verify site ownership with the search engines listed below, it is highly recommended to download and install the <a href="@site-verify">Site verification module</a>.', array('@site-verify' => 'http://drupal.org/project/site_verify'));
-      break;
-  }
 
-  return $output;
+/**
+ * @addtogroup xmlsitemap
+ * @{
+ */
+
+/*****************************************************************************
+ * Drupal hooks.
+ ****************************************************************************/
+
+/**
+ * Implementation of hook_cron().
+ */
+function xmlsitemap_engines_cron() {
+  if (variable_get('site_offline', 0)) {
+    return;
+  }
+  $frequency = variable_get('xmlsitemap_engines_cron_submit_frequency', 3600);
+  $last_ping = variable_get('xmlsitemap_engines_cron_timestamp_submit', 0);
+  $submit_on_change = variable_get('xmlsitemap_engines_submit', FALSE);
+  $content_changed = variable_get('xmlsitemap_sitemap_is_changed', FALSE);
+  $ping_engines = (!$submit_on_change || $content_changed) &&
+    ((REQUEST_TIME - $last_ping) >= $frequency);
+  if ($ping_engines) {
+    xmlsitemap_engines_ping_sitemap();
+    variable_set('xmlsitemap_sitemap_is_changed', FALSE);
+    variable_set('xmlsitemap_engines_cron_timestamp_submit', REQUEST_TIME);
+  }
 }
 
 /**
@@ -20,148 +40,143 @@ function xmlsitemap_engines_help($path, $arg) {
  */
 function xmlsitemap_engines_menu() {
   $items['admin/settings/xmlsitemap/engines'] = array(
-    'title' => 'Search Engines',
+    'title' => 'Search engines',
+    'description' => 'Configure the submission settings of the XML sitemap to the search engines.',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('xmlsitemap_engines_settings_form'),
-    'access arguments' => array('administer xmlsitemap'),
+    'page arguments' => array('xmlsitemap_engines_settings'),
+    'access arguments' => array('administer site configuration'),
     'type' => MENU_LOCAL_TASK,
     'file' => 'xmlsitemap_engines.admin.inc',
   );
-
   return $items;
 }
 
 /**
- * Implementation of hook_cron().
+ * Implementation of hook_xmlsitemap_operations().
  */
-function xmlsitemap_engines_cron() {
-  if (variable_get('site_offline', 0)
-      || (xmlsitemap_engines_var('submit_updated') && xmlsitemap_var('generated_last') < xmlsitemap_engines_var('submit_last'))
-      || (REQUEST_TIME - xmlsitemap_engines_var('submit_last')) < xmlsitemap_engines_var('minimum_lifetime')) {
-    return;
-  }
-
-  $sitemaps = xmlsitemap_get_sitemaps();
-  $engines = xmlsitemap_engines_var('engines');
-  foreach ($engines as $engine) {
-    foreach ($sitemaps as $sitemap) {
-      $url = xmlsitemap_engines_prepare_url(xmlsitemap_engines_get_engines($engine, 'url'), $sitemap);
-      $request = drupal_http_request($url);
-      watchdog('xmlsitemap', 'Submitted the sitemap to %url and received response @code.', array('%url' => $url, '@code' => $request->code));
-    }
-  }
-
-  $custom_urls = xmlsitemap_engines_var('custom_urls');
-  $custom_urls = preg_split('/[\r\n]+/', $custom_urls, -1, PREG_SPLIT_NO_EMPTY);
-  foreach ($custom_urls as $custom_url) {
-    foreach ($sitemaps as $sitemap) {
-      $url = xmlsitemap_engines_prepare_url($custom_url, $sitemap);
-      $request = drupal_http_request($url);
-      watchdog('xmlsitemap', 'Submitted the sitemap to %url and received response @code.', array('%url' => $url, '@code' => $request->code));
-    }
-  }
-
-  variable_set('xmlsitemap_engines_submit_last', REQUEST_TIME);
+function xmlsitemap_engines_xmlsitemap_operations() {
+  return array(
+    'submit_to_all' => array(
+      'label' => t('Submit the sitemap to all the active search engines'),
+      'callback' => 'xmlsitemap_engines_ping_sitemap',
+    ),
+    'submit_to_askcom' => array(
+      'label' => t('Submit the sitemap to Ask.com'),
+      'callback' => 'xmlsitemap_engines_ping_sitemap',
+      'callback arguments' => array('engine' => 'ask'),
+    ),
+    'submit_to_bing' => array(
+      'label' => t('Submit the sitemap to Bing'),
+      'callback' => 'xmlsitemap_engines_ping_sitemap',
+      'callback arguments' => array('engine' => 'bing'),
+    ),
+    'submit_to_google' => array(
+      'label' => t('Submit the sitemap to Google'),
+      'callback' => 'xmlsitemap_engines_ping_sitemap',
+      'callback arguments' => array('engine' => 'google'),
+    ),
+    'submit_to_moreovercom' => array(
+      'label' => t('Submit the sitemap to Moreover.com'),
+      'callback' => 'xmlsitemap_engines_ping_sitemap',
+      'callback arguments' => array('engine' => 'moreover'),
+    ),
+    'submit_to_yahoo' => array(
+      'label' => t('Submit the sitemap to Yahoo!'),
+      'callback' => 'xmlsitemap_engines_ping_sitemap',
+      'callback arguments' => array('engine' => 'yahoo'),
+    ),
+  );
 }
 
-/**
- * Replace valid tokens in the URL with their appropriate values.
- *
- * @param $url
- *   An un-tokenized URL.
- * @return
- *   A tokenized URL.
- */
-function xmlsitemap_engines_prepare_url($url, $sitemap) {
-  return str_replace('[sitemap]', $sitemap, $url);
-}
+/*****************************************************************************
+ * Public functions.
+ ****************************************************************************/
 
 /**
- * Get a list of supported search engines, or a detail about a specific engine.
- *
- * @param $engine
- *   An optional specific engine to get details about.
- * @param $value
- *   An optional value about an engine to get details about.
- * @return
- *   If $engine and $value are not specified, a two-level array with all the
- *   engines and their details. If $engine is specified but $value is not, an
- *   array with just the details for a specific engine. If $engine and $value
- *   are both specified, just the specific detail for a specific engine.
+ * Submit the sitemap to the selected engines.
  */
-function xmlsitemap_engines_get_engines($engine = NULL, $value = NULL) {
-  static $engines;
-
-  if (!isset($engines)) {
-    $engines = array(
-      'google' => array(
-        'name' => t('Google'),
-        'url' => 'http://www.google.com/webmasters/tools/ping?sitemap=[sitemap]',
-      ),
-      'yahoo' => array(
-        'name' => t('Yahoo!'),
-        'url' => 'http://search.yahooapis.com/SiteExplorerService/V1/ping?sitemap=[sitemap]',
-      ),
-      'ask' => array(
-        'name' => t('Ask.com'),
-        'url' => 'http://submissions.ask.com/ping?sitemap=[sitemap]',
-      ),
-      'bing' => array(
-        'name' => t('Bing (formerly Live Search)'),
-        'url' => 'http://www.bing.com/webmaster/ping.aspx?siteMap=[sitemap]',
-      ),
-      'moreover' => array(
-        'name' => t('Moreover'),
-        'url' => 'http://api.moreover.com/ping?u=[sitemap]',
-      ),
-    );
-
-    // Allow other modules to alter or add search engines.
-    drupal_alter('xmlsitemap_engines', $engines);
-    ksort($engines);
-  }
-
-  if (isset($engine) && isset($value)) {
-    return isset($engines[$engine][$value]) ? $engines[$engine][$value] : NULL;
-  }
-  elseif (isset($engine)) {
-    return isset($engines[$engine]) ? $engines[$engine] : NULL;
-  }
-  else {
-    return $engines;
-  }
-}
-
-/**
- * Internal default variables for template_var().
- */
-function xmlsitemap_engines_variables() {
-  $variables = array(
-    'xmlsitemap_engines_engines' => array(),
-    'xmlsitemap_engines_custom_urls' => '',
-    'xmlsitemap_engines_minimum_lifetime' => 3600,
-    'xmlsitemap_engines_submit_last' => 0,
-    'xmlsitemap_engines_submit_updated' => TRUE,
+function xmlsitemap_engines_ping_sitemap($engine = NULL) {
+  $engines = array(
+    'ask' => array(
+      'Ask.com',
+      'http://submissions.ask.com/ping?sitemap=[sitemap]',
+    ),
+    'bing' => array(
+      'Bing (formerly Live Search)',
+      'http://www.bing.com/webmaster/ping.aspx?siteMap=[sitemap]',
+    ),
+    'google' => array(
+      'Google',
+      'http://www.google.com/webmasters/tools/ping?sitemap=[sitemap]'
+    ),
+    'moreover' => array(
+      'Moreover.com',
+      'http://api.moreover.com/ping?u=[sitemap]'
+    ),
+    'yahoo' => array(
+      'Yahoo!',
+      'http://search.yahooapis.com/SiteExplorerService/V1/ping?sitemap=[sitemap]'
+    ),
   );
 
-  return $variables;
+  if (variable_get('xmlsitemap_all_links_to_default_language', 0)) {
+    // Only submit the default language sitemap since it contains every link.
+    $languages = array(language_default());
+  }
+  else {
+    // Get a list of enabled languages.
+    $languages = language_list('enabled');
+    $languages = $languages[1];
+  }
+
+  foreach ($languages as $language) {
+    if (!isset($engine)) {
+      foreach ($engines as $id => $info) {
+        if (variable_get("xmlsitemap_engines_{$id}_submit", FALSE)) {
+          xmlsitemap_engines_submit_sitemap($info[0], "xmlsitemap_engines_{$id}_url", $info[1], $language);
+        }
+      }
+    }
+    elseif (isset($engines[$engine])) {
+      xmlsitemap_engines_submit_sitemap($engines[$engine][0], "xmlsitemap_engines_{$engine}_url", $engines[$engine][1], $language);
+    }
+  }
 }
 
 /**
- * Internal implementation of variable_get().
+ * Helper function for xmlsitemap_engines_ping_sitemap().
+ * Submit the sitemap to the engine passed as argument, and write a message in
+ * Drupal log.
+ *
+ * @param $engine
+ *  The identifier for the search engine.
+ * @param $url_var
+ *  The variable name containing the submission URL used by the search engine.
+ * @param $default_url
+ *  The default submission URL.
  */
-function xmlsitemap_engines_var($name, $default = NULL) {
-  static $defaults = NULL;
-  if (!isset($defaults)) {
-    $defaults = xmlsitemap_engines_variables();
+function xmlsitemap_engines_submit_sitemap($engine, $url_var, $default_url, $language = null) {
+  $url_options = array ('absolute' => TRUE);
+  if (!is_null($language)) {
+    $url_options['language'] = $language;
   }
 
-  $name = 'xmlsitemap_engines_' . $name;
+  $url = url('sitemap.xml', $url_options);
+  $url = strtr(variable_get($url_var, $default_url), array('[sitemap]' => $url));
 
-  // @todo Remove when stable.
-  if (!isset($defaults[$name])) {
-    trigger_error(t('Default variable for %variable not found.', array('%variable' => $name)));
+  $result = drupal_http_request($url);
+  if ($result->code == 200) {
+    watchdog('xmlsitemap', 'Sitemap successfully submitted to @engine.<br />Request: @url',
+      array('@engine' => $engine, '@url' => $url)
+    );
   }
-
-  return variable_get($name, isset($default) || !isset($defaults[$name]) ? $default : $defaults[$name]);
+  else {
+    watchdog('xmlsitemap', 'Error occurred submitting sitemap to @engine: @code.<br />Request: @url',
+      array('@engine' => $engine, '@code' => 0 + $result->code, '@url' => $url), WATCHDOG_ERROR
+    );
+  }
 }
+
+/**
+ * @} End of "addtogroup xmlsitemap".
+ */

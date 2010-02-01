@@ -1,5 +1,5 @@
 <?php
-/* $Id: css.inc,v 1.7 2009/05/06 00:10:01 merlinofchaos Exp $ */
+/* $Id: css.inc,v 1.10.2.1 2009/10/08 16:12:17 merlinofchaos Exp $ */
 
 /*
  * @file
@@ -48,10 +48,11 @@
  * @endcode
  *
  * The CSS that was generated will be stored in the database, so even if the
- * file was removed the cached CSS will be used. It is your module's
- * responsibility to know when this CSS is outdated and needs to be
- * changed. This storage is non-volatile and will never be removed unless
- * you remove it:
+ * file was removed the cached CSS will be used. If the CSS cache is
+ * cleared you may be required to regenerate your CSS. This will normally
+ * only be cleared by an administrator operation, not during normal usage.
+ *
+ * You may remove your stored CSS this way:
  *
  * @code
  *   ctools_css_clear($id);
@@ -113,6 +114,9 @@ function ctools_css_clear($id) {
 
   if (file_exists($cache->filename)) {
     file_delete($cache->filename);
+    // If we remove an existing file, there may be cached pages that refer
+    // to it. We must get rid of them:
+    cache_clear_all();
   }
 
   db_query("DELETE FROM {ctools_css_cache} WHERE cid = '%s'", $id);
@@ -296,7 +300,7 @@ function ctools_css_disassemble($css) {
       }
 
       // Disassemble the declaration, check it and tuck it into an array.
-      $disassembled_css[$selector_str] = _ctools_css_disassemble_declaration(strtolower($declaration));
+      $disassembled_css[$selector_str] = _ctools_css_disassemble_declaration($declaration);
     }
   }
   return $disassembled_css;
@@ -309,7 +313,7 @@ function _ctools_css_disassemble_selector($selector_str) {
   // pass. Note that this handles 0, 1, or more valid selectors gracefully.
   foreach ($selectors as $key => $selector) {
     // Replace un-needed characters and do a little cleanup.
-    $selector = preg_replace("/[\n|\t|\\|\s]+/", ' ', strtolower(trim($selector)));
+    $selector = preg_replace("/[\n|\t|\\|\s]+/", ' ', trim($selector));
     // Make sure this is still a real selector after cleanup.
     if (!empty($selector)) {
       $selectors[$key] = $selector;
@@ -338,7 +342,7 @@ function _ctools_css_disassemble_declaration($declaration) {
         continue;
       }
       // Clean up the current property-value pair.
-      $propval_pair = preg_replace("/[\n|\t|\\|\s]+/", ' ', strtolower(trim($propval_pair)));
+      $propval_pair = preg_replace("/[\n|\t|\\|\s]+/", ' ', trim($propval_pair));
       // Explode the remaining fragements some more, but clean them up first.
       list($property, $value) = explode(':', $propval_pair);
       // If the property survived, toss it onto the stack.
@@ -538,5 +542,5 @@ function ctools_css_filter_default_allowed_values() {
  */
 function ctools_css_flush_caches() {
   file_scan_directory(file_create_path('ctools/css'), '.*', array('.', '..', 'CVS'), 'file_delete', TRUE);
-  db_query("TRUNCATE {ctools_css_cache}");
+  db_query("DELETE FROM {ctools_css_cache}");
 }

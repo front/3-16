@@ -1,4 +1,29 @@
-/* $Id: changelog.txt,v 1.1.4.15 2008/12/19 18:17:14 aaron Exp $ */
+/* $Id: CHANGELOG.txt,v 1.1.2.4 2009/12/07 22:24:59 aaron Exp $ */
+
+================
+ DRUPAL-6--1-18
+================
+
+by aaron: Change hook_theme to call emfield directly rather than through module_invoke.
+#597664 by kratib: Fixed Parameter 6 to emvideo_vimeo_video() expected to be a reference, value given in /var/www/adhack/live/modules/emfield/emfield.mod.
+
+===============
+ DRUPAL-6--1-4
+===============
+
+August 2009
+-----------
+ * #370882: Fix menu creation (jdwfly/aaron).
+
+DRUPAL-6--1-3
+=============
+
+June 2009
+---------
+ * Fix custom_url url to use absolute, fixing playlist problems (aaron).
+
+DRUPAL-6--1-2
+=============
 
 December 2008
 =============

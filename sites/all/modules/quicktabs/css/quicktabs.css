@@ -1,6 +1,6 @@
-/* $Id: quicktabs.css,v 1.1.2.4 2009/03/13 18:57:28 katbailey Exp $ */
+/* $Id: quicktabs.css,v 1.1.2.6 2009/07/18 02:42:16 pasqualle Exp $ */
 
-div.quicktabs_tabpage.nojs-hide {
+.quicktabs-hide {
   display: none;
 }
 
@@ -12,6 +12,7 @@ ul.quicktabs_tabs li {
   background: none;
   list-style-type: none;
   padding: 2px;
+  white-space: nowrap;
 }
 ul.quicktabs_tabs li a:focus {
   outline: none;

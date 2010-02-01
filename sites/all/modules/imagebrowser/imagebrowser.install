@@ -1,5 +1,5 @@
 <?php
-// $Id: imagebrowser.install,v 1.1.2.10 2008/12/03 22:18:50 starnox Exp $
+// $Id: imagebrowser.install,v 1.1.2.15 2009/07/19 14:30:50 starnox Exp $
 
 /**
  * @file
@@ -10,15 +10,14 @@
  * Implementation of hook_install().
  */
 function imagebrowser_install() {
-  //Nothing to install
+  //Do Nothing
 }
 
 /**
  * Implementation of hook_uninstall().
  */
 function imagebrowser_uninstall() {
-  variable_del('imagebrowser_insert_type');
-  variable_del('imagebrowser_editor');
+  db_query("DELETE FROM {variable} WHERE name LIKE 'imagebrowser%'");
 }
 
 /**
@@ -36,7 +35,7 @@ function imagebrowser_requirements($phase) {
     if (count($toolkits) == 0) {
       $requirements['image_toolkit'] = array(
         'title' => $t('Image API Toolkit'),
-        'description' => $t('There are no image toolkit modules enabled. Toolkit modules can be enabled from the <a href="!admin-build-modules">module configuration page</a>.', array('!admin-build-modules' => url('admin/build/modules'))),
+        'description' => $t('There are no image toolkit modules enabled (GD2 or ImageMagic). Toolkit modules can be enabled from the <a href="!admin-build-modules">module configuration page</a>.', array('!admin-build-modules' => url('admin/build/modules'))),
         'severity' => REQUIREMENT_ERROR,
       );
     }

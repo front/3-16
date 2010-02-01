@@ -1,6 +1,6 @@
-/* $Id: navlist.css,v 1.1.2.1 2008/12/09 20:32:57 pasqualle Exp $ */
+/* $Id: navlist.css,v 1.1.2.2 2009/09/25 13:31:35 pasqualle Exp $ */
 
-quicktabs_wrapper.quicktabs-style-navlist {
+.quicktabs_wrapper.quicktabs-style-navlist {
   margin: 0;
   width: 100%;
   display: block;

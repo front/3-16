@@ -1,5 +1,5 @@
 <?php
-// $Id: ajax.inc,v 1.6 2009/04/20 21:29:46 merlinofchaos Exp $
+// $Id: ajax.inc,v 1.14.2.1 2009/10/01 21:34:36 merlinofchaos Exp $
 
 /**
  * @file
@@ -55,8 +55,27 @@
  *   - selector: The CSS selector to add CSS to.
  *   - argument: An array of 'key': 'value' CSS selectors to set.
  *
+ * - attr
+ *   - selector: The CSS selector. This can be any selector jquery uses in $().
+ *   - name: The name or key of the data attached to this selector.
+ *   - value: The value of the data.
+ *
  * - settings
  *   - argument: An array of settings to add to Drupal.settings via $.extend
+ *
+ * - data
+ *   - selector: The CSS selector. This can be any selector jquery uses in $().
+ *   - name: The name or key of the data attached to this selector.
+ *   - value: The value of the data. Not just limited to strings can be any format.
+ *
+ * - redirect
+ *   - url: The url to be redirected to. This can be an absolute URL or a Drupal path.
+ *
+ * - reload
+ *
+ * - submit
+ *   - selector: The CSS selector to identify the form for submission. This can
+ *     be any selector jquery uses in $().
  *
  * Commands are usually created with a couple of helper functions, so they
  * look like this:
@@ -106,7 +125,7 @@ function ctools_ajax_image_button($image, $dest, $alt, $class = '') {
  *   to ctools-use-ajax.
  */
 function ctools_ajax_text_button($text, $dest, $alt, $class = '', $type = 'ctools-use-ajax') {
-  return l($text, $dest, array('html' => TRUE, 'attributes' => array('class' => "$type $class", 'title' => $alt, 'alt' => $alt)));
+  return l($text, $dest, array('html' => TRUE, 'attributes' => array('class' => "$type $class", 'title' => $alt)));
 }
 
 /**
@@ -295,6 +314,47 @@ function ctools_ajax_command_settings($argument) {
 }
 
 /**
+ * Create a data command for the AJAX responder.
+ *
+ * This will attach the name=value pair of data to the selector via
+ * jquery's data cache.
+ *
+ * @param $selector
+ *   The CSS selector. This can be any selector jquery uses in $().
+ * @param $name
+ *   The name or key: of the data attached to this selector.
+ * @param $value
+ *  The value of the data. Not just limited to strings can be any format.
+ */
+function ctools_ajax_command_data($selector, $name, $value) {
+  return array(
+    'command' => 'data',
+    'selector' => $selector,
+    'name' => $name,
+    'value' => $value,
+  );
+}
+
+ /**
+  * Set a single property to a value, on all matched elements.
+  *
+  * @param $selector
+  *   The CSS selector. This can be any selector jquery uses in $().
+  * @param $name
+  *   The name or key: of the data attached to this selector.
+  * @param $value
+  *  The value of the data.
+  */
+ function ctools_ajax_command_attr($selector, $name, $value) {
+   return array(
+     'command' => 'attr',
+     'selector' => $selector,
+     'name' => $name,
+     'value' => $value,
+   );
+ }
+
+/**
  * Force a table to be restriped.
  *
  * This is usually used after a table has been modifed by a replace or append
@@ -311,11 +371,59 @@ function ctools_ajax_command_restripe($selector) {
 }
 
 /**
+ * Force a client-side redirect.
+ *
+ * @param $url
+ *   The url to be redirected to. This can be an absolute URL or a
+ *   Drupal path.
+ */
+function ctools_ajax_command_redirect($url) {
+  return array(
+    'command' => 'redirect',
+    'url' => url($url),
+  );
+}
+
+/**
+ * Force a reload of the current page.
+ */
+function ctools_ajax_command_reload() {
+  return array(
+    'command' => 'reload',
+  );
+}
+
+/**
+ * Submit a form.
+ *
+ * This is useful for submitting a parent form after a child form has finished
+ * processing in a modal overlay.
+ *
+ * @param $selector
+ *   The CSS selector to identify the form for submission. This can be any
+ *   selector jquery uses in $().
+ */
+function ctools_ajax_command_submit($selector) {
+  return array(
+    'command' => 'submit',
+    'selector' => $selector,
+  );
+}
+
+/**
  * Render a commands array into JSON and immediately hand this back
  * to the AJAX requester.
  */
 function ctools_ajax_render($commands = array()) {
-  drupal_json($commands);
+  if (!empty($_REQUEST['ctools_multipart'])) {
+    // We don't use drupal_json here because the header is not true. We're not really
+    // returning JSON, strictly-speaking, but rather JSON content wrapped in a <textarea>
+    // as per the "file uploads" example here: http://malsup.com/jquery/form/#code-samples
+    echo '<textarea>' . drupal_to_js($commands) . '</textarea>';
+  }
+  else {
+    drupal_json($commands);
+  }
   exit;
 }
 
@@ -328,3 +436,50 @@ function ctools_ajax_render_error($error = '') {
   ctools_ajax_render($commands);
 }
 
+/**
+ * Associate a URL to a form element with a hidden form.
+ *
+ * This is a helper function to easily associate a URL with a form element
+ * which can be used for different ajax functionality.
+ *
+ * You would call this function on a form element in the form function like this:
+ *
+ * @code
+ *   $form['example'] = array(
+ *     '#title' => t('Example'),
+ *     '#type' => 'select',
+ *     '#options' => array(1 => 'One', 2 => 'Two', 3 => 'Three'),
+ *     '#default_value' => 1,
+ *   );
+ *   ctools_ajax_associate_url_to_element($form, $form['example'], 'example/ajax/urlpath');
+ * @endcode
+ *
+ * The AJAX request will POST the value of the form element in the "ctools_changed" parameter.
+ *
+ * @param &$form
+ *   Reference to the form element. This is required to have the #id and #attribute
+ *   elements populated and to create the hidden form element for each select.
+ * @param &$form_element
+ *   The form element we are going to take action on.
+ * @param $dest
+ *   The URL to associate the form element to.
+ * @param $type
+ *   A type to use, in case a different behavior should be attached. Defaults
+ *   to ctools-use-ajax.
+ */
+function ctools_ajax_associate_url_to_element(&$form, &$form_element, $dest, $type = 'ctools-use-ajax') {
+  drupal_add_js('misc/jquery.form.js', 'core');
+  if (!isset($form_element['#id'])) {
+    //Create a unique ID to associate $form_element and hidden elements since we dont have an ID
+    $form_element['#id'] = uniqid('ctools-ajax-url-');
+
+    $form_element['#attributes']['class'] = $type;
+  }
+
+  //Add hidden form element to hold base URL
+  $form[$form_element['#id'] . '-url'] = array(
+    '#type' => 'hidden',
+    '#value' => $dest,
+    '#attributes' => array('class' =>  $form_element['#id'] . '-url'),
+  );
+}

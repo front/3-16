@@ -1,5 +1,5 @@
 <?php
-// $Id: views_panes.inc,v 1.8 2009/05/01 16:11:22 merlinofchaos Exp $
+// $Id: views_panes.inc,v 1.14.2.3 2009/10/21 19:52:07 merlinofchaos Exp $
 
 /**
  * @file
@@ -105,9 +105,12 @@ function _views_content_panes_content_type($view, $display) {
         list($context, $converter) = explode('.', $argument['context'], 2);
       }
       else {
+        // Backwards-compat for before we had a system for delimiting the data
+        // we retrieve out of context objects.
         $context = $argument['context'];
       }
-      $contexts[] = new ctools_context_required($argument['label'], $context);
+      $class = 'ctools_context_' . (empty($argument['context_optional']) ? 'required' : 'optional');
+      $contexts[] = new $class($argument['label'], $context);
     }
   }
 
@@ -139,19 +142,21 @@ function views_content_views_panes_content_type_render($subtype, $conf, $panel_a
   }
 
   $view->set_display($display);
-  if (!$view->display_handler->access($GLOBALS['user'])) {
+  if (!$view->display_handler->access($GLOBALS['user']) || !$view->display_handler->panel_pane_display) {
     return;
   }
 
+
   $args = array();
   $arguments = $view->display_handler->get_option('arguments');
+
 
   $context_keys = array_keys($contexts);
   foreach ($view->display_handler->get_argument_input() as $id => $argument) {
     switch ($argument['type']) {
       case 'context':
         $key = array_shift($context_keys);
-        if ($key) {
+        if (isset($contexts [$key])) {
           if (strpos($argument['context'], '.')) {
             list($context, $converter) = explode('.', $argument['context'], 2);
             $args[] = ctools_context_convert_context($contexts[$key], $converter);
@@ -197,7 +202,10 @@ function views_content_views_panes_content_type_render($subtype, $conf, $panel_a
   $allow = $view->display_handler->get_option('allow');
 
   if ($allow['path_override'] && !empty($conf['path'])) {
-    $view->display_handler->set_option('path', $conf['path']);
+    $view->override_path = $conf['path'];
+  }
+  else if ($path = $view->display_handler->get_option('inherit_panels_path')) {
+    $view->override_path = $_GET['q'];
   }
 
   $block = new stdClass();
@@ -292,6 +300,8 @@ function views_content_views_panes_content_type_edit_form(&$form, &$form_state) 
     $conf['path'] = $view->get_path();
   }
 
+  $form['arguments']['#tree'] = TRUE;
+
   foreach ($view->display_handler->get_argument_input() as $id => $argument) {
     if ($argument['type'] == 'user') {
       $form['arguments'][$id] = array(
@@ -328,14 +338,12 @@ function views_content_views_panes_content_type_edit_form(&$form, &$form_state) 
 
   ctools_include('dependent');
   if ($allow['use_pager']) {
-    $form['pager_aligner_start'] = array(
-      '#value' => '<div class="option-text-aligner">',
-    );
     $form['use_pager'] = array(
       '#type' => 'checkbox',
       '#title' => t('Use pager'),
         '#default_value' => isset($conf['use_pager']) ? $conf['use_pager'] : $view->display_handler->get_option('use_pager'),
       '#id' => 'use-pager-checkbox',
+      '#prefix' => '<div class="container-inline">',
     );
     $form['pager_id'] = array(
       '#type' => 'textfield',
@@ -345,9 +353,7 @@ function views_content_views_panes_content_type_edit_form(&$form, &$form_state) 
       '#id' => 'use-pager-textfield',
       '#process' => array('ctools_dependent_process'),
       '#dependency' => array('use-pager-checkbox' => array(1)),
-    );
-    $form['pager_aligner_stop'] = array(
-      '#value' => '</div><div style="clear: both; padding: 0; margin: 0"></div>',
+      '#suffix' => '</div>',
     );
   }
   if ($allow['items_per_page']) {
@@ -385,7 +391,7 @@ function views_content_views_panes_content_type_edit_form(&$form, &$form_state) 
 function views_content_views_panes_content_type_edit_form_submit(&$form, &$form_state) {
   // Copy everything from our defaults.
   $keys = array('link_to_view', 'more_link', 'feed_icons', 'use_pager',
-    'pager_id', 'items_per_page', 'offset', 'path_override', 'path');
+    'pager_id', 'items_per_page', 'offset', 'path_override', 'path', 'arguments');
 
   foreach ($keys as $key) {
     if (isset($form_state['values'][$key])) {
@@ -417,4 +423,33 @@ function views_content_views_panes_content_type_admin_title($subtype, $conf, $co
  * Returns the administrative title for a type.
  */
 function views_content_views_panes_content_type_admin_info($subtype, $conf, $contexts) {
+  $info = array();
+
+  list($view_name, $display_name) = explode('-', $subtype);
+  $view = views_get_view($view_name);
+  $view->set_display($display_name);
+
+  // Add arguments first
+  if ($conf['arguments']) { 
+    $keys = array_keys($conf['arguments']);
+    $values = array_values($conf['arguments']);
+    $argument_input = $view->display_handler->get_option('argument_input');
+
+    foreach ($conf['arguments'] as $key => $value) { 
+      $label = $argument_input[$key]['label'];
+      $info[] = $label .': '. $value;
+    }
+  }
+
+  $block = new stdClass;
+  if ($info) { 
+    $block->title = array_shift($info);
+
+    $info[] = $view->display_handler->get_option('pane_description');
+    $block->content = theme('item_list', $info);
+  }
+  else { 
+    $block->title = $view->display_handler->get_option('pane_description');
+  }
+  return $block;
 }

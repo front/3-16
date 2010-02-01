@@ -2,9 +2,9 @@
 name = Quick Tabs
 description = Create blocks of tabbed views, blocks and nodes.
 core = 6.x
-; Information added by drupal.org packaging script on 2009-03-27
-version = "6.x-2.0-rc3"
+; Information added by drupal.org packaging script on 2010-01-15
+version = "6.x-2.0-rc4"
 core = "6.x"
 project = "quicktabs"
-datestamp = "1238119849"
+datestamp = "1263519006"
 

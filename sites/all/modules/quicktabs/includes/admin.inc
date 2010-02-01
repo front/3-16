@@ -1,5 +1,5 @@
 <?php
-// $Id: admin.inc,v 1.1.2.44 2009/03/20 21:10:20 pasqualle Exp $
+// $Id: admin.inc,v 1.1.2.53 2010/01/10 01:06:40 katbailey Exp $
 
 /**
  * Page callback for quicktabs admin landing page.
@@ -14,9 +14,9 @@ function quicktabs_list() {
   while ($row = db_fetch_object($result)) {
     $tablerow = array(
       array('data' => $row->title),
-      array('data' => l('Edit', 'admin/build/quicktabs/'. $row->qtid .'/edit')),
-      array('data' => l('Clone', 'admin/build/quicktabs/'. $row->qtid .'/clone')),
-      array('data' => l('Delete', 'admin/build/quicktabs/'. $row->qtid .'/delete')),
+      array('data' => l(t('Edit'), 'admin/build/quicktabs/'. $row->qtid .'/edit')),
+      array('data' => l(t('Clone'), 'admin/build/quicktabs/'. $row->qtid .'/clone')),
+      array('data' => l(t('Delete'), 'admin/build/quicktabs/'. $row->qtid .'/delete')),
     );
     $rows[] = $tablerow;
   }
@@ -50,17 +50,35 @@ function quicktabs_form($form_state, $formtype, $quicktabs = array()) {
       '#value' => isset($quicktabs['qtid']) ? $quicktabs['qtid'] : 0,
     );
   }
+  $no_tabs = TRUE;
   if (empty($quicktabs['tabs'])) {
     $quicktabs['tabs'] = array(
       0 => array(),
       1 => array(),
     );
   }
+  else {
+    $no_tabs = FALSE;
+    $tab_titles = array();
+  }
 
   // Add the current tabs to the form.
   foreach ($quicktabs['tabs'] as $delta => $details) {
     $details['delta'] = $delta;
     $form['qt_wrapper']['tabs'][$delta] = _quicktabs_form($details);
+    if (isset($details['title'])) {
+      $tab_titles[$delta] = $details['title'];
+    }
+  }
+  
+  if (!$no_tabs) {
+    $form['default_tab'] = array(
+      '#type' => 'select',
+      '#title' => t('Default tab'),
+      '#options' => $tab_titles,
+      '#default_value' => $quicktabs['default_tab'],
+      '#weight' => -6,
+    );
   }
 
   return $form;
@@ -82,9 +100,10 @@ function _qt_admin_main_form($form_state, &$quicktabs) {
     '#type' => 'textfield',
     '#description' => t('This will appear as the name of this block in administer >> site building >> blocks.'),
     '#default_value' => isset($quicktabs['title']) ? $quicktabs['title'] : '',
-    '#weight' => -7,
+    '#weight' => -10,
   );
 
+  $style_options = array();
   $styles = module_invoke_all('quicktabs_tabstyles');
   // The keys used for options must be valid html id-s.
   foreach ($styles as $style) {
@@ -97,25 +116,33 @@ function _qt_admin_main_form($form_state, &$quicktabs) {
     '#options' => array('nostyle' => t('No style')) + array('default' => t('Default style')) + $style_options,
     '#default_value' => isset($quicktabs['style']) ? $quicktabs['style'] : 'default',
     '#description' => t('Choose the quicktab style.'),
-    '#weight' => -6,
+    '#weight' => -8,
   );
 
   $form['ajax'] = array(
     '#type' => 'radios',
     '#title' => t('Ajax'),
     '#options' => array(
-      TRUE => t('Yes') .': '. t('Tab content will be loaded at tab click.'),
-      FALSE => t('No') .': '. t('All tabs will be loaded at page load.'),
+      TRUE => t('Yes') .': '. t('Load only the first tab on page view.'),
+      FALSE => t('No') .': '. t('Load all tabs on page view.'),
     ),
     '#default_value' => isset($quicktabs['ajax']) ? $quicktabs['ajax'] : 0,
-    '#description' => t('Choose how the content of tabs should be loaded.'),
-    '#weight' => -5,
+    '#description' => t('Choose how the content of tabs should be loaded.<p>By choosing "Yes", only the first tab will be loaded when the page first viewed. Content for other tabs will be loaded only when the user clicks the other tab. This will provide faster initial page loading, but subsequent tab clicks will be slower. This can place less load on a server.</p><p>By choosing "No", all tabs will be loaded when the page is first viewed. This will provide slower initial page loading, and more server load, but subsequent tab clicks will be faster for the user. Use with care if you have heavy views.</p>'),
+    '#weight' => -6,
+  );
+
+  $form['hide_empty_tabs'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Hide empty tabs'),
+    '#default_value' => isset($quicktabs['hide_empty_tabs']) ? $quicktabs['hide_empty_tabs'] : 0,
+    '#description' => t('Empty and restricted tabs will not be displayed. Could be useful when the tab content is not accessible.<br />This option does not work in ajax mode.'),
+    '#weight' => -4,
   );
 
   // Add a wrapper for the tabs and Add Another Tab button.
   $form['qt_wrapper'] = array(
     '#tree' => FALSE,
-    '#weight' => -4,
+    '#weight' => -3,
     '#prefix' => '<div class="clear-block" id="quicktabs-tabs-wrapper">',
     '#suffix' => '</div>',
   );
@@ -161,7 +188,8 @@ function _quicktabs_form($details) {
 
   $form['weight'] = array(
     '#type' => 'weight',
-    '#default_value' => isset($details['weight']) ? $details['weight'] : $delta-10,
+    '#default_value' => isset($details['weight']) ? $details['weight'] : $delta-100,
+    '#delta' => 100,
   );
 
   $form['title'] = array(
@@ -436,6 +464,7 @@ function quicktabs_form_submit($form, &$form_state) {
   // We don't want it to submit when we're just adding or removing tabs.
   if ($form_state['clicked_button']['#id'] == 'edit-submit-form') {
     $quicktabs = _quicktabs_convert_form_to_quicktabs($form_state);
+    drupal_alter('quicktabs', $quicktabs, 'presave');
 
     if ($quicktabs['qtid'] > 0) {
       $ret = drupal_write_record('quicktabs', $quicktabs, 'qtid');
@@ -476,6 +505,7 @@ function quicktabs_block_delete_submit($form, &$form_state) {
  * Callback function for admin/settings/quicktabs. Display the settings form.
  */
 function quicktabs_settings() {
+  $options = array();
   $styles = module_invoke_all('quicktabs_tabstyles');
   // The keys used for options must be valid html id-s.
   // Removing the css file path, because that can't be used.
@@ -520,6 +550,7 @@ function theme_quicktabs_settings($form) {
   $tabs['three'] = array('title' => t('Three'), 'type' => 'freetext', 'text' => t('Third tab'));
   $quicktabs['tabs'] = $tabs;
   $quicktabs['ajax'] = FALSE;
+  $quicktabs['hide_empty_tabs'] = FALSE;
 
   // Preview for each style.
   foreach ($form['quicktabs_tabstyle']['#options'] as $style => $style_title) {
@@ -635,10 +666,11 @@ function _quicktabs_convert_form_to_quicktabs($form_state) {
   $quicktabs = array(
     'title' => $form_state['values']['title'],
     'ajax' => $form_state['values']['ajax'],
+    'hide_empty_tabs' => $form_state['values']['hide_empty_tabs'],
+    'default_tab' => isset($form_state['values']['default_tab']) ? $form_state['values']['default_tab'] : 0,
     'style' => $form_state['values']['style'],
     'tabs' => $formvalues_tabs,
   );
-
   if (isset($form_state['values']['qtid'])) {
     $quicktabs['qtid'] = $form_state['values']['qtid'];
   }

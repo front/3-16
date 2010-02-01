@@ -1,5 +1,5 @@
 <?php
-// $Id: export.inc,v 1.13 2009/04/24 15:50:24 merlinofchaos Exp $
+// $Id: export.inc,v 1.19.2.2 2009/10/08 16:12:17 merlinofchaos Exp $
 
 /**
  * @file
@@ -10,6 +10,40 @@
  *
  * This doesn't include a write routine since drupal_write_record is
  * more or less sufficient.
+ *
+ * Exportable objects are created by adding definition to the schema
+ * in an 'export' section. The following fields are supported in this
+ * chunk of code:
+ * - key: This is the primary key of the exportable object and should be
+ *   a string as names are more portable across systems. It is possible
+ *   to use numbers here, but be aware that export collisions are very
+ *   likely. Defaults to 'name'.
+ * - object: The class the object should be created ass. Defaults as stdClass.
+ * - can disable: Control whether or not the exportable objects can be
+ *   disabled. All this does is cause the 'disabled' field on the object
+ *   to always be set appropriately, and a variable is kept to record
+ *   the state. Changes made to this state must be handled by the owner
+ *   of the object. Defaults to TRUE.
+ * - status: Exportable objects can be enabled or disabled, and this status
+ *   is stored in a variable. This defines what variable that is. Defaults
+ *   to: 'default_' . $table,
+ * - default hook: What hook to invoke to find exportable objects that are
+ *   currently defined. These will all be gathered into a giant array.
+ *   Defaults to 'default_' . $table,
+ * - identifier: When exporting the object, the identifier is the variable that
+ *   the exported object will be placed in. Defaults to $table.
+ * - bulk export': Declares whether or not the exportable will be available
+ *   for bulk exporting. (Bulk export UI is currently left to be handled
+ *   by contrib, though the core hooks are present so this can be done.).
+ * - export callback: The callback to use for bulk exporting. Defaults to
+ *   $module . '_export_' . $table.
+ * - list callback: Bulk export callback to provide a list of exportable
+ *   objects to be chosen for bulk exporting. Defaults to
+ *   $module . '_' . $table . '_list'.
+ * - to hook code callback: Function used to generate an export for the bulk
+ *   export process. This is only necessary if the export is more complicated
+ *   than simply listing the fields. Defaults to $module . '_' . $table .
+ *   '_to_hook_code'.
  */
 
 /**
@@ -46,8 +80,8 @@ define('EXPORT_IN_CODE', 0x02);
  *   An array of arguments whose actual use is defined by the $type argument.
  */
 function ctools_export_load_object($table, $type = 'all', $args = array()) {
-  static $cache = array();
-  static $cached_database = array();
+  $cache = &ctools_static(__FUNCTION__);
+  $cached_database = &ctools_static('ctools_export_load_object_all');
 
   $schema = ctools_export_get_schema($table);
   $export = $schema['export'];
@@ -104,11 +138,17 @@ function ctools_export_load_object($table, $type = 'all', $args = array()) {
 
   $result = db_query($query, $query_args);
 
+  $status = variable_get($export['status'], array());
   // Unpack the results of the query onto objects and cache them.
   while ($data = db_fetch_object($result)) {
     $object = _ctools_export_unpack_object($schema, $data, $export['object']);
+    $object->table = $table;
     $object->type = t('Normal');
     $object->export_type = EXPORT_IN_DATABASE;
+    // Determine if default object is enabled or disabled.
+    if (isset($status[$object->{$export['key']}])) {
+      $object->disabled = $status[$object->{$export['key']}];
+    }
 
     $cache[$table][$object->{$export['key']}] = $object;
     if ($type == 'conditions') {
@@ -119,7 +159,6 @@ function ctools_export_load_object($table, $type = 'all', $args = array()) {
   // @todo Load subrecords.
 
   if ($defaults = _ctools_export_get_defaults($table, $export)) {
-    $status = variable_get($export['status'], array());
 
     foreach ($defaults as $object) {
       if ($type == 'conditions') {
@@ -137,25 +176,26 @@ function ctools_export_load_object($table, $type = 'all', $args = array()) {
       }
 
       // Determine if default object is enabled or disabled.
-      if (isset($status[$object->name])) {
-        $object->disabled = $status[$object->name];
+      if (isset($status[$object->{$export['key']}])) {
+        $object->disabled = $status[$object->{$export['key']}];
       }
 
-      if (!empty($cache[$table][$object->name])) {
-        $cache[$table][$object->name]->type = t('Overridden');
-        $cache[$table][$object->name]->export_type |= EXPORT_IN_CODE;
+      if (!empty($cache[$table][$object->{$export['key']}])) {
+        $cache[$table][$object->{$export['key']}]->type = t('Overridden');
+        $cache[$table][$object->{$export['key']}]->export_type |= EXPORT_IN_CODE;
         if ($type == 'conditions') {
-          $return[$object->name] = $cache[$table][$object->name];
+          $return[$object->{$export['key']}] = $cache[$table][$object->{$export['key']}];
         }
       }
       else {
         $object->type = t('Default');
         $object->export_type = EXPORT_IN_CODE;
         $object->in_code_only = TRUE;
+        $object->table = $table;
 
-        $cache[$table][$object->name] = $object;
+        $cache[$table][$object->{$export['key']}] = $object;
         if ($type == 'conditions') {
-          $return[$object->name] = $object;
+          $return[$object->{$export['key']}] = $object;
         }
       }
     }
@@ -177,6 +217,27 @@ function ctools_export_load_object($table, $type = 'all', $args = array()) {
 
   // For conditions,
   return $return;
+}
+
+/**
+ * Reset all static caches in ctools_export_load_object() or static caches for 
+ * a given table in ctools_export_load_object().
+ * 
+ * @param $table
+ *   String that is the name of a table. If not defined, all static caches in 
+ *   ctools_export_load_object() will be reset.
+ */
+function ctools_export_load_object_reset($table = NULL) {
+  if (empty($table)) {
+    ctools_static_reset('ctools_export_load_object');
+    ctools_static_reset('ctools_export_load_object_all');
+  }
+  else {
+    $cache = &ctools_static('ctools_export_load_object');
+    $cached_database = &ctools_static('ctools_export_load_object_all');
+    unset($cache[$table]);
+    unset($cached_database[$table]);
+  }
 }
 
 /**
@@ -207,8 +268,8 @@ function ctools_get_default_object($table, $name) {
   $object = $defaults[$name];
 
   // Determine if default object is enabled or disabled.
-  if (isset($status[$object->name])) {
-    $object->disabled = $status[$object->name];
+  if (isset($status[$object->{$export['key']}])) {
+    $object->disabled = $status[$object->{$export['key']}];
   }
 
   $object->type = t('Default');
@@ -289,7 +350,7 @@ function _ctools_export_unpack_object($schema, $data, $object = 'stdClass') {
 
   // Go through our schema and build correlations.
   foreach ($schema['fields'] as $field => $info) {
-    $object->$field = empty($info['serialize']) ? $data->$field : unserialize($data->$field);
+    $object->$field = empty($info['serialize']) ? $data->$field : unserialize(db_decode_blob($data->$field));
   }
 
   return $object;
@@ -417,17 +478,52 @@ function ctools_export_get_schema($table) {
     'default hook' => 'default_' . $table,
     'can disable' => TRUE,
     'identifier' => $table,
+    'bulk export' => TRUE,
+    'export callback' => "$schema[module]_export_{$table}",
+    'list callback' => "$schema[module]_{$table}_list",
+    'to hook code callback' => "$schema[module]_{$table}_to_hook_code",
   );
 
   return $schema;
 }
 
 /**
+ * Gets the schemas for all tables with ctools object metdata.
+ */
+function ctools_export_get_schemas($for_export = FALSE) {
+  static $export_tables;
+  if (is_null($export_tables)) {
+    $export_tables = array();
+    $schemas = drupal_get_schema();
+    foreach ($schemas as $table => $schema) {
+      if (!isset($schema['export'])) {
+        unset($schemas[$table]);
+        continue;
+      }
+      $export_tables[$table] = ctools_export_get_schema($table);
+    }
+  }
+  return $for_export ? array_filter($export_tables, '_ctools_export_filter_export_tables') : $export_tables;
+}
+
+function _ctools_export_filter_export_tables($export) {
+  return empty($export['bulk export']);
+}
+
+function ctools_export_get_schemas_by_module($modules = array(), $for_export = FALSE) {
+  $export_tables = array();
+  $list = ctools_export_get_schemas($for_export);
+  foreach ($list as $table => $schema) {
+    $export_tables[$schema['module']][$table] = $schema;
+  }
+  return empty($modules) ? $export_tables : array_keys($export_tables, $modules);
+}
+
+/**
  * Set the status of a default $object as a variable.
  *
- * The status, in this case, is whether or not it is 'disabled'
- * and is only valid for in-code objects that do not have a database
- * equivalent. This function does not check to make sure $object actually
+ * The status, in this case, is whether or not it is 'disabled'.
+ * This function does not check to make sure $object actually
  * exists.
  */
 function ctools_export_set_status($table, $name, $new_status = TRUE) {
@@ -435,6 +531,30 @@ function ctools_export_set_status($table, $name, $new_status = TRUE) {
   $status = variable_get($schema['export']['status'], array());
 
   $status[$name] = $new_status;
+  variable_set($schema['export']['status'], $status);
+}
+
+/**
+ * Set the status of a default $object as a variable.
+ *
+ * This is more efficient than ctools_export_set_status because it
+ * will actually unset the variable entirely if it's not necessary,
+ * this saving a bit of space.
+ */
+function ctools_export_set_object_status($object, $new_status = TRUE) {
+  $table = $object->table;
+  $schema = ctools_export_get_schema($table);
+  $export = $schema['export'];
+  $status = variable_get($schema['export']['status'], array());
+
+  // Compare
+  if (!$new_status && $object->export_type & EXPORT_IN_DATABASE) {
+    unset($status[$object->{$export['key']}]);
+  }
+  else {
+    $status[$object->{$export['key']}] = $new_status;
+  }
+
   variable_set($schema['export']['status'], $status);
 }
 
@@ -488,4 +608,52 @@ function ctools_export_new_object($table, $set_defaults = TRUE) {
     $object->type = t('Local');
   }
   return $object;
+}
+
+/**
+ * Convert a group of objects to code based upon input and return this as a larger
+ * export.
+ */
+function ctools_export_to_hook_code(&$code, $table, $names = array(), $name = 'foo') {
+  $schema = ctools_export_get_schema($table);
+  $export = $schema['export'];
+  // Use the schema-specified function for generating hook code, if one exists
+  if (function_exists($export['to hook code callback'])) {
+    $output = $export['to hook code callback']($names, $name);
+  }
+  // Otherwise, the following code generates basic hook code
+  else {
+    $objects = ctools_export_load_object($table, 'names', $names);
+    if ($objects) {
+      $output = "/**\n";
+      $output .= " * Implementation of hook_{$export['default hook']}()\n";
+      $output .= " */\n";
+      $output .= "function " . $name . "_{$export['default hook']}() {\n";
+      foreach ($objects as $object) {
+        $output .= $export['export callback']($object, '  '); // if this function does not exist, better to error out than fail silently
+        $output .= "  \${$export['identifier']}s['" . check_plain($object->$export['key']) . "'] = \${$export['identifier']};\n\n";
+      }
+      $output .= " return \${$export['identifier']}s;\n";
+      $output .= "}\n";
+    }
+  }
+
+  if (!empty($output)) {
+    if (isset($export['api'])) {
+      if (isset($code[$export['api']['owner']][$export['api']['api']]['version'])) {
+        $code[$export['api']['owner']][$export['api']['api']]['version'] = max($code[$export['api']['owner']][$export['api']['api']]['version'], $export['api']['minimum_version']);
+      }
+      else {
+        $code[$export['api']['owner']][$export['api']['api']]['version'] = $export['api']['minimum_version'];
+        $code[$export['api']['owner']][$export['api']['api']]['code'] = '';
+      }
+      $code[$export['api']['owner']][$export['api']['api']]['code'] .= $output;
+    }
+    else {
+      if (empty($code['general'])) {
+        $code['general'] = '';
+      }
+      $code['general'] .= $output;
+    }
+  }
 }
