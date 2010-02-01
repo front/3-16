@@ -1,74 +1,58 @@
-# Norwegian Bokmål translation of Drupal (6.10)
-# Copyright (c) 2009 by the Norwegian Bokmål translation team
-# Generated from files:
-#  help.admin.inc,v 1.5 2007/11/25 11:11:17 goba
-#  help.module,v 1.78.2.1 2008/04/09 21:11:48 goba
+# Norwegian Bokmål translation of Drupal (6.15)
+# Copyright (c) 2010 by the Norwegian Bokmål translation team
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Drupal (6.10)\n"
-"POT-Creation-Date: 2009-02-27 19:39-0600\n"
-"PO-Revision-Date: 2008-03-27 06:29-0500\n"
+"Project-Id-Version: Drupal (6.15)\n"
+"POT-Creation-Date: 2010-01-06 12:46+0000\n"
+"PO-Revision-Date: 2009-08-26 16:23+0000\n"
 "Language-Team: Norwegian Bokmål\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: modules/help/help.admin.inc:15
-msgid "Help topics"
-msgstr "Hjelpeemner"
-
-#: modules/help/help.admin.inc:15
-msgid "Help is available on the following items:"
-msgstr "Hjelp er tilgjengelig for følgende elementer:"
-
-#: modules/help/help.admin.inc:30
-msgid "No help is available for module %module."
-msgstr "Ingen hjelp er tilgjengelig for modulen %module."
-
-#: modules/help/help.admin.inc:41
-msgid "@module administration pages"
-msgstr "Administreringsider for @module"
-
-#: modules/help/help.module:41
 msgid ""
-"This guide provides context sensitive help on the use and configuration of "
-"<a href=\"@drupal\">Drupal</a> and its modules, and is a supplement to the "
-"more extensive online <a href=\"@handbook\">Drupal handbook</a>. The online "
-"handbook may contain more up-to-date information, is annotated with helpful "
-"user-contributed comments, and serves as the definitive reference point for "
-"all Drupal documentation."
-msgstr ""
-"Denne veiledningen forklarer hva de forskjellige modulene i <a href=\"@Drupal"
-"\">Drupal</a> gjør og hvordan de konfigureres. Det er ikke en erstatning for "
-"<a href=\"@handbook\">Drupal håndboka</a> som er tilgjengelig på nettet, men "
-"bør brukes i kombinasjon med den. Håndboka kan være mer oppdatert, og har "
-"verdifulle kommentarer fra andre brukere."
-
-#: modules/help/help.module:44
-msgid ""
-"The help module provides context sensitive help on the use and configuration "
-"of <a href=\"@drupal\">Drupal</a> and its modules, and is a supplement to "
-"the more extensive online <a href=\"@handbook\">Drupal handbook</a>. The "
-"online handbook may contain more up-to-date information, is annotated with "
-"helpful user-contributed comments, and serves as the definitive reference "
+"This guide provides context sensitive help on the use and "
+"configuration of <a href=\"@drupal\">Drupal</a> and its modules, and "
+"is a supplement to the more extensive online <a "
+"href=\"@handbook\">Drupal handbook</a>. The online handbook may "
+"contain more up-to-date information, is annotated with helpful "
+"user-contributed comments, and serves as the definitive reference "
 "point for all Drupal documentation."
 msgstr ""
-"Hjelpmodulen forklarer hva de forskjellige moduler i <a href=\"@Drupal"
-"\">Drupal</a> gjør og hvordan de konfigureres. Det er ikke en erstatning for "
-"<a href=\"@handbook\">Drupal håndboka</a> som er tilgjengelig på nettet, men "
-"bør brukes i kombinasjon med den. Håndboka kan være mer oppdatert, og har "
-"verdifulle kommentarer fra andre brukere."
-
-#: modules/help/help.module:45
+"Denne veiledningen forklarer hva de forskjellige modulene i <a "
+"href=\"@Drupal\">Drupal</a> gjør og hvordan de konfigureres. Det er "
+"ikke en erstatning for <a href=\"@handbook\">Drupal håndboka</a> som "
+"er tilgjengelig på nettet, men bør brukes i kombinasjon med den. "
+"Håndboka kan være mer oppdatert, og har verdifulle kommentarer fra "
+"andre brukere."
 msgid ""
-"For more information, see the online handbook entry for <a href=\"@help"
-"\">Help module</a>."
+"The help module provides context sensitive help on the use and "
+"configuration of <a href=\"@drupal\">Drupal</a> and its modules, and "
+"is a supplement to the more extensive online <a "
+"href=\"@handbook\">Drupal handbook</a>. The online handbook may "
+"contain more up-to-date information, is annotated with helpful "
+"user-contributed comments, and serves as the definitive reference "
+"point for all Drupal documentation."
 msgstr ""
-"For ytterligere opplysninger, les den engelske Drupal håndbokas avsnitt om "
-"<a href=\"@help\">hjelpmodulen</a>."
-
-#: modules/help/help.module:0
-msgid "help"
-msgstr "hjelp"
+"Hjelpmodulen forklarer hva de forskjellige moduler i <a "
+"href=\"@Drupal\">Drupal</a> gjør og hvordan de konfigureres. Det er "
+"ikke en erstatning for <a href=\"@handbook\">Drupal håndboka</a> som "
+"er tilgjengelig på nettet, men bør brukes i kombinasjon med den. "
+"Håndboka kan være mer oppdatert, og har verdifulle kommentarer fra "
+"andre brukere."
+msgid ""
+"For more information, see the online handbook entry for <a "
+"href=\"@help\">Help module</a>."
+msgstr ""
+"For ytterligere opplysninger, les den engelske Drupal håndbokas "
+"avsnitt om <a href=\"@help\">hjelpmodulen</a>."
+msgid "Help topics"
+msgstr "Hjelpeemner"
+msgid "Help is available on the following items:"
+msgstr "Hjelp er tilgjengelig for følgende elementer:"
+msgid "No help is available for module %module."
+msgstr "Ingen hjelp er tilgjengelig for modulen %module."
+msgid "@module administration pages"
+msgstr "Administreringsider for @module"

@@ -1,707 +1,486 @@
-# Norwegian Bokmål translation of Drupal (6.10)
-# Copyright (c) 2009 by the Norwegian Bokmål translation team
-# Generated from files:
-#  filter.admin.inc,v 1.8.2.1 2008/02/12 14:25:34 goba
-#  filter.pages.inc,v 1.2 2007/11/10 17:41:18 dries
-#  filter.module,v 1.204.2.8 2008/12/10 22:30:14 goba
+# Norwegian Bokmål translation of Drupal (6.15)
+# Copyright (c) 2010 by the Norwegian Bokmål translation team
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Drupal (6.10)\n"
-"POT-Creation-Date: 2009-02-27 19:39-0600\n"
-"PO-Revision-Date: 2009-02-12 02:39-0600\n"
+"Project-Id-Version: Drupal (6.15)\n"
+"POT-Creation-Date: 2010-01-06 12:46+0000\n"
+"PO-Revision-Date: 2009-08-26 16:23+0000\n"
 "Language-Team: Norwegian Bokmål\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: modules/filter/filter.admin.inc:33
-msgid "All roles may use default format"
-msgstr "Alle roller kan bruke standard format"
-
-#: modules/filter/filter.admin.inc:33
-msgid "No roles may use this format"
-msgstr "Ingen roller kan bruke dette formatet"
-
-#: modules/filter/filter.admin.inc:38
-msgid "Set default format"
-msgstr "Sett standardformat"
-
-#: modules/filter/filter.admin.inc:45
-msgid "Default format updated."
-msgstr "Standard inndataformat oppdatert."
-
-#: modules/filter/filter.admin.inc:97
-msgid "All roles for the default format must be enabled and cannot be changed."
-msgstr ""
-"Alle roller skal være aktivert for standardformatet, og kan ikke endres."
-
-#: modules/filter/filter.admin.inc:104
-msgid "Specify a unique name for this filter format."
-msgstr "Angi et unikt navn for dette filterformat."
-
-#: modules/filter/filter.admin.inc:111
-msgid ""
-"Choose which roles may use this filter format. Note that roles with the "
-"\"administer filters\" permission can always use all the filter formats."
-msgstr ""
-"Velg hvilke roller som kan bruke dette filterformat. Bemerk at roller med "
-"tillatelsen «administrer filtre» alltid kan bruke alle filterformater."
-
-#: modules/filter/filter.admin.inc:130
+msgid "Filter HTML tags"
+msgstr "Filtrer HTML merker"
+msgid "Input format"
+msgstr "Inndataformat"
+msgid "Table"
+msgstr "Tabell"
 msgid "Filters"
 msgstr "Filtre"
-
-#: modules/filter/filter.admin.inc:131
+msgid "Preformatted"
+msgstr "Forhåndsformatert"
+msgid "Deleted"
+msgstr "Slettet"
+msgid "Greater than"
+msgstr "Større enn"
+msgid "Less than"
+msgstr "Mindre enn"
+msgid "Spam link deterrent"
+msgstr "Begrens spam-lenker"
+msgid "administer filters"
+msgstr "Administrer filtre"
+msgid "Line break converter"
+msgstr "Linjeskiftskonverterer"
+msgid "Underlined"
+msgstr "Understreket"
+msgid "Input formats"
+msgstr "Inndataformater"
+msgid "Subtitle"
+msgstr "Undertittel"
+msgid "Escape all tags"
+msgstr "Konverter alle merker"
+msgid "Strip disallowed tags"
+msgstr "Fjern uønskede merker"
+msgid "input formats"
+msgstr "inndataformater"
+msgid "Rearrange"
+msgstr "Sorter filtre"
+msgid ""
+"If enabled, Drupal will add rel=\"nofollow\" to all links, as a "
+"measure to reduce the effectiveness of spam links. Note: this will "
+"also prevent valid links from being followed by search engines, "
+"therefore it is likely most effective when enabled for anonymous "
+"users."
+msgstr ""
+"Aktiveres denne funksjonen, setter Drupal inn rel=\"nofollow\" i alle "
+"lenker i et forsøk på å redusere effektiviteten av spam-lenker. "
+"Bemerk: Det bevirker at gyldige lenker ikke følges av søkemaskiner; "
+"derfor er det mest effektivt når det aktiveres for anonyme brukere."
+msgid "Maximum link text length"
+msgstr "Maks lengde på lenker"
+msgid ""
+"URLs longer than this number of characters will be truncated to "
+"prevent long strings that break formatting. The link itself will be "
+"retained; just the text portion of the link will be truncated."
+msgstr ""
+"URLer som er lengre enn det angitte antall tegn beskjæres. Lenka "
+"forblir intakt, men teksten blir forkortet."
+msgid "URL filter"
+msgstr "URL-filter"
+msgid "Acronym"
+msgstr "Akronym"
+msgid "Abbreviation"
+msgstr "Forkortelse"
+msgid "Inserted"
+msgstr "Satt inn"
+msgid "All roles may use default format"
+msgstr "Alle roller kan bruke standard format"
+msgid "No roles may use this format"
+msgstr "Ingen roller kan bruke dette formatet"
+msgid "Set default format"
+msgstr "Sett standardformat"
+msgid "Default format updated."
+msgstr "Standard inndataformat oppdatert."
+msgid ""
+"All roles for the default format must be enabled and cannot be "
+"changed."
+msgstr ""
+"Alle roller skal være aktivert for standardformatet, og kan ikke "
+"endres."
+msgid "Specify a unique name for this filter format."
+msgstr "Angi et unikt navn for dette filterformat."
+msgid ""
+"Choose which roles may use this filter format. Note that roles with "
+"the \"administer filters\" permission can always use all the filter "
+"formats."
+msgstr ""
+"Velg hvilke roller som kan bruke dette filterformat. Bemerk at roller "
+"med tillatelsen «administrer filtre» alltid kan bruke alle "
+"filterformater."
 msgid "Choose the filters that will be used in this filter format."
 msgstr "Velg hvilke filtre som skal brukes i filterformatet."
-
-#: modules/filter/filter.admin.inc:149
 msgid "No guidelines available."
 msgstr "Ingen retningslinjer tilgjengelige."
-
-#: modules/filter/filter.admin.inc:151
 msgid ""
 "These are the guidelines that users will see for posting in this input "
 "format. They are automatically generated from the filter settings."
 msgstr ""
 "Retningslinjene vises når brukerne velger dette inndataformatet. De "
 "oppbygges automatisk på basis av filterinnstillingene."
-
-#: modules/filter/filter.admin.inc:168
 msgid ""
-"Filter format names need to be unique. A format named %name already exists."
+"Filter format names need to be unique. A format named %name already "
+"exists."
 msgstr ""
-"Navn på filterformater skal være unike. Det finnes allerede et format med "
-"navnet %name."
-
-#: modules/filter/filter.admin.inc:187
+"Navn på filterformater skal være unike. Det finnes allerede et "
+"format med navnet %name."
 msgid "Added input format %format."
 msgstr "Inndataformat %format ble lagt til."
-
-#: modules/filter/filter.admin.inc:190
 msgid "The input format settings have been updated."
 msgstr "Innstillingene for inndataformat er oppdatert"
-
-#: modules/filter/filter.admin.inc:252
 msgid "Are you sure you want to delete the input format %format?"
 msgstr "Ønsker du å slette inndataformatet %format?"
-
-#: modules/filter/filter.admin.inc:252
 msgid ""
-"If you have any content left in this input format, it will be switched to "
-"the default input format. This action cannot be undone."
+"If you have any content left in this input format, it will be switched "
+"to the default input format. This action cannot be undone."
 msgstr ""
 "Hvis du har innhold som bruker dette formatet, vil det bli endret til "
 "standardformatet. Denne handling kan ikke omgjøres."
-
-#: modules/filter/filter.admin.inc:255
 msgid "The default format cannot be deleted."
 msgstr "Standardformatet kan ikke slettes."
-
-#: modules/filter/filter.admin.inc:278
 msgid "Deleted input format %format."
 msgstr "Inndataformat %format slettet."
-
-#: modules/filter/filter.admin.inc:289
 msgid "Configure %format"
 msgstr "Konfigurer %format"
-
-#: modules/filter/filter.admin.inc:312
 msgid "No settings are available."
 msgstr "Ingen innstillinger er tilgjengelige."
-
-#: modules/filter/filter.admin.inc:330
 msgid "Rearrange %format"
 msgstr "Sorter %format"
-
-#: modules/filter/filter.admin.inc:391
 msgid "The filter ordering has been saved."
 msgstr "Filterrekkefølgen har blitt lagret."
-
-#: modules/filter/filter.pages.inc:35
-msgid "input formats"
-msgstr "inndataformater"
-
-#: modules/filter/filter.module:23
 msgid ""
-"The filter module allows administrators to configure text input formats for "
-"use on your site. An input format defines the HTML tags, codes, and other "
-"input allowed in both content and comments, and is a key feature in guarding "
-"against potentially damaging input from malicious users. Two input formats "
-"included by default are <em>Filtered HTML</em> (which allows only an "
-"administrator-approved subset of HTML tags) and <em>Full HTML</em> (which "
-"allows the full set of HTML tags). Additional input formats may be created "
-"by an administrator."
+"The filter module allows administrators to configure text input "
+"formats for use on your site. An input format defines the HTML tags, "
+"codes, and other input allowed in both content and comments, and is a "
+"key feature in guarding against potentially damaging input from "
+"malicious users. Two input formats included by default are "
+"<em>Filtered HTML</em> (which allows only an administrator-approved "
+"subset of HTML tags) and <em>Full HTML</em> (which allows the full set "
+"of HTML tags). Additional input formats may be created by an "
+"administrator."
 msgstr ""
 "Filter-modulen gir administratorer muligheten til å konfigurere tekst "
-"inndataformat til bruk på ditt nettsted. Et inndataformat definerer HTML "
-"tagger, koder, og andre inndata som er tillatt i både innhold og "
+"inndataformat til bruk på ditt nettsted. Et inndataformat definerer "
+"HTML tagger, koder, og andre inndata som er tillatt i både innhold og "
 "kommentarer, og som er en nøkkelfunksjon i beskyttelse mot potensielt "
-"skadegjørende inndata fra skadefro brukere. To inndataformat inkludert som "
-"standard er <em>Filtrert HTML</em> (som bare tillater et undersett av HTML "
-"tagger godkjent av administratorer) og <em>Fullstendig HTML</em> (som "
-"tillater hele settet av HTML tagger). Ytterligere inndataformater kan "
-"opprettes av en administrator."
-
-#: modules/filter/filter.module:24
+"skadegjørende inndata fra skadefro brukere. To inndataformat "
+"inkludert som standard er <em>Filtrert HTML</em> (som bare tillater et "
+"undersett av HTML tagger godkjent av administratorer) og "
+"<em>Fullstendig HTML</em> (som tillater hele settet av HTML tagger). "
+"Ytterligere inndataformater kan opprettes av en administrator."
 msgid ""
-"Each input format uses filters to manipulate text, and most input formats "
-"apply several different filters to text in a specific order. Each filter is "
-"designed for a specific purpose, and generally either adds, removes or "
-"transforms elements within user-entered text before it is displayed. A "
-"filter does not change the actual content of a post, but instead, modifies "
-"it temporarily before it is displayed. A filter may remove unapproved HTML "
-"tags, for instance, while another automatically adds HTML to make links "
-"referenced in text clickable."
+"Each input format uses filters to manipulate text, and most input "
+"formats apply several different filters to text in a specific order. "
+"Each filter is designed for a specific purpose, and generally either "
+"adds, removes or transforms elements within user-entered text before "
+"it is displayed. A filter does not change the actual content of a "
+"post, but instead, modifies it temporarily before it is displayed. A "
+"filter may remove unapproved HTML tags, for instance, while another "
+"automatically adds HTML to make links referenced in text clickable."
 msgstr ""
-"Hvert inndataformat bruker filtere for å manipulere tekst, og de fleste "
-"inndataformat bruker flere forskjellige filtere til tekst i en bestemt "
-"rekkefølge. Hvert filter er utarbeidet for et spesifikt formål, og generelt "
-"legger de enten til, fjerner eller transformerer elementer i bruker-innlagt "
-"tekst før den blir vist. Et filter forandrer ikke det faktiske innholdet i "
-"en post, men modifiserer den istedet midlertidig før den blir vist. Et "
-"filter kan for eksempel fjerne ikke-godkjente HTML tagger, mens et annet "
-"automatisk legger til HTML for å gjøre lenker som er henvist i tekst, "
-"klikkbare."
-
-#: modules/filter/filter.module:25
+"Hvert inndataformat bruker filtere for å manipulere tekst, og de "
+"fleste inndataformat bruker flere forskjellige filtere til tekst i en "
+"bestemt rekkefølge. Hvert filter er utarbeidet for et spesifikt "
+"formål, og generelt legger de enten til, fjerner eller transformerer "
+"elementer i bruker-innlagt tekst før den blir vist. Et filter "
+"forandrer ikke det faktiske innholdet i en post, men modifiserer den "
+"istedet midlertidig før den blir vist. Et filter kan for eksempel "
+"fjerne ikke-godkjente HTML tagger, mens et annet automatisk legger til "
+"HTML for å gjøre lenker som er henvist i tekst, klikkbare."
 msgid ""
 "Users can choose between the available input formats when creating or "
 "editing content. Administrators can configure which input formats are "
-"available to which user roles, as well as choose a default input format."
+"available to which user roles, as well as choose a default input "
+"format."
 msgstr ""
-"Når brukerne oppretter eller redigerer innhold, kan de velge mellom de "
-"tilgjengelige inndataformater. Administratorer kan velge hvilke "
-"inndataformater de forskjellige brukerroller har tilgang til, samt velge et "
-"standard inndataformat."
-
-#: modules/filter/filter.module:26
+"Når brukerne oppretter eller redigerer innhold, kan de velge mellom "
+"de tilgjengelige inndataformater. Administratorer kan velge hvilke "
+"inndataformater de forskjellige brukerroller har tilgang til, samt "
+"velge et standard inndataformat."
 msgid ""
-"For more information, see the online handbook entry for <a href=\"@filter"
-"\">Filter module</a>."
+"For more information, see the online handbook entry for <a "
+"href=\"@filter\">Filter module</a>."
 msgstr ""
-"For ytterligere opplysninger, les den engelske Drupalhåndbokas avsnitt om <a "
-"href=\"@filter\">filtermodulen</a>."
-
-#: modules/filter/filter.module:29
+"For ytterligere opplysninger, les den engelske Drupalhåndbokas "
+"avsnitt om <a href=\"@filter\">filtermodulen</a>."
 msgid ""
-"<em>Input formats</em> define a way of processing user-supplied text in "
-"Drupal. Each input format uses filters to manipulate text, and most input "
-"formats apply several different filters to text, in a specific order. Each "
-"filter is designed to accomplish a specific purpose, and generally either "
-"removes elements from or adds elements to text before it is displayed. Users "
-"can choose between the available input formats when submitting content."
+"<em>Input formats</em> define a way of processing user-supplied text "
+"in Drupal. Each input format uses filters to manipulate text, and most "
+"input formats apply several different filters to text, in a specific "
+"order. Each filter is designed to accomplish a specific purpose, and "
+"generally either removes elements from or adds elements to text before "
+"it is displayed. Users can choose between the available input formats "
+"when submitting content."
 msgstr ""
-"<em>Inndataformater</em> definerer hvordan tekst fra brukeren behandles i "
-"Drupal. Hvert inndataformat benytter ett eller flere filtre i en gitt "
-"rekkefølge for å manipulere teksten. Hvert filter tjener en spesiell hensikt "
-"ved enten å fjerne elementer fra teksten, eller ved å legge til. Brukere kan "
-"velge mellom de tilgjengelige filtrene når de bidrar med innhold."
-
-#: modules/filter/filter.module:30
+"<em>Inndataformater</em> definerer hvordan tekst fra brukeren "
+"behandles i Drupal. Hvert inndataformat benytter ett eller flere "
+"filtre i en gitt rekkefølge for å manipulere teksten. Hvert filter "
+"tjener en spesiell hensikt ved enten å fjerne elementer fra teksten, "
+"eller ved å legge til. Brukere kan velge mellom de tilgjengelige "
+"filtrene når de bidrar med innhold."
 msgid ""
-"Use the list below to configure which input formats are available to which "
-"roles, as well as choose a default input format (used for imported content, "
-"for example). The default format is always available to users. All input "
-"formats are available to users in a role with the \"administer filters\" "
-"permission."
+"Use the list below to configure which input formats are available to "
+"which roles, as well as choose a default input format (used for "
+"imported content, for example). The default format is always available "
+"to users. All input formats are available to users in a role with the "
+"\"administer filters\" permission."
 msgstr ""
-"Bruk lista nedenfor for å konfigurere hvilke inndataformater de forskellige "
-"brukerroller har tilgang til, samt velge et standard inndataformat. "
-"Standardformater er alltid tilgjengelig for alle brukere. Alle "
-"inndataformater er tilgjengelige for brukere som har «administrer filtere»-"
-"tillatelse."
-
-#: modules/filter/filter.module:33
+"Bruk lista nedenfor for å konfigurere hvilke inndataformater de "
+"forskellige brukerroller har tilgang til, samt velge et standard "
+"inndataformat. Standardformater er alltid tilgjengelig for alle "
+"brukere. Alle inndataformater er tilgjengelige for brukere som har "
+"«administrer filtere»-tillatelse."
 msgid ""
-"Every <em>filter</em> performs one particular change on the user input, for "
-"example stripping out malicious HTML or making URLs clickable. Choose which "
-"filters you want to apply to text in this input format. If you notice some "
-"filters are causing conflicts in the output, you can <a href=\"@rearrange"
-"\">rearrange them</a>."
+"Every <em>filter</em> performs one particular change on the user "
+"input, for example stripping out malicious HTML or making URLs "
+"clickable. Choose which filters you want to apply to text in this "
+"input format. If you notice some filters are causing conflicts in the "
+"output, you can <a href=\"@rearrange\">rearrange them</a>."
 msgstr ""
 "Hvert <em>filter</em> foretar en bestemt endring av inndata, f.eks. "
-"utrensning av skadelige HTML merker eller opprettelse av lenker. Velg hvilke "
-"filtre du ønsker å anvende på tekst i dette inndataformatet. Hvis du ser at "
-"noen filtre gir problemer i utdata, kan du <a href=\"@rearrange\">endre "
-"rekkefølgen</a>."
-
-#: modules/filter/filter.module:35
+"utrensning av skadelige HTML merker eller opprettelse av lenker. Velg "
+"hvilke filtre du ønsker å anvende på tekst i dette inndataformatet. "
+"Hvis du ser at noen filtre gir problemer i utdata, kan du <a "
+"href=\"@rearrange\">endre rekkefølgen</a>."
 msgid ""
-"If you cannot find the settings for a certain filter, make sure you have "
-"enabled it on the <a href=\"@url\">view tab</a> first."
+"If you cannot find the settings for a certain filter, make sure you "
+"have enabled it on the <a href=\"@url\">view tab</a> first."
 msgstr ""
 "Hvis du ikke kan finne innstillingene for et bestemt filter, sjekk om "
 "filteret er aktivert i <a href=\"@url\">filteroversikten</a>."
-
-#: modules/filter/filter.module:37
 msgid ""
-"Because of the flexible filtering system, you might encounter a situation "
-"where one filter prevents another from doing its job. For example: a word in "
-"an URL gets converted into a glossary term, before the URL can be converted "
-"to a clickable link. When this happens, rearrange the order of the filters."
+"Because of the flexible filtering system, you might encounter a "
+"situation where one filter prevents another from doing its job. For "
+"example: a word in an URL gets converted into a glossary term, before "
+"the URL can be converted to a clickable link. When this happens, "
+"rearrange the order of the filters."
 msgstr ""
-"På grunn av det fleksible filtersystemet kan det oppstå situasjoner hvor et "
-"filter forhindrer et annet filter i å virke korrekt. For eksempel: Et ord i "
-"en URL blir oversatt til en beskrivelse fra en ordliste før URLen kan bli "
-"omdannet til en klikkbar lenke. Når dette skjer, er du nødt til å endre "
-"filtrenes rekkefølge."
-
-#: modules/filter/filter.module:38
+"På grunn av det fleksible filtersystemet kan det oppstå situasjoner "
+"hvor et filter forhindrer et annet filter i å virke korrekt. For "
+"eksempel: Et ord i en URL blir oversatt til en beskrivelse fra en "
+"ordliste før URLen kan bli omdannet til en klikkbar lenke. Når dette "
+"skjer, er du nødt til å endre filtrenes rekkefølge."
 msgid ""
-"Filters are executed from top-to-bottom. To change the order of the filters, "
-"modify the values in the <em>Weight</em> column or grab a drag-and-drop "
-"handle under the <em>Name</em> column and drag filters to new locations in "
-"the list. (Grab a handle by clicking and holding the mouse while hovering "
-"over a handle icon.) Remember that your changes will not be saved until you "
-"click the <em>Save configuration</em> button at the bottom of the page."
+"Filters are executed from top-to-bottom. To change the order of the "
+"filters, modify the values in the <em>Weight</em> column or grab a "
+"drag-and-drop handle under the <em>Name</em> column and drag filters "
+"to new locations in the list. (Grab a handle by clicking and holding "
+"the mouse while hovering over a handle icon.) Remember that your "
+"changes will not be saved until you click the <em>Save "
+"configuration</em> button at the bottom of the page."
 msgstr ""
-"Filtre blir utført ovenfra-og-ned. For å endre rekkefølgen på filtrene, "
-"tilpass verdiene i <em>vekt</em>-kolonnen eller ta tak i dra-og-slipp-"
-"hendelen under <em>«Navn»</em>-kolonnenen og dra filtrene til sine nye "
-"plasseringer i lista. (Du tar tak i et håndtak ved å trykke og holde "
-"museknappen mens du holder musepekeren over et håndtaksikon.) Husk at "
-"endringene dine ikke vil bli permanent før du trykker på <em>Lagre "
-"innstillinger</em>-knappen nederst på siden."
-
-#: modules/filter/filter.module:180,182
+"Filtre blir utført ovenfra-og-ned. For å endre rekkefølgen på "
+"filtrene, tilpass verdiene i <em>vekt</em>-kolonnen eller ta tak i "
+"dra-og-slipp-hendelen under <em>«Navn»</em>-kolonnenen og dra "
+"filtrene til sine nye plasseringer i lista. (Du tar tak i et håndtak "
+"ved å trykke og holde museknappen mens du holder musepekeren over et "
+"håndtaksikon.) Husk at endringene dine ikke vil bli permanent før du "
+"trykker på <em>Lagre innstillinger</em>-knappen nederst på siden."
 msgid "Allowed HTML tags: @tags"
 msgstr "Tillatte HTML-merker: @tags"
-
-#: modules/filter/filter.module:187
 msgid ""
 "\n"
 "<p>This site allows HTML content. While learning all of HTML may feel "
-"intimidating, learning how to use a very small number of the most basic HTML "
-"\"tags\" is very easy. This table provides examples for each tag that is "
-"enabled on this site.</p>\n"
-"<p>For more information see W3C's <a href=\"http://www.w3.org/TR/html/"
-"\">HTML Specifications</a> or use your favorite search engine to find other "
-"sites that explain HTML.</p>"
+"intimidating, learning how to use a very small number of the most "
+"basic HTML \"tags\" is very easy. This table provides examples for "
+"each tag that is enabled on this site.</p>\n"
+"<p>For more information see W3C's <a "
+"href=\"http://www.w3.org/TR/html/\">HTML Specifications</a> or use "
+"your favorite search engine to find other sites that explain HTML.</p>"
 msgstr ""
 "\n"
-"<p>Nettstedet tillater bruk av HTML. Det kan virke uoverskuelig å lære alt "
-"om HTML, men det kan være praktisk å kjenne den mest brukte HTML-notasjonen. "
-"Denne tabellen gir eksempler på de merker som kan brukes på nettstedet.</p>\n"
-"<p>Besøk <a href=\"http://www.w3.org/TR/html/\">W3Cs HTML-spesifikasjon</a> "
-"for ytterligere opplysninger, eller bruk din foretrukkede søkemotor til å "
-"finne nettsteder som forklarer bruken av HTML.</p>"
-
-#: modules/filter/filter.module:191
+"<p>Nettstedet tillater bruk av HTML. Det kan virke uoverskuelig å "
+"lære alt om HTML, men det kan være praktisk å kjenne den mest "
+"brukte HTML-notasjonen. Denne tabellen gir eksempler på de merker som "
+"kan brukes på nettstedet.</p>\n"
+"<p>Besøk <a href=\"http://www.w3.org/TR/html/\">W3Cs "
+"HTML-spesifikasjon</a> for ytterligere opplysninger, eller bruk din "
+"foretrukkede søkemotor til å finne nettsteder som forklarer bruken "
+"av HTML.</p>"
 msgid "Anchors are used to make links to other pages."
 msgstr "Ankre brukes til å lage lenker til andre sider."
-
-#: modules/filter/filter.module:192
 msgid ""
-"By default line break tags are automatically added, so use this tag to add "
-"additional ones. Use of this tag is different because it is not used with an "
-"open/close pair like all the others. Use the extra \" /\" inside the tag to "
-"maintain XHTML 1.0 compatibility"
+"By default line break tags are automatically added, so use this tag to "
+"add additional ones. Use of this tag is different because it is not "
+"used with an open/close pair like all the others. Use the extra \" /\" "
+"inside the tag to maintain XHTML 1.0 compatibility"
 msgstr ""
-"Linjeskiftmerker legges vanligvis til automatisk, men du kan bruke dette "
-"merket til å legge til ekstra linjeskift. Dette merket opptrer ikke i et "
-"start/slutt par som alle andre merker. Bruk det ekstra \"/\"-tegnet i merket "
-"for å sikre kompatibilitet med XHTML 1.0."
-
-#: modules/filter/filter.module:192
+"Linjeskiftmerker legges vanligvis til automatisk, men du kan bruke "
+"dette merket til å legge til ekstra linjeskift. Dette merket opptrer "
+"ikke i et start/slutt par som alle andre merker. Bruk det ekstra "
+"\"/\"-tegnet i merket for å sikre kompatibilitet med XHTML 1.0."
 msgid "Text with <br />line break"
 msgstr "Tekst med <br /> linjeskift"
-
-#: modules/filter/filter.module:193
 msgid ""
-"By default paragraph tags are automatically added, so use this tag to add "
-"additional ones."
+"By default paragraph tags are automatically added, so use this tag to "
+"add additional ones."
 msgstr ""
 "Avsnittsmerker legges vanligvis til automatisk, men du kan bruke dette "
 "merket for å sette inn ekstra avsnitt."
-
-#: modules/filter/filter.module:193
 msgid "Paragraph one."
 msgstr "Første avsnitt"
-
-#: modules/filter/filter.module:193
 msgid "Paragraph two."
 msgstr "Andre avsnitt"
-
-#: modules/filter/filter.module:194
 msgid "Strong"
 msgstr "Fet"
-
-#: modules/filter/filter.module:195
 msgid "Emphasized"
 msgstr "Uthevet"
-
-#: modules/filter/filter.module:196
 msgid "Cited"
 msgstr "Sitert"
-
-#: modules/filter/filter.module:197
 msgid "Coded text used to show programming source code"
 msgstr "Kodetekst brukes til å vise programmeringskildekode og liknende"
-
-#: modules/filter/filter.module:197
 msgid "Coded"
 msgstr "Kode"
-
-#: modules/filter/filter.module:198
 msgid "Bolded"
 msgstr "Fet"
-
-#: modules/filter/filter.module:199
-msgid "Underlined"
-msgstr "Understreket"
-
-#: modules/filter/filter.module:200
 msgid "Italicized"
 msgstr "Kursiv"
-
-#: modules/filter/filter.module:201
 msgid "Superscripted"
 msgstr "Hevet skrift"
-
-#: modules/filter/filter.module:201
 msgid "<sup>Super</sup>scripted"
 msgstr "<sup>Hevet</sup>skrift"
-
-#: modules/filter/filter.module:202
 msgid "Subscripted"
 msgstr "Senket skrift"
-
-#: modules/filter/filter.module:202
 msgid "<sub>Sub</sub>scripted"
 msgstr "<sub>Senket</sub>skrift"
-
-#: modules/filter/filter.module:203
-msgid "Preformatted"
-msgstr "Forhåndsformatert"
-
-#: modules/filter/filter.module:204
-msgid "Abbreviation"
-msgstr "Forkortelse"
-
-#: modules/filter/filter.module:204
 msgid "<abbr title=\"Abbreviation\">Abbrev.</abbr>"
 msgstr "<abbr title=\"Forkortelse\">Forkort.</abbr>"
-
-#: modules/filter/filter.module:205
-msgid "Acronym"
-msgstr "Akronym"
-
-#: modules/filter/filter.module:205
 msgid "<acronym title=\"Three-Letter Acronym\">TLA</acronym>"
 msgstr "<acronym title=\"Tre-Bokstavs Forkortelse\">TBF</acronym>"
-
-#: modules/filter/filter.module:206
 msgid "Block quoted"
 msgstr "Blokksitat"
-
-#: modules/filter/filter.module:207
 msgid "Quoted inline"
 msgstr "Linjesitat"
-
-#: modules/filter/filter.module:209
-msgid "Table"
-msgstr "Tabell"
-
-#: modules/filter/filter.module:209
 msgid "Table header"
 msgstr "Tabelltittel"
-
-#: modules/filter/filter.module:209
 msgid "Table cell"
 msgstr "Tabellcelle"
-
-#: modules/filter/filter.module:211
-msgid "Deleted"
-msgstr "Slettet"
-
-#: modules/filter/filter.module:212
-msgid "Inserted"
-msgstr "Satt inn"
-
-#: modules/filter/filter.module:214
 msgid "Ordered list - use the &lt;li&gt; to begin each list item"
 msgstr "Sortert liste - bruk &lt;li&gt; for å begynne hvert listepunkt"
-
-#: modules/filter/filter.module:214,215
 msgid "First item"
 msgstr "Første punkt"
-
-#: modules/filter/filter.module:214,215
 msgid "Second item"
 msgstr "Andre punkt"
-
-#: modules/filter/filter.module:215
 msgid "Unordered list - use the &lt;li&gt; to begin each list item"
 msgstr "Usortert liste - bruk &lt;li&gt; for å begynne hvert listepunkt"
-
-#: modules/filter/filter.module:218
 msgid ""
-"Definition lists are similar to other HTML lists. &lt;dl&gt; begins the "
-"definition list, &lt;dt&gt; begins the definition term and &lt;dd&gt; begins "
-"the definition description."
+"Definition lists are similar to other HTML lists. &lt;dl&gt; begins "
+"the definition list, &lt;dt&gt; begins the definition term and "
+"&lt;dd&gt; begins the definition description."
 msgstr ""
 "Definisjonslister ligner andre HTML-lister. &lt;dl&gt; begynner "
 "definisjonslista, &lt;dt&gt; begynner definisjonstermen og &lt;dd&gt; "
 "begynner beskrivelsen av definisjonen."
-
-#: modules/filter/filter.module:218
 msgid "First term"
 msgstr "Første ord"
-
-#: modules/filter/filter.module:218
 msgid "First definition"
 msgstr "Første definisjon"
-
-#: modules/filter/filter.module:218
 msgid "Second term"
 msgstr "Annet ord"
-
-#: modules/filter/filter.module:218
 msgid "Second definition"
 msgstr "Andre definisjon"
-
-#: modules/filter/filter.module:221
-msgid "Subtitle"
-msgstr "Undertittel"
-
-#: modules/filter/filter.module:222
 msgid "Subtitle three"
 msgstr "Undertittel tre"
-
-#: modules/filter/filter.module:223
 msgid "Subtitle four"
 msgstr "Undertittel fire"
-
-#: modules/filter/filter.module:224
 msgid "Subtitle five"
 msgstr "Undertittel fem"
-
-#: modules/filter/filter.module:225
 msgid "Subtitle six"
 msgstr "Undertittel seks"
-
-#: modules/filter/filter.module:227
 msgid "Tag Description"
 msgstr "Beskrivelse av merke"
-
-#: modules/filter/filter.module:227,256
 msgid "You Type"
 msgstr "Du skriver"
-
-#: modules/filter/filter.module:227,256
 msgid "You Get"
 msgstr "Du får"
-
-#: modules/filter/filter.module:241
 msgid "No help provided for tag %tag."
 msgstr "Ingen hjelp tilgjengelig for merket %tag."
-
-#: modules/filter/filter.module:247
 msgid ""
 "\n"
-"<p>Most unusual characters can be directly entered without any problems.</"
-"p>\n"
-"<p>If you do encounter problems, try using HTML character entities. A common "
-"example looks like &amp;amp; for an ampersand &amp; character. For a full "
-"list of entities see HTML's <a href=\"http://www.w3.org/TR/html4/sgml/"
-"entities.html\">entities</a> page. Some of the available characters include:"
-"</p>"
+"<p>Most unusual characters can be directly entered without any "
+"problems.</p>\n"
+"<p>If you do encounter problems, try using HTML character entities. A "
+"common example looks like &amp;amp; for an ampersand &amp; character. "
+"For a full list of entities see HTML's <a "
+"href=\"http://www.w3.org/TR/html4/sgml/entities.html\">entities</a> "
+"page. Some of the available characters include:</p>"
 msgstr ""
 "\n"
 "<p>De fleste tegnene kan skrives inn direkte uten problemer.</p>\n"
-"<p>Hvis du allikevel støter på problemer, kan du prøve å bruke HTML "
-"tegnkoder. Bruk f.eks. &amp;amp; for å vise et ampersand &amp; tegn. Se "
-"dessuten den komplette <a href=\"http://www.w3.org/TR/html4/sgml/entities."
-"html\">liste av tegnkoder</a>. De mest brukte tegnene er:</p>"
-
-#: modules/filter/filter.module:251
+"<p>Hvis du allikevel støter på problemer, kan du prøve å bruke "
+"HTML tegnkoder. Bruk f.eks. &amp;amp; for å vise et ampersand &amp; "
+"tegn. Se dessuten den komplette <a "
+"href=\"http://www.w3.org/TR/html4/sgml/entities.html\">liste av "
+"tegnkoder</a>. De mest brukte tegnene er:</p>"
 msgid "Ampersand"
 msgstr "og-tegnet"
-
-#: modules/filter/filter.module:252
-msgid "Greater than"
-msgstr "Større enn"
-
-#: modules/filter/filter.module:253
-msgid "Less than"
-msgstr "Mindre enn"
-
-#: modules/filter/filter.module:254
 msgid "Quotation mark"
 msgstr "Siteringstegn"
-
-#: modules/filter/filter.module:256
 msgid "Character Description"
 msgstr "Tegnbeskrivelse"
-
-#: modules/filter/filter.module:270
 msgid "No HTML tags allowed"
 msgstr "Ingen HTML merker tillatt"
-
-#: modules/filter/filter.module:278
 msgid "Lines and paragraphs break automatically."
 msgstr "Automatisk linjeskift"
-
-#: modules/filter/filter.module:280
 msgid ""
-"Lines and paragraphs are automatically recognized. The &lt;br /&gt; line "
-"break, &lt;p&gt; paragraph and &lt;/p&gt; close paragraph tags are inserted "
-"automatically. If paragraphs are not recognized simply add a couple blank "
-"lines."
+"Lines and paragraphs are automatically recognized. The &lt;br /&gt; "
+"line break, &lt;p&gt; paragraph and &lt;/p&gt; close paragraph tags "
+"are inserted automatically. If paragraphs are not recognized simply "
+"add a couple blank lines."
 msgstr ""
-"Linjeskift og avsnitt gjenkjennes automatisk. Linjeskiftmerket &lt;br/&gt; "
-"og avsnittsmerkene &lt;p&gt; og &lt;/p&gt; settes inn automatisk. Hvis "
-"avsnitt ikke gjenkjennes, sett inn noen ekstra tomme linjer."
-
-#: modules/filter/filter.module:284
+"Linjeskift og avsnitt gjenkjennes automatisk. Linjeskiftmerket "
+"&lt;br/&gt; og avsnittsmerkene &lt;p&gt; og &lt;/p&gt; settes inn "
+"automatisk. Hvis avsnitt ikke gjenkjennes, sett inn noen ekstra tomme "
+"linjer."
 msgid "Web page addresses and e-mail addresses turn into links automatically."
 msgstr "Internettadresser og e-postadresser konverteres til lenker automatisk."
-
-#: modules/filter/filter.module:495
-msgid "Input format"
-msgstr "Inndataformat"
-
-#: modules/filter/filter.module:615,666
 msgid "HTML filter"
 msgstr "HTML-filter"
-
-#: modules/filter/filter.module:615
-msgid "Line break converter"
-msgstr "Linjeskiftskonverterer"
-
-#: modules/filter/filter.module:615,726
-msgid "URL filter"
-msgstr "URL-filter"
-
-#: modules/filter/filter.module:615
 msgid "HTML corrector"
 msgstr "HTML-korreksjon"
-
-#: modules/filter/filter.module:620
 msgid ""
-"Allows you to restrict whether users can post HTML and which tags to filter "
-"out. It will also remove harmful content such as JavaScript events, "
-"JavaScript URLs and CSS styles from those tags that are not removed."
+"Allows you to restrict whether users can post HTML and which tags to "
+"filter out. It will also remove harmful content such as JavaScript "
+"events, JavaScript URLs and CSS styles from those tags that are not "
+"removed."
 msgstr ""
-"Tillater deg å begrense om brukere kan skrive HTML og hvilke HTML-merker som "
-"skal filtreres ut. Det vil også fjerne skadelig innhold slik som JavaScript-"
-"hendelser (events), JavaScript-URLer og CSS-stiler fra de merkene som ikke "
-"fjernes."
-
-#: modules/filter/filter.module:622
+"Tillater deg å begrense om brukere kan skrive HTML og hvilke "
+"HTML-merker som skal filtreres ut. Det vil også fjerne skadelig "
+"innhold slik som JavaScript-hendelser (events), JavaScript-URLer og "
+"CSS-stiler fra de merkene som ikke fjernes."
 msgid "Converts line breaks into HTML (i.e. &lt;br&gt; and &lt;p&gt; tags)."
 msgstr ""
-"Konverterer linjeskift til HTML (f.eks. &lt;br&gt; og &lt;p&gt; merker)."
-
-#: modules/filter/filter.module:624
+"Konverterer linjeskift til HTML (f.eks. &lt;br&gt; og &lt;p&gt; "
+"merker)."
 msgid "Turns web and e-mail addresses into clickable links."
 msgstr "Gjør om web- og e-postadresser til klikkbare lenker."
-
-#: modules/filter/filter.module:626
 msgid "Corrects faulty and chopped off HTML in postings."
 msgstr "Retter feil og mangler i HTML-koder i innlegg."
-
-#: modules/filter/filter.module:671
-msgid "Filter HTML tags"
-msgstr "Filtrer HTML merker"
-
-#: modules/filter/filter.module:673
-msgid "Strip disallowed tags"
-msgstr "Fjern uønskede merker"
-
-#: modules/filter/filter.module:673
-msgid "Escape all tags"
-msgstr "Konverter alle merker"
-
-#: modules/filter/filter.module:674
 msgid ""
-"How to deal with HTML tags in user-contributed content. If set to \"Strip "
-"disallowed tags\", dangerous tags are removed (see below). If set to "
-"\"Escape tags\", all HTML is escaped and presented as it was typed."
+"How to deal with HTML tags in user-contributed content. If set to "
+"\"Strip disallowed tags\", dangerous tags are removed (see below). If "
+"set to \"Escape tags\", all HTML is escaped and presented as it was "
+"typed."
 msgstr ""
-"Hvordan håndtere HTML merker i inndata. Velg \"Fjern uønskede merker\" for å "
-"fjerne alle farlige HTML merker (se nedenfor). Velg \"Konverter merker\" for "
-"å vise alle HTML merker som de skrives inn av brukeren."
-
-#: modules/filter/filter.module:682
+"Hvordan håndtere HTML merker i inndata. Velg \"Fjern uønskede "
+"merker\" for å fjerne alle farlige HTML merker (se nedenfor). Velg "
+"\"Konverter merker\" for å vise alle HTML merker som de skrives inn "
+"av brukeren."
 msgid ""
-"If \"Strip disallowed tags\" is selected, optionally specify tags which "
-"should not be stripped. JavaScript event attributes are always stripped."
+"If \"Strip disallowed tags\" is selected, optionally specify tags "
+"which should not be stripped. JavaScript event attributes are always "
+"stripped."
 msgstr ""
-"Hvis «Fjern uønskede merker» er valgt, kan du bestemme hvilke merker som ikke "
-"skal fjernes. Javascript hendelsesattributter fjernes alltid."
-
-#: modules/filter/filter.module:686
+"Hvis «Fjern uønskede merker» er valgt, kan du bestemme hvilke "
+"merker som ikke skal fjernes. Javascript hendelsesattributter fjernes "
+"alltid."
 msgid "Display HTML help"
 msgstr "Vis HTML-hjelp"
-
-#: modules/filter/filter.module:688
 msgid ""
-"If enabled, Drupal will display some basic HTML help in the long filter tips."
+"If enabled, Drupal will display some basic HTML help in the long "
+"filter tips."
 msgstr ""
-"Aktiveres hvis du ønsker at Drupal skal vise grunnleggende hjelp i bruken av "
-"HTML."
-
-#: modules/filter/filter.module:692
-msgid "Spam link deterrent"
-msgstr "Begrens spam-lenker"
-
-#: modules/filter/filter.module:694
+"Aktiveres hvis du ønsker at Drupal skal vise grunnleggende hjelp i "
+"bruken av HTML."
 msgid ""
-"If enabled, Drupal will add rel=\"nofollow\" to all links, as a measure to "
-"reduce the effectiveness of spam links. Note: this will also prevent valid "
-"links from being followed by search engines, therefore it is likely most "
-"effective when enabled for anonymous users."
-msgstr ""
-"Aktiveres denne funksjonen, setter Drupal inn rel=\"nofollow\" i alle lenker "
-"i et forsøk på å redusere effektiviteten av spam-lenker. Bemerk: Det "
-"bevirker at gyldige lenker ikke følges av søkemaskiner; derfor er det mest "
-"effektivt når det aktiveres for anonyme brukere."
-
-#: modules/filter/filter.module:731
-msgid "Maximum link text length"
-msgstr "Maks lengde på lenker"
-
-#: modules/filter/filter.module:734
-msgid ""
-"URLs longer than this number of characters will be truncated to prevent long "
-"strings that break formatting. The link itself will be retained; just the "
-"text portion of the link will be truncated."
-msgstr ""
-"URLer som er lengre enn det angitte antall tegn beskjæres. Lenka forblir "
-"intakt, men teksten blir forkortet."
-
-#: modules/filter/filter.module:157
-msgid "administer filters"
-msgstr "Administrer filtre"
-
-#: modules/filter/filter.module:71
-msgid "Input formats"
-msgstr "Inndataformater"
-
-#: modules/filter/filter.module:72
-msgid ""
-"Configure how content input by users is filtered, including allowed HTML "
-"tags. Also allows enabling of module-provided filters."
+"Configure how content input by users is filtered, including allowed "
+"HTML tags. Also allows enabling of module-provided filters."
 msgstr ""
 "Konfigurer hvordan innhold innsendt av brukerne filtreres, inklusive "
 "tillatte HTML-merker. Filtre fra moduler kan også aktiveres."
-
-#: modules/filter/filter.module:91
 msgid "Delete input format"
 msgstr "Slett inndataformat"
-
-#: modules/filter/filter.module:99
 msgid "Compose tips"
 msgstr "Veiledning til skriving av innlegg"
-
-#: modules/filter/filter.module:131
-msgid "Rearrange"
-msgstr "Sorter filtre"
-
-#: modules/filter/filter.module:0
-msgid "filter"
-msgstr "filter"
